@@ -14,6 +14,11 @@ module.exports = {
         allowNull: false,
         unique: true
       },
+      imgProfile: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue:null,
+      },
       storeName: {
         type: Sequelize.STRING,
         allowNull: false,
