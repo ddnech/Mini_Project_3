@@ -8,4 +8,9 @@ router.post(
   authController.registerUser
 );
 
+router.post(
+  "/login",
+  validatorMiddleware.validateLogin,
+  authController.loginUser);
+
 module.exports = router;
