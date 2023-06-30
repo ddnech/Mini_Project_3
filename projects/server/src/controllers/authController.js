@@ -36,8 +36,6 @@ module.exports = {
         });
         return;
       }
-
-      //generate password
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(password, salt);
 
@@ -48,7 +46,6 @@ module.exports = {
         phone,
         address,
         password: hashPassword,
-        imgProfile: null,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -57,6 +54,7 @@ module.exports = {
         message: "Registration success. Welcome!",
         data: {
           username: newUser.username,
+          imgProfile: newUser.imgProfile,
           storeName: newUser.storeName,
           email: newUser.email,
           phone: newUser.phone,
@@ -73,21 +71,16 @@ module.exports = {
 
   async loginUser(req, res) {
     try {
-      const { identifier, password } = req.body;
+      const { username, password } = req.body;
 
       const user = await db.User.findOne({
         where: {
-          [db.Sequelize.Op.or]: [
-            { username: identifier },
-            { phone: identifier },
-            { email: identifier },
-          ],
+            username:username
         },
       });
 
       if (user) {
-        // const passwordMatch = await bcrypt.compare(password, user.password);
-        const passwordMatch = password === user.password;
+        const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (passwordMatch) {
           const token = generateJWTToken(user);

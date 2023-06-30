@@ -121,4 +121,13 @@ module.exports = {
       .isLength({ min: 8 })
       .withMessage("Minimum password length is 8 characters"),
   ]),
+
+  validateLogin: validate([
+    body("username").notEmpty().withMessage("Username is required"),
+    body("password")
+      .notEmpty()
+      .withMessage("Password is required")
+      .isLength({ min: 8 })
+      .withMessage("Minimum password length is 8 characters"),
+  ]),
 };
