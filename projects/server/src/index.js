@@ -2,13 +2,11 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const routes = require("./routes");
+const router = require("./routes");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
-app.use(
-  cors()
-);
+app.use(cors());
 
 app.use(express.json());
 
@@ -27,7 +25,8 @@ app.get("/api/greetings", (req, res, next) => {
   });
 });
 
-app.use("/api/auth",routes.auth);
+app.use("/api/auth", router.auth);
+
 // ===========================
 
 // not found
@@ -69,4 +68,3 @@ app.listen(PORT, (err) => {
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });
-
