@@ -130,4 +130,42 @@ module.exports = {
       .isLength({ min: 8 })
       .withMessage("Minimum password length is 8 characters"),
   ]),
+
+  createCategory: validate([
+    body("name")
+      .notEmpty()
+      .withMessage("Category name is required")
+      .custom(async (value, { req }) => {
+        try {
+          const category = await db.Category.findOne({
+            where: { name: value },
+          });
+          if (category) {
+            throw new Error("Category name already exist");
+          }
+          return true;
+        } catch (error) {
+          throw new Error(error.message);
+        }
+      }),
+  ]),
+
+  updateCategory: validate([
+    body("name")
+      .notEmpty()
+      .withMessage("Category name is required")
+      .custom(async (value, { req }) => {
+        try {
+          const category = await db.Category.findOne({
+            where: { name: value },
+          });
+          if (category) {
+            throw new Error("Category name already exist");
+          }
+          return true;
+        } catch (error) {
+          throw new Error(error.message);
+        }
+      }),
+  ]),
 };
