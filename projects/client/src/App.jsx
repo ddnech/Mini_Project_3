@@ -1,6 +1,10 @@
 import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { keep } from './store/reducer/authSlice'
+import Home from './page/home'
+import SignUp from './page/signup'
+import LogIn from './page/login'
 
 
 function App() {
@@ -17,7 +21,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
 
