@@ -27,6 +27,7 @@ app.get("/api/greetings", (req, res, next) => {
 
 app.use("/api/auth", router.auth);
 app.use("/api/product", router.product);
+app.use("/api/user", router.user);
 
 // ===========================
 
