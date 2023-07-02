@@ -2,11 +2,10 @@ import React from 'react';
 import { useDispatch } from "react-redux";
 import { keep } from '../store/reducer/authSlice';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-// import { Modal, Button } from "flowbite-react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import NavBar from "../component/navbar"
 
@@ -35,11 +34,11 @@ export default function LogIn() {
           const { token } = response.data;
   
           localStorage.setItem('token', token);
-
+          dispatch(keep(token));
           resetForm();
           setStatus({ success: true, token });
           // Redirect to homepage
-          navigate('/home');
+          navigate('/');
         } else {
           throw new Error('Login failed');
         }
@@ -52,33 +51,8 @@ export default function LogIn() {
       }
     };
   
-    const handleForgotPassword = async (values, { setSubmitting, setFieldError, resetForm, setStatus }) => {
-      try {
-        const response = await axios.put('https://minpro-blog.purwadhikabootcamp.com/api/auth/forgotPass', { email: values.email });
-  
-        if (response.status === 200) {
-          resetForm();
-          setStatus({ success: true });
-          // Display a success message or perform any other necessary actions
-        } else {
-          throw new Error('Forgot password failed');
-        }
-      } catch (error) {
-        setFieldError('email', 'Invalid email');
-        setStatus({ success: false });
-        // Display an error message or perform any other necessary actions
-      } finally {
-        setSubmitting(false);
-      }
-    };
-  
     const togglePasswordVisibility = () => {
       setShowPassword((prevShowPassword) => !prevShowPassword);
-    };
-  
-    const handleGuestSignIn = () => {
-      // Redirect to homepage as a guest
-      navigate('/home');
     };
   
     const handleSignUp = () => {
@@ -86,9 +60,6 @@ export default function LogIn() {
       navigate('/signup');
     };
   
-    const handleForgot = () => {
-      setShowForgotPasswordModal(true);
-    };
 
     return (
       <>
@@ -149,72 +120,9 @@ export default function LogIn() {
                             >
                             Sign Up
                             </button>
-                            <button
-                            className='w-full hover:bg-gray-400'
-                            onClick={handleGuestSignIn}
-                            >
-                            Sign in as Guest
-                            </button>
-                            <button
-                            className='w-full hover:bg-gray-400'
-                            onClick={handleForgot}
-                            >
-                            Forgot Password
-                            </button>
                         </Form>
                         )}
                     </Formik>
-
-                    {showForgotPasswordModal && (
-                        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-                        <div className='bg-white p-8 rounded-md'>
-                            <h2 className='text-2xl font-bold mb-4'>Forgot Password</h2>
-                            <Formik
-                            initialValues={{ email: '' }}
-                            validationSchema={Yup.object().shape({
-                                email: Yup.string().email('Invalid email').required('Email is required'),
-                            })}
-                            onSubmit={handleForgotPassword}
-                            >
-                            {({ isSubmitting, status }) => (
-                                <Form>
-                                {status && status.success && (
-                                    <p className='text-green-500'>Password reset email sent!</p>
-                                )}
-                                <div className='flex flex-col mb-2 pb-3'>
-                                    <div className='relative'>
-                                    <Field
-                                        className='border p-2 w-full'
-                                        type='text'
-                                        name='email'
-                                        placeholder='Email'
-                                    />
-                                    <ErrorMessage
-                                        name='email'
-                                        component='div'
-                                        className='text-red-500 text-sm'
-                                    />
-                                    </div>
-                                </div>
-                                <button
-                                    className='w-full py-2 my-4 bg-gray-300 hover:bg-gray-400'
-                                    type='submit'
-                                    disabled={isSubmitting}
-                                >
-                                    Reset Password
-                                </button>
-                                <button
-                                    className='w-full py-2 bg-gray-300 hover:bg-gray-400'
-                                    onClick={() => setShowForgotPasswordModal(false)}
-                                >
-                                    Cancel
-                                </button>
-                                </Form>
-                            )}
-                            </Formik>
-                        </div>
-                        </div>
-                    )}
                     </div>
                 </div>
                 </div>
