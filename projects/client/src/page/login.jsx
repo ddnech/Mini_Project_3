@@ -6,186 +6,218 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { VscEye } from "react-icons/vsc";
-import { Modal, Button } from "flowbite-react";
+// import { Modal, Button } from "flowbite-react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import NavBar from "../component/navbar"
 
 export default function LogIn() {
-    // const dispatch = useDispatch();
 
-    // const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+    const dispatch = useDispatch();
+  
+    const initialValues = {
+      username: '',
+      password: '',
+    };
+  
+    const validationSchema = Yup.object().shape({
+      username: Yup.string().required('Username is required'),
+      password: Yup.string().required('Password is required'),
+    });
+  
+    const handleSubmit = async (values, { setSubmitting, setFieldError, resetForm, setStatus }) => {
+      try {
+        const response = await axios.post('http://localhost:8000/api/auth/login', values);
+  
+        if (response.status === 200) {
+          const { token } = response.data;
+  
+          localStorage.setItem('token', token);
 
-    // const togglePassword = (e) => {
-    //     e.preventDefault();
-    //     setShowPassword(!showPassword);
-    // };
+          resetForm();
+          setStatus({ success: true, token });
+          // Redirect to homepage
+          navigate('/home');
+        } else {
+          throw new Error('Login failed');
+        }
+      } catch (error) {
+        setFieldError('username', 'Incorrect username or password');
+        setFieldError('password', 'Incorrect username or password');
+        setStatus({ success: false });
+      } finally {
+        setSubmitting(false);
+      }
+    };
+  
+    const handleForgotPassword = async (values, { setSubmitting, setFieldError, resetForm, setStatus }) => {
+      try {
+        const response = await axios.put('https://minpro-blog.purwadhikabootcamp.com/api/auth/forgotPass', { email: values.email });
+  
+        if (response.status === 200) {
+          resetForm();
+          setStatus({ success: true });
+          // Display a success message or perform any other necessary actions
+        } else {
+          throw new Error('Forgot password failed');
+        }
+      } catch (error) {
+        setFieldError('email', 'Invalid email');
+        setStatus({ success: false });
+        // Display an error message or perform any other necessary actions
+      } finally {
+        setSubmitting(false);
+      }
+    };
+  
+    const togglePasswordVisibility = () => {
+      setShowPassword((prevShowPassword) => !prevShowPassword);
+    };
+  
+    const handleGuestSignIn = () => {
+      // Redirect to homepage as a guest
+      navigate('/home');
+    };
+  
+    const handleSignUp = () => {
+      // Redirect to sign up page
+      navigate('/signup');
+    };
+  
+    const handleForgot = () => {
+      setShowForgotPasswordModal(true);
+    };
 
-    // const initialValues = {
-    //     username: '',
-    //     password: '',
-    // };
+    return (
+      <>
+        <div className="sticky top-0 z-50">
+                <NavBar />
+            </div>
+            <div className='w-full h-screen flex'>
+                <div className=' m-auto center'>
+                    <div className='p-4 flex flex-col justify-around'>
+                    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+                        {({ isSubmitting, status }) => (
+                        <Form className='relative'>
+                            <h2 className='text-4xl  text-center h-16 font-lora'>Login</h2>
+                            <p className='text-center mb-8 h-4 font-chivo tracking-wide'>Please enter your username and password</p>
+                            {status && status.success && <p className='text-center text-green-500'>Login successful!</p>}
+                            <div className='flex flex-col mb-2 pb-3'>
+                            <div className='relative'>
+                                <Field
+                                className='border p-1 w-full pr-10'
+                                type='text'
+                                name='username'
+                                placeholder='Username'
+                                />
+                                <ErrorMessage name='username' component='div' className='text-red-500 text-sm absolute left-0 bottom-[-20px]' />
+                            </div>
+                            </div>
+                            <div className='flex flex-col mb-4'>
+                            <div className='relative'>
+                                <Field
+                                className='border p-1 w-full pr-10'
+                                type={showPassword ? 'text' : 'password'}
+                                name='password'
+                                placeholder='Password'
+                                />
+                                <ErrorMessage name='password' component='div' className='text-red-500 text-sm absolute left-0 bottom-[-20px]' />
+                                <div className='pt-2 pl-1'>
+                                <button
+                                    type='button'
+                                    onClick={togglePasswordVisibility}
+                                    className='text-gray-500 focus:outline-none'
+                                >
+                                    {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+                                </button>
+                                </div>
+                            </div>
+                            </div>
+                            <button
+                            className='w-full py-2 my-4 bg-gray-300 hover:bg-gray-400'
+                            type='submit'
+                            disabled={isSubmitting}
+                            >
+                            Sign In
+                            </button>
+                            {status && status.token && <p className='text-center'>Token: {status.token}</p>}
+                            <button
+                            className='w-full py-2 my-4 bg-gray-300 hover:bg-gray-400'
+                            onClick={handleSignUp}
+                            >
+                            Sign Up
+                            </button>
+                            <button
+                            className='w-full hover:bg-gray-400'
+                            onClick={handleGuestSignIn}
+                            >
+                            Sign in as Guest
+                            </button>
+                            <button
+                            className='w-full hover:bg-gray-400'
+                            onClick={handleForgot}
+                            >
+                            Forgot Password
+                            </button>
+                        </Form>
+                        )}
+                    </Formik>
 
-    // const validationSchema = Yup.object().shape({
-    //     username: Yup.string().required('Username is required'),
-    //     password: Yup.string().required('Password is required'),
-    // });
-
-    // const navigate = useNavigate()
-
-    // const handleSubmit = async (values, { setSubmitting, setFieldError, resetForm, setStatus }) => {
-    //     try {
-
-    //         const response = await axios.post('https://minpro-blog.purwadhikabootcamp.com/api/auth/login', values);
-
-    //         if (response.status === 200) {
-    //             const token = response.data.token;
-    //             localStorage.setItem("token", token);
-    //             dispatch(keep(token));
-    //             const likeResponse = await LikePostUser(token)
-    //             dispatch(postLike(likeResponse.data));
-    //             resetForm();
-    //             setStatus({ success: true, token });
-    //             navigate("/homeuser")
-    //         } else {
-    //             throw new Error('Login Failed');
-    //         }
-    //     } catch (error) {
-    //         alert(error)
-    //         setFieldError('username', 'Incorrect Username!');
-    //         setFieldError('password', 'Incorrect Password!');
-    //         setStatus({ success: false, token: " " });
-    //     } finally {
-    //         setSubmitting(false);
-    //     }
-    // };
-
-    // //forget password modal
-    // const [modalOpen, setModalOpen] = useState(false);
-    // const [email, setEmail] = useState("");
-
-    // const initialValuesEmail = {
-    //     email: '',
-    // };
-
-    // const validationSchemaEmail = Yup.object().shape({
-    //     email: Yup.string().email('Format is not acceptable').required('Email is required'),
-    // });
-
-    // const handleToggleModal = () => {
-    //     setModalOpen(!modalOpen);
-    // };
-
-    // const handleCloseModal = () => {
-    //     setModalOpen(false);
-    // };
-
-    // const handleEmail = (input) => {
-    //     setEmail(input);
-    // };
-
-    // const handleSave = (event) => {
-    //     event.preventDefault();
-    //     axios.put("https://minpro-blog.purwadhikabootcamp.com/api/auth/forgotPass", { "email": email })
-    //         .then(() => alert("success!"))
-    //         .catch((err) => alert(err))
-    // };
-
-
-    // return (
-    //     <div className='w-screen h-screen grid content-center justify-center'>
-    //         <div className='w-[28rem] h-[36rem] grid grid-flow-row rounded overflow-hidden shadow-2xl'>
-    //             <div className='bg-header w-full h-32 object-cover bg-no-repeat bg-center bg-cover grid'>
-    //                 <div className='font-monts font-bold text-6xl text-center text-ivory drop-shadow-5xl m-6'>
-    //                     COZY
-    //                 </div>
-    //             </div>
-    //             <div className='h-[27rem]'>
-    //                 <div>
-    //                     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-    //                         {({ isSubmitting }) => (
-    //                             <Form>
-    //                                 <div className='grid grid-flow-row gap-1 justify-center'>
-    //                                     <h3 className='font-monts font-bold text-xl text-center text-darkcho m-4'>WELCOME BACK!</h3>
-    //                                     <div className=' grid grid-flow-row gap-3 w-60'>
-    //                                         <ErrorMessage name='username' component='div' className='text-red-500 text-xs' />
-    //                                         <Field
-    //                                             className='border-none h-6'
-    //                                             type='text'
-    //                                             name='username'
-    //                                             placeholder='Username'
-    //                                         />
-    //                                         <ErrorMessage name='password' component='div' className='text-red-500 text-xs' />
-    //                                         <Field
-    //                                             className='border-none h-6'
-    //                                             type={showPassword ? 'text' : 'password'}
-    //                                             name='password'
-    //                                             placeholder='Password'
-    //                                         />
-    //                                     </div>
-    //                                     <div className='grid grid-flow-col justify-start'>
-    //                                         <button onClick={togglePassword} className='m-1'><span className='flex content-center h-5'><VscEye className='m-1' />Show Password</span></button>
-    //                                     </div>
-    //                                     <div>
-    //                                         <button
-    //                                             className='w-full py-2 my-4 bg-olive text-ivory hover:bg-sage hover:text-black hover:font-bold'
-    //                                             type='submit'
-    //                                             disabled={isSubmitting}
-    //                                         >
-    //                                             Log In
-    //                                         </button>
-    //                                     </div>
-    //                                 </div>
-    //                             </Form>
-    //                         )}
-    //                     </Formik>
-    //                 </div>
-    //                 <div className='flex justify-center content-center'>
-    //                     <span className='h-10 font-fira text-sm p-1'> Forget Password? </span>
-    //                     <Button onClick={handleToggleModal} className="bg-gray-400 hover:bg-olive mx-4" size="xs">
-    //                         Click Here!
-    //                     </Button>
-    //                     <Modal show={modalOpen} size="md" popup={true} onClose={handleCloseModal}>
-    //                         <Modal.Header />
-    //                         <Modal.Body>
-    //                             <Formik initialValues={initialValuesEmail} validationSchema={validationSchemaEmail} onSubmit={handleSave}>
-    //                                 <form>
-    //                                     <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-    //                                         <h3 className="text-xl font-monts font-medium text-gray-900 dark:text-white">
-    //                                             Forget Password
-    //                                         </h3>
-    //                                         <div>
-    //                                             <div>
-    //                                                 <label className="font-fira text-sm">Enter your registered email here!</label>
-    //                                                 <Field type="text" id="email" name="email" className='border-none h-6 mt-4 rounded' placeholder='john.doe@purwadhika.com' />
-    //                                                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
-    //                                             </div>
-    //                                             <div className="text-sm font-medium text-gray-500 dark:text-gray-300 mt-4">
-    //                                                 <button
-    //                                                     className="bg-sage hover:bg-olive text-black hover:text-white hover:font-bold w-14 mr-2 text-center rounded"
-    //                                                 >
-    //                                                     Save
-    //                                                 </button>
-    //                                                 <button
-    //                                                     onClick={handleCloseModal}
-    //                                                     className="bg-sage hover:bg-olive text-black hover:text-white hover:font-bold w-14 text-center rounded"
-    //                                                 >
-    //                                                     Cancel
-    //                                                 </button>
-    //                                             </div>
-    //                                         </div>
-    //                                     </div>
-    //                                 </form>
-    //                             </Formik>
-    //                         </Modal.Body>
-    //                     </Modal>
-    //                 </div>
-    //                 <div className='text-center font-fira'>
-    //                     <p>
-    //                         Don't have an account?
-    //                         <button className='m-1 bg-sage py-2 px-1 rounded hover:bg-lightcho'><Link to="/signup">Sign Up! </Link></button>
-    //                     </p>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </div>
-    // );
+                    {showForgotPasswordModal && (
+                        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+                        <div className='bg-white p-8 rounded-md'>
+                            <h2 className='text-2xl font-bold mb-4'>Forgot Password</h2>
+                            <Formik
+                            initialValues={{ email: '' }}
+                            validationSchema={Yup.object().shape({
+                                email: Yup.string().email('Invalid email').required('Email is required'),
+                            })}
+                            onSubmit={handleForgotPassword}
+                            >
+                            {({ isSubmitting, status }) => (
+                                <Form>
+                                {status && status.success && (
+                                    <p className='text-green-500'>Password reset email sent!</p>
+                                )}
+                                <div className='flex flex-col mb-2 pb-3'>
+                                    <div className='relative'>
+                                    <Field
+                                        className='border p-2 w-full'
+                                        type='text'
+                                        name='email'
+                                        placeholder='Email'
+                                    />
+                                    <ErrorMessage
+                                        name='email'
+                                        component='div'
+                                        className='text-red-500 text-sm'
+                                    />
+                                    </div>
+                                </div>
+                                <button
+                                    className='w-full py-2 my-4 bg-gray-300 hover:bg-gray-400'
+                                    type='submit'
+                                    disabled={isSubmitting}
+                                >
+                                    Reset Password
+                                </button>
+                                <button
+                                    className='w-full py-2 bg-gray-300 hover:bg-gray-400'
+                                    onClick={() => setShowForgotPasswordModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                                </Form>
+                            )}
+                            </Formik>
+                        </div>
+                        </div>
+                    )}
+                    </div>
+                </div>
+                </div>
+      </>
+    )
 }
