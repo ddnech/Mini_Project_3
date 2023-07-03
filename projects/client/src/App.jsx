@@ -5,6 +5,7 @@ import { keep } from './store/reducer/authSlice'
 import Home from './page/home'
 import SignUp from './page/signup'
 import LogIn from './page/login'
+import UserProfile from './page/userProfile'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/myprofile" element={<UserProfile />} />
 
           {/* <Route path="/verification/:token" element={<EmailVerification />} />
           <Route path="/homeuser" element={<HomeUser />} />
