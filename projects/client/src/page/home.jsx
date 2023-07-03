@@ -1,15 +1,19 @@
 import NavBar from "../component/navbar"
 import Header from "../component/header"
 import Footer from "../component/footer"
+import TopSelling from "../component/topselling"
 
 export default function Home() {
     return (
         <div className="flex flex-col min-h-screen">
             <div className="sticky top-0 z-50">
                 <NavBar />
-            </div>~
+            </div>
             <div>
                 <Header />
+            </div>
+            <div>
+                <TopSelling />
             </div>
             <div className="mt-auto">
                 <Footer />
