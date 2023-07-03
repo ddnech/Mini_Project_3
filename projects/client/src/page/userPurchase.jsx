@@ -1,6 +1,6 @@
 import NavbarDashboard from "../component/user/navbarDashboard"
 import Footer from "../component/footer"
-import MyPurchase from "../component/user/mypurchase"
+import MyPurchase from "../component/user/myPurchase"
 
 export default function UserPurchase() {
     return (

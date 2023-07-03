@@ -1,6 +1,6 @@
 import NavbarDashboard from "../component/user/navbarDashboard"
 import Footer from "../component/footer"
-import MyShop from "../component/user/myshop"
+import MyShop from "../component/user/myShop"
 
 export default function UserShop() {
     return (
