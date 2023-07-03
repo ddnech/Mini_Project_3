@@ -4,11 +4,11 @@ import { MdEmail } from "react-icons/md"
 
 export default function Footer() {
     return (
-        <div className="bg-darkgreen w-screen h-32 grid content-center font-chivo">
+        <div className="bg-darkgreen w-screen h-32 grid content-center">
             <div className="m-4 flex flex-col gap-5">
                 <div className="basis-3/4 flex text-center justify-between">
                     <div className="p-2 basis-1/2">
-                        <p className="text-babypowder font-bold mb-2 text-sm text-left">FIND US ON</p>
+                        <p className="text-babypowder font-bold mb-2 text-sm text-left font-josefin tracking-wide">FIND US ON</p>
                         <p className="flex gap-2 text-flashwhite">
                             <a href="#" className="text-xl"><FaFacebookF className="text-sm" /></a>
                             <a href="#" className="text-xl"><FaTwitter className="text-sm" /></a>
@@ -18,10 +18,10 @@ export default function Footer() {
                     </div>
                     <div className="p-2 basis-1/2">
                         <div>
-                            <p className="text-babypowder font-bold mb-2 text-sm">Stay updated on our latest products!</p>
+                            <p className="text-babypowder font-semibold mb-2 leading-5 font-josefin">Get notify for our new products!</p>
                         </div>
                         <div className="flex content-center justify-center">
-                            <input type="text" placeholder="john.doe@gmail.com" className="text-xs w-40 h-5 outline-none focus:ring-2 focus:ring-lightgreen focus:ring-opacity-50"></input>
+                            <input type="text" placeholder="john.doe@gmail.com" className="font-ysa text-xs w-40 h-5 outline-none focus:ring-2 focus:ring-lightgreen focus:ring-opacity-50"></input>
                             <button className=" bg-flashwhite w-5 h-5 text-base flex items-center justify-center outline-none"><MdEmail className="" /></button>
                         </div>
                     </div>

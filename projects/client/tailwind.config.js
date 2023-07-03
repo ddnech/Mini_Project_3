@@ -4,9 +4,10 @@ module.exports = {
   theme: {
     extend: {},
     fontFamily: {
-      chivo: ["Chivo", "sans-serif"],
       lora: ["Lora", "serif"],
       maitree: ["Maitree", "serif"],
+      josefin: ["Josefin Sans", "sans-serif"],
+      ysa: ["Ysabeau Infant", "sans-serif"],
     },
     screens: {
       sm: "640px",
@@ -37,12 +38,12 @@ module.exports = {
       "5xl": "3.052rem",
     },
     letterSpacing: {
-      tighter: '-0.1em',
-      tight: '-0.05em',
-      normal: '0',
-      wide: '0.1em',
-      wider: '0.2em',
-      widest: '0.3em',
+      tighter: "-0.1em",
+      tight: "-0.05em",
+      normal: "0",
+      wide: "0.1em",
+      wider: "0.2em",
+      widest: "0.3em",
     },
   },
   plugins: [require("flowbite/plugin")],

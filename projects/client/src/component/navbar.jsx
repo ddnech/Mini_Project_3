@@ -32,15 +32,15 @@ export default function NavBar() {
         <div>
             <div className="bg-babypowder w-screen h-8 flex content-center">
                 <div className="basis-1/2">
-                    <Link to="/" className="basis-1/2 px-4 font-chivo">
-                        <span className="font-maitree font-semibold text-lg text-darkgreen">
+                    <Link to="/" className="basis-1/2 px-5 font-chivo">
+                        <span className="font-lora font-semibold text-lg text-darkgreen">
                             verdant market
                         </span>
                     </Link>
                 </div>
-                <div className="basis-1/2 text-right flex justify-end">
+                <div className="basis-1/2 text-right flex justify-end px-5">
                     <span className="hover:font-semibold px-4 pt-">
-                        <Link to="/login" className="basis-1/2 text-xs font-chivo">
+                        <Link to="/login" className="basis-1/2 text-xs font-josefin">
                             Log In
                         </Link>
                     </span>
