@@ -61,66 +61,66 @@ export default function LoginUser() {
 
     return (
       <>
-            <div className='w-full h-screen flex'>
-                <div className=' m-auto center'>
-                    <div className='p-4 flex flex-col justify-around'>
-                    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-                        {({ isSubmitting, status }) => (
-                        <Form className='relative'>
-                            <h2 className='text-4xl  text-center h-16 font-lora'>Login</h2>
-                            <p className='text-center mb-8 h-4 font-chivo tracking-wide'>Please enter your username and password</p>
-                            {status && status.success && <p className='text-center text-green-500'>Login successful!</p>}
-                            <div className='flex flex-col mb-2 pb-3'>
-                            <div className='relative'>
-                                <Field
-                                className='border p-1 w-full pr-10'
-                                type='text'
-                                name='username'
-                                placeholder='Username'
-                                />
-                                <ErrorMessage name='username' component='div' className='text-red-500 text-sm absolute left-0 bottom-[-20px]' />
-                            </div>
-                            </div>
-                            <div className='flex flex-col mb-4'>
-                            <div className='relative'>
-                                <Field
-                                className='border p-1 w-full pr-10'
-                                type={showPassword ? 'text' : 'password'}
-                                name='password'
-                                placeholder='Password'
-                                />
-                                <ErrorMessage name='password' component='div' className='text-red-500 text-sm absolute left-0 bottom-[-20px]' />
-                                <div className='pt-2 pl-1'>
-                                <button
-                                    type='button'
-                                    onClick={togglePasswordVisibility}
-                                    className='text-gray-500 focus:outline-none'
-                                >
-                                    {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
-                                </button>
-                                </div>
-                            </div>
-                            </div>
-                            <button
-                            className='w-full py-2 my-4 bg-gray-300 hover:bg-gray-400'
-                            type='submit'
-                            disabled={isSubmitting}
-                            >
-                            Sign In
-                            </button>
-                            {status && status.token && <p className='text-center'>Token: {status.token}</p>}
-                            <button
-                            className='w-full py-2 my-4 bg-gray-300 hover:bg-gray-400'
-                            onClick={handleSignUp}
-                            >
-                            Sign Up
-                            </button>
-                        </Form>
-                        )}
-                    </Formik>
+        <div className='grid justify-center mt-3'>
+          <div className='w-screen grid grid-flow-row justify-center'>
+              <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+                {({ isSubmitting, status }) => (
+                  <Form className='relative'>
+                    <h2 className='w-72 text-l text-center font-josefin mt-4 text-jetblack tracking-wide font-semibold'>Login</h2>
+                    <p className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Please enter your username and password:</p>
+                    {status && status.success && <p className='text-center text-green-500'>Login successful!</p>}
+                    <div className='grid grid-cols-1 mt-7 mb-1 pb-3'>
+                      <div className='font-ysa relative mt-4'>
+                        <ErrorMessage name='username' component='div' className='text-redd text-xs absolute -top-5' />
+                        <Field
+                          className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0'
+                          type='text'
+                          name='username'
+                          placeholder='Username'
+                        />
+                      </div>
                     </div>
-                </div>
-                </div>
+                    <div className='grid grid-cols-1 mb-4'>
+                      <div className='font-ysa relative mt-4'>
+                        <ErrorMessage name='password' component='div' className='text-redd text-xs absolute -top-5' />
+                        <Field
+                          className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0'
+                          type={showPassword ? 'text' : 'password'}
+                          name='password'
+                          placeholder='Password'
+                        />
+                        <div className='pt-2 pl-1'>
+                          <button
+                            type='button'
+                            onClick={togglePasswordVisibility}
+                            className='text-gray-500 focus:outline-none'
+                          >
+                            {showPassword ? <AiOutlineEye size={15} /> : <AiOutlineEyeInvisible size={15} />}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      className='w-full py-2 my-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
+                      type='submit'
+                      disabled={isSubmitting}
+                    >
+                      Sign In
+                    </button>
+                    {status && status.token && <p className='text-center'>Token: {status.token}</p>}
+                    <div className='text-center text-xs font-josefin tracking-wide  mb-6'>
+                      <p>
+                        Don't have an account?
+                        <button className='m-1'>
+                          <span className='p-1 hover:border-b-2 hover:border-darkgreen font-semibold'><Link to='/signup'>Create one</Link></span>
+                        </button>
+                      </p>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+          </div>
+        </div>
       </>
     )
 }
