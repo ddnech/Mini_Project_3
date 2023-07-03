@@ -27,7 +27,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="basis-1/4">
-                    <p className="font-chivo text-babypowder text-xs text-center">Copyright <FaCopyright className="text-xxs inline-block" /> 2023. All rights reserved</p>
+                    <p className="font-ysa text-babypowder text-xs text-center ">Copyright <FaCopyright className="text-xxs inline-block" /> 2023. All rights reserved</p>
                 </div>
             </div>
         </div>
