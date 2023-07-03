@@ -71,39 +71,39 @@ export default function SignupUser() {
                                         {status && status.success && (
                                             <p className="text-center text-greenn">{status.message}</p>
                                         )}
-                                        <div>
-
-                                            <ErrorMessage name='username' component='div' className='text-redd text-xs' />
-                                            <Field className='border border-gray-300 h-6 text-xs w-full mt-2 font-ysa' type='text' name='username' placeholder='Username' />
+                                        <div className='font-ysa relative mt-4'>
+                                            <ErrorMessage name='username' component='div' className='text-redd text-xs absolute -top-5' />
+                                            <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='username' placeholder='Username' />
                                         </div>
-                                        <div>
-
-                                            <ErrorMessage name='storeName' component='div' className='text-redd text-xs' />
-                                            <Field className='border border-gray-300 h-6 text-xs w-full mt-2 font-ysa' type='text' name='storeName' placeholder='Store Name' />
+                                        <div className='font-ysa relative mt-4'>
+                                            <ErrorMessage name='storeName' component='div' className='text-redd text-xs absolute -top-5' />
+                                            <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='storeName' placeholder='Store Name' />
                                         </div>
-                                        <div>
-                                            <ErrorMessage name='email' component='div' className='text-redd text-xs' />
-                                            <Field className='border border-gray-300 h-6 text-xs w-full mt-2 font-ysa' type='email' name='email' placeholder='Email' />
+                                        <div className='font-ysa relative mt-4'>
+                                            <ErrorMessage name='email' component='div' className='text-redd text-xs absolute -top-5' />
+                                            <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='email' name='email' placeholder='Email' />
                                         </div>
-                                        <div>
-                                            <ErrorMessage name='phone' component='div' className='text-redd text-xs' />
-                                            <Field className='border border-gray-300 h-6 text-xs w-full mt-2 font-ysa' type='text' name='phone' placeholder='Phone' />
+                                        <div className='font-ysa relative mt-4'>
+                                            <ErrorMessage name='phone' component='div' className='text-redd text-xs absolute -top-5' />
+                                            <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='phone' placeholder='Phone' />
                                         </div>
-                                        <div>
-                                            <ErrorMessage name='address' component='div' className='text-redd text-xs' />
-                                            <Field className='border border-gray-300 h-6 text-xs w-full mt-2 font-ysa' type='text' name='address' placeholder='Address' />
+                                        <div className='font-ysa relative mt-4'>
+                                            <ErrorMessage name='address' component='div' className='text-redd text-xs absolute -top-5' />
+                                            <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='address' placeholder='Address' />
                                         </div>
-                                        <ErrorMessage name='password' component='div' className='text-redd text-xs' />
-                                        <Field
-                                            className='border border-gray-300 h-6 text-xs w-full mt-2 font-ysa'
-                                            type={showPassword ? 'text' : 'password'}
-                                            name='password'
-                                            placeholder='Password'
-                                        />
-                                        <div>
-                                            <ErrorMessage name='confirmPassword' component='div' className='text-redd text-xs' />
+                                        <div className='font-ysa relative mt-4'>
+                                            <ErrorMessage name='password' component='div' className='text-redd text-xs absolute -top-5' />
                                             <Field
-                                                className='border border-gray-300 h-6 text-xs w-full mt-2 font-ysa'
+                                                className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0'
+                                                type={showPassword ? 'text' : 'password'}
+                                                name='password'
+                                                placeholder='Password'
+                                            />
+                                        </div>
+                                        <div className='font-ysa relative mt-4'>
+                                            <ErrorMessage name='confirmPassword' component='div' className='text-redd text-xs absolute -top-5' />
+                                            <Field
+                                                className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0'
                                                 type={showPassword ? 'text' : 'password'}
                                                 name='confirmPassword'
                                                 placeholder='Confirm Password'
@@ -114,7 +114,7 @@ export default function SignupUser() {
                                         <button type='password' onClick={togglePassword} className='border-none'>{showPassword ? <AiOutlineEye size={15} /> : <AiOutlineEyeInvisible size={15} />}</button>
                                     </div>
                                     <button
-                                        className='w-full py-2 my-4 text-xs font-chivo tracking-widest border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
+                                        className='w-full py-2 my-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
                                         type='submit'
                                         disabled={isSubmitting}
                                     >
@@ -125,11 +125,11 @@ export default function SignupUser() {
                         )}
                     </Formik>
                 </div>
-                <div className='text-center text-xs font-chivo tracking-wider mb-6'>
+                <div className='text-center text-xs font-josefin tracking-wide  mb-6'>
                     <p>
                         Already a user?
                         <button className='m-1'>
-                            <span className='p-1 hover:border-b-2 hover:border-darkgreen tracking-wide'><Link to='/login'>Log In!</Link></span>
+                            <span className='p-1 hover:border-b-2 hover:border-darkgreen font-semibold'><Link to='/login'>Log In!</Link></span>
                         </button>
                     </p>
                 </div>
