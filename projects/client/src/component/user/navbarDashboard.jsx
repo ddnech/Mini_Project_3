@@ -23,12 +23,12 @@ export default function NavbarDashboard() {
                             </Link>
                         </span>
                         <span className="hover:border-b-4 hover:border-gray-300 px-4 grid content-center">
-                            <Link to="/" className="basis-1/2 text-xs font-josefin h-5">
+                            <Link to="/myshop" className="basis-1/2 text-xs font-josefin h-5">
                                 <BsShopWindow size={15} />
                             </Link>
                         </span>
                         <span className="hover:border-b-4 hover:border-gray-300 px-4 grid content-center">
-                            <Link to="/" className="basis-1/2 text-xs font-josefin h-5">
+                            <Link to="/mypurchase" className="basis-1/2 text-xs font-josefin h-5">
                                 <TfiClipboard size={15} />
                             </Link>
                         </span>
@@ -45,12 +45,12 @@ export default function NavbarDashboard() {
                             </Link>
                         </span>
                         <span className="hover:border-b-4 hover:border-gray-300 px-4">
-                            <Link to="/" className="text-xs font-josefin">
+                            <Link to="/myshop" className="text-xs font-josefin">
                                 My Shop
                             </Link>
                         </span>
                         <span className="hover:border-b-4 hover:border-gray-300 px-4">
-                            <Link to="/" className="text-xs font-josefin">
+                            <Link to="/mypurchase" className="text-xs font-josefin">
                                 My Purchase
                             </Link>
                         </span>

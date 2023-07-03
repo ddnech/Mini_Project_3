@@ -6,6 +6,8 @@ import Home from './page/home'
 import SignUp from './page/signup'
 import LogIn from './page/login'
 import UserProfile from './page/userProfile'
+import UserShop from './page/userShop'
+import UserPurchase from './page/userPurchase'
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/myprofile" element={<UserProfile />} />
+          <Route path="/myshop" element={<UserShop />} />
+          <Route path="/mypurchase" element={<UserPurchase />} />
 
           {/* <Route path="/verification/:token" element={<EmailVerification />} />
           <Route path="/homeuser" element={<HomeUser />} />
