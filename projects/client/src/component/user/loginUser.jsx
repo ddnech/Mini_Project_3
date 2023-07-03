@@ -52,12 +52,6 @@ export default function LoginUser() {
     const togglePasswordVisibility = () => {
       setShowPassword((prevShowPassword) => !prevShowPassword);
     };
-  
-    const handleSignUp = () => {
-      // Redirect to sign up page
-      navigate('/signup');
-    };
-  
 
     return (
       <>
