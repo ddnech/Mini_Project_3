@@ -30,8 +30,8 @@ router.patch(
 
 router.get(
   "/",
-  productController.getAllProduct
-  );
-
+  authMiddleware.verifyToken,
+  productController.getAllUserProduct
+);
 
 module.exports = router;

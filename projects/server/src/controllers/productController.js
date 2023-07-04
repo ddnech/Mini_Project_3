@@ -36,45 +36,48 @@ module.exports = {
     }
   },
 
-  async getAllProduct(req, res) {
+  async getAllUserProduct(req, res) {
     const pagination = {
       page: Number(req.query.page) || 1,
       perPage: 9,
       search: req.query.search || undefined,
       category: req.query.category || undefined,
-      sort: req.query.sort || "priceHighToLow",
+      sortAlphabet: req.query.sortAlphabet || "DESC",
+      sortPrice: req.query.sortPrice || "DESC",
     };
-  
+
     try {
-      const filterOptions = {};
-  
+      const where = {};
+      const order = [];
+
+      if (req.user.id) {
+        where.seller_id = req.user.id;
+      }
+
       if (pagination.search) {
-        filterOptions.name = {
+        where.name = {
           [db.Sequelize.Op.like]: `%${pagination.search}%`,
         };
       }
-  
+
       if (pagination.category) {
-        filterOptions.category_id = pagination.category;
+        where.category_id = pagination.category;
       }
-  
-      let order;
-      switch (pagination.sort) {
-        case 'alphabetAZ':
-          order = [['name', 'ASC']];
-          break;
-        case 'alphabetZA':
-          order = [['name', 'DESC']];
-          break;
-        case 'priceLowHigh':
-          order = [['price', 'ASC']];
-          break;
-        default:
-          order = [['price', 'DESC']];
+
+      if (pagination.sortAlphabet.toUpperCase() === "DESC") {
+        order.push(["name", "DESC"]);
+      } else {
+        order.push(["name", "ASC"]);
       }
-  
+
+      if (pagination.sortPrice.toUpperCase() === "DESC") {
+        order.push(["price", "DESC"]);
+      } else {
+        order.push(["price", "ASC"]);
+      }
+
       const results = await db.Product.findAndCountAll({
-        where: filterOptions,
+        where,
         include: [
           {
             model: db.Category,
@@ -84,16 +87,16 @@ module.exports = {
         offset: (pagination.page - 1) * pagination.perPage,
         order,
       });
-  
+
       const totalCount = results.count;
       pagination.totalData = totalCount;
-  
+
       if (results.rows.length === 0) {
         return res.status(200).send({
-          message: 'No products found',
+          message: "No products found",
         });
       }
-  
+
       res.send({
         message: "Successfully retrieved products",
         pagination,
@@ -123,7 +126,6 @@ module.exports = {
       });
     }
   },
-  
 
   async updateProduct(req, res) {
     try {
@@ -187,6 +189,7 @@ module.exports = {
     try {
       const category = await db.Category.findAll({
         attributes: ["id", "name"],
+        order: [["id", "ASC"]],
       });
 
       return res
