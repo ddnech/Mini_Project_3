@@ -54,14 +54,12 @@ export default function ShopNew() {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     price: Yup.number()
-      .required('Price is required')
-      .positive('Price must be a positive number'),
+      .required('Price is required'),
     category: Yup.string().required('Category is required'),
     description: Yup.string().required('Description is required'),
     stock: Yup.number()
       .required('Stock is required')
-      .integer('Stock must be an integer')
-      .positive('Stock must be a positive number'),
+
   });
 
   const initialValues = {

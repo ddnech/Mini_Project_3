@@ -17,6 +17,7 @@ router.post(
   "/",
   authMiddleware.verifyToken,
   multerMiddleware.single("file"),
+  validatorMiddleware.validateProduct,
   productController.createProduct
 );
 
