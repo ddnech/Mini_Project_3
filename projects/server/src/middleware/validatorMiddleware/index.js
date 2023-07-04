@@ -122,6 +122,29 @@ module.exports = {
       .withMessage("Minimum password length is 8 characters"),
   ]),
 
+validateProduct: validate([
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Product name is required")
+    .isLength({ max: 50 })
+    .withMessage("Maximum character is 50"),
+  body("price")
+    .trim()
+    .notEmpty()
+    .withMessage("Price is required")
+    .isNumeric(),
+  body("category_id")
+    .notEmpty()
+    .withMessage("Category is required"),
+  body("description")
+    .notEmpty()
+    .withMessage("Description is required"),
+  body("stock")
+  .notEmpty()
+  .withMessage("Stock is required"),
+]),
+
   validateLogin: validate([
     body("username").notEmpty().withMessage("Username is required"),
     body("password")
