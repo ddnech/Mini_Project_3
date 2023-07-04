@@ -43,20 +43,31 @@ export default function SignupUser() {
 
     const handleSubmit = async (values, { setSubmitting, resetForm, setStatus }) => {
         try {
-            const response = await axios.post('https://localhost:8000/api/auth/register', values);
+            const response = await axios.post('http://localhost:8000/api/auth/register', values);
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 resetForm();
                 setStatus({ success: true, message: 'Sign up successful!' });
-            } else {
-                throw new Error('Sign up Failed');
             }
+
         } catch (error) {
-            setStatus({ success: false });
+            const response = error.response;
+            if (response.status === 400) {
+                const { errors } = response.data;
+                const errorMessage = errors[0].msg;
+                console.log(errorMessage)
+                setStatus({ success: false, message: errorMessage });
+            }
+
+            if (response.status === 500) {
+                setStatus({ success: false, message: "Internal Server Error" });
+            }
+
         } finally {
             setSubmitting(false);
         }
     };
+
     return (
         <div className='grid justify-center mt-3'>
             <div className='w-screen grid grid-flow-row justify-center'>
@@ -69,7 +80,10 @@ export default function SignupUser() {
                                     <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Please fill in the information below:</h3>
                                     <div className='w-full grid grid-flow-row gap-3'>
                                         {status && status.success && (
-                                            <p className="text-center text-greenn">{status.message}</p>
+                                            <p className="font-ysa text-center text-greenn">{status.message}</p>
+                                        )}
+                                        {status && !status.success && (
+                                            <p className="font-ysa text-center text-redd">{status.message}</p>
                                         )}
                                         <div className='font-ysa relative mt-4'>
                                             <ErrorMessage name='username' component='div' className='text-redd text-xs absolute -top-5' />
