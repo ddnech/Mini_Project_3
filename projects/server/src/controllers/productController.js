@@ -44,27 +44,36 @@ module.exports = {
       category: req.query.category || undefined,
       sort: req.query.sort || "priceHighToLow",
     };
-
+  
     try {
       const filterOptions = {};
-
+  
       if (pagination.search) {
         filterOptions.name = {
           [db.Sequelize.Op.like]: `%${pagination.search}%`,
         };
       }
-
+  
       if (pagination.category) {
         filterOptions.category_id = pagination.category;
       }
-
-      const order =
-        pagination.sort === "alphabet"
-          ? [["name", "ASC"]]
-          : [["price", "DESC"]];
-
+  
+      let order;
+      switch (pagination.sort) {
+        case 'alphabetAZ':
+          order = [['name', 'ASC']];
+          break;
+        case 'alphabetZA':
+          order = [['name', 'DESC']];
+          break;
+        case 'priceLowHigh':
+          order = [['price', 'ASC']];
+          break;
+        default:
+          order = [['price', 'DESC']];
+      }
+  
       const results = await db.Product.findAndCountAll({
-        // attributes:{exclude:["product_id","user_id","user_seller_id"]},
         where: filterOptions,
         include: [
           {
@@ -75,16 +84,16 @@ module.exports = {
         offset: (pagination.page - 1) * pagination.perPage,
         order,
       });
-
+  
       const totalCount = results.count;
       pagination.totalData = totalCount;
-
+  
       if (results.rows.length === 0) {
         return res.status(200).send({
           message: 'No products found',
         });
       }
-
+  
       res.send({
         message: "Successfully retrieved products",
         pagination,
@@ -114,6 +123,7 @@ module.exports = {
       });
     }
   },
+  
 
   async updateProduct(req, res) {
     try {
