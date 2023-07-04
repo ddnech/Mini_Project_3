@@ -6,9 +6,9 @@ import Home from './page/home'
 import SignUp from './page/signup'
 import LogIn from './page/login'
 import UserProfile from './page/userProfile'
-import UserShop from './page/userShop'
 import UserPurchase from './page/userPurchase'
 import store from './store/index'
+import UserStore from './page/userShop'
 
 
 function App() {
@@ -36,7 +36,7 @@ function AppContent() {
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/myprofile" element={<UserProfile />} />
-        <Route path="/myshop" element={<UserShop />} />
+        <Route path="/mystore" element={<UserStore />} />
         <Route path="/mypurchase" element={<UserPurchase />} />
       </Routes>
     </Router>

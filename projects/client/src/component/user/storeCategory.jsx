@@ -5,7 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from "axios";
 
-export default function ShopCategory() {
+export default function StoreCategory() {
     const token = useSelector((state) => state.auth.token)
 
     //handle accordian

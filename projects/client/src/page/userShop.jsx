@@ -1,15 +1,15 @@
 import NavbarDashboard from "../component/user/navbarDashboard"
 import Footer from "../component/footer"
-import MyShop from "../component/user/contentShop"
+import MyStore from "../component/user/contentStore"
 
-export default function UserShop() {
+export default function UserStore() {
     return (
         <div className="flex flex-col min-h-screen">
             <div className="sticky top-0 z-50">
                 <NavbarDashboard />
             </div>
             <div>
-                <MyShop />
+                <MyStore />
             </div>
             <div className="mt-auto">
                 <Footer />

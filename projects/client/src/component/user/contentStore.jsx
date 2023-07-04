@@ -3,12 +3,12 @@ import { useState } from "react";
 import { BsBoxFill } from "react-icons/bs"
 import { ImBoxAdd } from "react-icons/im"
 import { FaCashRegister, FaListAlt } from "react-icons/fa"
-import ShopProduct from "./shopProduct";
-import ShopNew from "./shopNew";
-import ShopIncome from "./shopIncome";
-import ShopCategory from "./shopCategory";
+import StoreProduct from "./storeProduct";
+import StoreNew from "./storeNew";
+import StoreIncome from "./storeIncome";
+import StoreCategory from "./storeCategory";
 
-export default function MyShop() {
+export default function MyStore() {
     const [activeTab, setActiveTab] = useState('product');
 
     const handleTabClick = (tabId) => {
@@ -114,7 +114,7 @@ export default function MyShop() {
                         aria-labelledby="product-tab"
                     >
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <ShopProduct />
+                            <StoreProduct />
                         </p>
                     </div>
                     <div
@@ -125,7 +125,7 @@ export default function MyShop() {
                         aria-labelledby="new-tab"
                     >
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <ShopNew />
+                            <StoreNew />
                         </p>
                     </div>
                     <div
@@ -136,7 +136,7 @@ export default function MyShop() {
                         aria-labelledby="income-tab"
                     >
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <ShopIncome />
+                            <StoreIncome />
                         </p>
                     </div>
                     <div
@@ -147,7 +147,7 @@ export default function MyShop() {
                         aria-labelledby="category-tab"
                     >
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <ShopCategory />
+                            <StoreCategory />
                         </p>
                     </div>
                 </div>

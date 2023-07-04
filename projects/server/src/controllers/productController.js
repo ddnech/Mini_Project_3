@@ -36,6 +36,83 @@ module.exports = {
     }
   },
 
+  async searchProduct(req, res) {
+    const pagination = {
+      page: Number(req.query.page) || 1,
+      perPage: Number(req.query.perPage) || 10,
+      search: req.query.search || undefined,
+      category: req.query.category || undefined,
+      sort: req.query.sort || 'priceHighToLow',
+    };
+  
+    try {
+      const filterOptions = {};
+  
+      if (pagination.search) {
+        filterOptions.name = {
+          [db.Sequelize.Op.like]: `%${pagination.search}%`,
+        };
+      }
+  
+      if (pagination.category) {
+        filterOptions.category_id = pagination.category;
+      }
+  
+      const order =
+        pagination.sort === 'alphabet'
+          ? [['name', 'ASC']]
+          : [['price', 'DESC']];
+  
+      const results = await db.Product.findAndCountAll({
+        where: filterOptions,
+        include: [
+          {
+            model: db.Category,
+          },
+        ],
+        limit: pagination.perPage,
+        offset: (pagination.page - 1) * pagination.perPage,
+        order,
+      });
+  
+      const totalCount = results.count;
+      pagination.totalData = totalCount;
+  
+      if (results.rows.length === 0) {
+        return res.status(404).send({
+          message: 'No products found',
+        });
+      }
+  
+      res.send({
+        message: 'Successfully retrieved products',
+        pagination,
+        data: results.rows.map((product) => {
+          return {
+            product_id: product.id,
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            imgProduct: product.imgProduct,
+            stock: product.stock,
+            isActive: product.isActive,
+            createdAt: product.createdAt,
+            updatedAt: product.updatedAt,
+            category: product.Category.name,
+          };
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: 'Internal Server Error',
+        error: error.message,
+      });
+    }
+  },
+
+  
+
   async updateProduct(req, res) {
     try {
       const { name, price, category_id, description, stock } = req.body;

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-export default function ShopNew() {
+export default function StoreNew() {
   const token = useSelector((state) => state.auth.token);
   const [image, setImage] = useState('');
 

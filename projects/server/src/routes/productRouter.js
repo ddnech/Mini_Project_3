@@ -28,4 +28,10 @@ router.patch(
   productController.updateProduct
 );
 
+router.get(
+  "/",
+  productController.searchProduct
+  );
+
+
 module.exports = router;

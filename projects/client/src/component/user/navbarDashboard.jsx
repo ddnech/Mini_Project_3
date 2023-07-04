@@ -51,8 +51,8 @@ export default function NavbarDashboard() {
                             </Link>
                         </span>
                         <span className={`hover:border-b-4 hover:border-gray-300 px-4 grid content-center ${isCurrentRoute("/myshop") ? "border-b-4 border-gray-300" : ""}`}>
-                            <Link to="/myshop" className="text-xs font-josefin">
-                                My Shop
+                            <Link to="/mystore" className="text-xs font-josefin">
+                                My Store
                             </Link>
                         </span>
                         <span className={`hover:border-b-4 hover:border-gray-300 px-4 grid content-center ${isCurrentRoute("/mypurchase") ? "border-b-4 border-gray-300" : ""}`}>
