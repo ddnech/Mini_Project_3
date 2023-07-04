@@ -8,11 +8,11 @@ import LogIn from './page/login'
 import UserProfile from './page/userProfile'
 import UserPurchase from './page/userPurchase'
 import store from './store/index'
-import UserStore from './page/userShop'
+import UserStore from './page/userStore'
 
 
 function App() {
-  
+
   return (
     <Provider store={store}>
       <AppContent />
