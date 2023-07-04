@@ -36,10 +36,10 @@ module.exports = {
     }
   },
 
-  async searchProduct(req, res) {
+  async getAllProduct(req, res) {
     const pagination = {
       page: Number(req.query.page) || 1,
-      perPage: Number(req.query.perPage) || 10,
+      perPage: 9,
       search: req.query.search || undefined,
       category: req.query.category || undefined,
       sort: req.query.sort || 'priceHighToLow',
@@ -64,6 +64,7 @@ module.exports = {
           : [['price', 'DESC']];
   
       const results = await db.Product.findAndCountAll({
+        // attributes:{exclude:["product_id","user_id","user_seller_id"]},
         where: filterOptions,
         include: [
           {
@@ -79,7 +80,7 @@ module.exports = {
       pagination.totalData = totalCount;
   
       if (results.rows.length === 0) {
-        return res.status(404).send({
+        return res.status(200).send({
           message: 'No products found',
         });
       }
@@ -89,7 +90,7 @@ module.exports = {
         pagination,
         data: results.rows.map((product) => {
           return {
-            product_id: product.id,
+            id: product.id,
             name: product.name,
             price: product.price,
             description: product.description,
@@ -98,7 +99,10 @@ module.exports = {
             isActive: product.isActive,
             createdAt: product.createdAt,
             updatedAt: product.updatedAt,
-            category: product.Category.name,
+            category: {
+              id: product.Category.id,
+              name: product.Category.name,
+            },
           };
         }),
       });

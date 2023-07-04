@@ -30,7 +30,7 @@ router.patch(
 
 router.get(
   "/",
-  productController.searchProduct
+  productController.getAllProduct
   );
 
 

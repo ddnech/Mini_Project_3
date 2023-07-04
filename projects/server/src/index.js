@@ -10,6 +10,11 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use("Public/product", express.static("Public/product"));
+app.use("Public/profile", express.static("Public/profile"));
+
+
+
 //#region API ROUTES
 
 // ===========================
@@ -24,6 +29,7 @@ app.get("/api/greetings", (req, res, next) => {
     message: "Hello, Student !",
   });
 });
+
 
 app.use("/api/auth", router.auth);
 app.use("/api/product", router.product);
