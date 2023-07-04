@@ -87,6 +87,10 @@ export default function StoreCategory() {
                 setStatus({ success: false, message: errorMessage });
             }
 
+            if (response.status === 404) {
+                setStatus({ success: false, message: "Category not found" })
+            }
+
             if (response.status === 500) {
                 setStatus({ success: false, message: "Internal Server Error" });
             }
