@@ -48,7 +48,7 @@ export default function NavBar() {
                   <AiOutlineUser size={20} />
                 </button>
                 {isProfileMenuOpen && (
-                  <ul className="absolute right-0 mt-2 bg-white text-black shadow-lg">
+                  <ul className="absolute right-0 bg-white text-black shadow-lg">
                     <li className="flex y-0 items-center p-2 border-b border-gray-600 bg-babypowder hover:text-redd">
                       <AiOutlineUnorderedList size={20} className="mr-2" />
                       <Link to="/myprofile">Dashboard</Link>
