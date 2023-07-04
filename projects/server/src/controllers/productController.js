@@ -42,27 +42,27 @@ module.exports = {
       perPage: Number(req.query.perPage) || 10,
       search: req.query.search || undefined,
       category: req.query.category || undefined,
-      sort: req.query.sort || 'priceHighToLow',
+      sort: req.query.sort || "priceHighToLow",
     };
-  
+
     try {
       const filterOptions = {};
-  
+
       if (pagination.search) {
         filterOptions.name = {
           [db.Sequelize.Op.like]: `%${pagination.search}%`,
         };
       }
-  
+
       if (pagination.category) {
         filterOptions.category_id = pagination.category;
       }
-  
+
       const order =
-        pagination.sort === 'alphabet'
-          ? [['name', 'ASC']]
-          : [['price', 'DESC']];
-  
+        pagination.sort === "alphabet"
+          ? [["name", "ASC"]]
+          : [["price", "DESC"]];
+
       const results = await db.Product.findAndCountAll({
         where: filterOptions,
         include: [
@@ -74,18 +74,18 @@ module.exports = {
         offset: (pagination.page - 1) * pagination.perPage,
         order,
       });
-  
+
       const totalCount = results.count;
       pagination.totalData = totalCount;
-  
+
       if (results.rows.length === 0) {
         return res.status(404).send({
-          message: 'No products found',
+          message: "No products found",
         });
       }
-  
+
       res.send({
-        message: 'Successfully retrieved products',
+        message: "Successfully retrieved products",
         pagination,
         data: results.rows.map((product) => {
           return {
@@ -105,13 +105,11 @@ module.exports = {
     } catch (error) {
       console.log(error);
       res.status(500).send({
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
         error: error.message,
       });
     }
   },
-
-  
 
   async updateProduct(req, res) {
     try {
@@ -243,7 +241,7 @@ module.exports = {
       });
 
       if (!getCategory) {
-        return res.status(401).send({ message: "Category not found" });
+        return res.status(404).send({ message: "Category not found" });
       }
 
       if (name) {
