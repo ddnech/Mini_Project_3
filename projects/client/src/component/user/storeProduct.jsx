@@ -14,6 +14,11 @@ export default function StoreProduct() {
         setActiveTab(tabId);
     };
 
+    const handleImageError = (event) => {
+        event.target.src =
+          'https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg';
+      };
+
 
     // handle search
     const [searchValue, setSearchValue] = useState('');
@@ -54,24 +59,25 @@ export default function StoreProduct() {
     }, [token])
 
     // handle blog
-    // const location = useLocation();
-    const [allBlog, setAllBlog] = useState([]);
+    const location = useLocation();
+    const [allproduct, setAllProduct] = useState([]);
 
-    // useEffect(() => {
-    //     const params = new URLSearchParams(location.search);
-    //     let page = params.get('page');
-    //     if (!page) page = 1;
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        let page = params.get('page');
+        if (!page) page = 1;
 
-    //     if (token) {
-    //         const data = axios.get(`http://localhost:8000/api/product?page=${page}&search=${searchValue}&category=${selectCategory}&sortAlphabet=${sortAlphabet}&sortPrice${sortPrice}`, { headers: { Authorization: `Bearer ${token}` } })
-    //             .then(response => {
-    //                 console.log(response.data)
-    //                 setAllBlog(response.data.data)
-    //             }).catch(error => {
-    //                 console.log(error.message)
-    //             })
-    //     }
-    // }, [token, searchValue, selectCategory, sortAlphabet, sortPrice])
+        if (token) {
+            const data = axios.get(`http://localhost:8000/api/product?page=${page}&search=${searchValue}&category=${selectCategory}&sortAlphabet=${sortAlphabet}&sortPrice${sortPrice}`, { headers: { Authorization: `Bearer ${token}` } })
+                .then(response => {
+                    console.log(response.data)
+                    setAllProduct(response.data.data)
+                }).catch(error => {
+                    console.log(error.message)
+                })
+        }
+    }, [token, searchValue, selectCategory, sortAlphabet, sortPrice])
+    
 
     useEffect(() => {
         const products = axios.get("http://localhost:8000/api/product", { headers: { Authorization: `Bearer ${token}` } })
@@ -179,28 +185,37 @@ export default function StoreProduct() {
                             </div>
                         </div>
                         <div className="flex flex-wrap gap-2 mt-2 mx-2">
+
+
+
                             {/* blog */}
-                            <div className="bg-white w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1">
+                            {allproduct.map( (allproduct)=> (
+                            <div className={`${
+                                allproduct.isActive ? "bg-white w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1" : " bg-gray-400 w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1 opacity-20"
+                              }`}>
                                 <div className="w-full">
-                                    <div className="bg-lightgreen w-20 h-20 justify-center mx-auto m-2">
-                                        img here
-                                    </div>
+                                     <img
+                                        className="w-20 h-20 justify-center mx-auto m-2 object-cover"
+                                        src={`http://localhost:8000${allproduct.imgProduct}`}
+                                        onError={handleImageError}
+                                        alt="/"
+                                        />
                                 </div>
                                 <div className="flex flex-col text-center gap-2 mt-2">
                                     <div className="flex-1 font-lora text-base overflow-auto">
-                                        product name SJDflajsbdflaslfaunselfuinslfunaoiurnfliusrnliush
+                                    {allproduct.name}
                                     </div>
                                     <div className="font-josefin overflow-auto">
-                                        active
+                                        {allproduct.isActive ? "active" : "inactive"}
                                     </div>
                                     <div className="font-josefin overflow-auto">
-                                        category
+                                    {allproduct.category.name}
                                     </div>
-                                    <div className="font-lora mx-auto mt-3 h-full">
-                                        <table>
+                                    <div className="font-lora mx-auto mt-3 h-full grow-0 w-44">
+                                        <table className="mx-auto">
                                             <tr>
-                                                <td className="border-r-2 border-gray-200 px-4 overflow-auto">Price</td>
-                                                <td className="px-4 overflow-auto">Stock</td>
+                                                <td className="border-r-2 border-gray-200 px-4 overflow-auto">{allproduct.price}</td>
+                                                <td className="px-4 overflow-auto">{allproduct.stock}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -213,72 +228,11 @@ export default function StoreProduct() {
                                     </Link>
                                 </div>
                             </div>
-                            <div className="bg-white w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1">
-                                <div className="w-full">
-                                    <div className="bg-lightgreen w-20 h-20 justify-center mx-auto m-2">
-                                        img here
-                                    </div>
-                                </div>
-                                <div className="flex flex-col text-center gap-2 mt-2">
-                                    <div className="flex-1 font-lora text-base overflow-auto">
-                                        product name SJDflajsbdflaslfaunselfuinslfunaoiurnfliusrnliush
-                                    </div>
-                                    <div className="font-josefin overflow-auto">
-                                        active
-                                    </div>
-                                    <div className="font-josefin overflow-auto">
-                                        category
-                                    </div>
-                                    <div className="font-lora mx-auto mt-3 h-full">
-                                        <table>
-                                            <tr>
-                                                <td className="border-r-2 border-gray-200 px-4 overflow-auto">Price</td>
-                                                <td className="px-4 overflow-auto">Stock</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <Link to="/">
-                                        <button
-                                            className='w-full py-2 mt-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
-                                        >
-                                            Edit Product
-                                        </button>
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="bg-white w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1">
-                                <div className="w-full">
-                                    <div className="bg-lightgreen w-20 h-20 justify-center mx-auto m-2">
-                                        img here
-                                    </div>
-                                </div>
-                                <div className="flex flex-col text-center gap-2 mt-2">
-                                    <div className="flex-1 font-lora text-base overflow-auto">
-                                        product name SJDflajsbdflaslfaunselfuinslfunaoiurnfliusrnliush
-                                    </div>
-                                    <div className="font-josefin overflow-auto">
-                                        active
-                                    </div>
-                                    <div className="font-josefin overflow-auto">
-                                        category
-                                    </div>
-                                    <div className="font-lora mx-auto mt-3 h-full">
-                                        <table>
-                                            <tr>
-                                                <td className="border-r-2 border-gray-200 px-4 overflow-auto">Price</td>
-                                                <td className="px-4 overflow-auto">Stock</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <Link to="/">
-                                        <button
-                                            className='w-full py-2 mt-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
-                                        >
-                                            Edit Product
-                                        </button>
-                                    </Link>
-                                </div>
-                            </div>
+                            ))}
+
+
+
+
                         </div>
                     </div>
                 )}

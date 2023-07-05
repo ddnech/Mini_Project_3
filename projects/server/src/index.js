@@ -10,8 +10,8 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use("Public/product", express.static("Public/product"));
-app.use("Public/profile", express.static("Public/profile"));
+app.use("/src/Public/product", express.static("src/Public/product"));
+app.use("/src/Public/profile", express.static("src/Public/profile"));
 
 
 

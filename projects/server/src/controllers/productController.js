@@ -42,8 +42,8 @@ module.exports = {
       perPage: 9,
       search: req.query.search || undefined,
       category: req.query.category || undefined,
-      sortAlphabet: req.query.sortAlphabet || "DESC",
-      sortPrice: req.query.sortPrice || "DESC",
+      sortAlphabet: req.query.sortAlphabet,
+      sortPrice: req.query.sortPrice,
     };
 
     try {
@@ -63,18 +63,22 @@ module.exports = {
       if (pagination.category) {
         where.category_id = pagination.category;
       }
-
-      if (pagination.sortAlphabet.toUpperCase() === "DESC") {
-        order.push(["name", "DESC"]);
-      } else {
-        order.push(["name", "ASC"]);
+      if(pagination.sortAlphabet){
+        if (pagination.sortAlphabet.toUpperCase() === "DESC") {
+          order.push(["name", "DESC"]);
+        } else {
+          order.push(["name", "ASC"]);
+        }
       }
 
-      if (pagination.sortPrice.toUpperCase() === "DESC") {
-        order.push(["price", "DESC"]);
-      } else {
-        order.push(["price", "ASC"]);
+      if(pagination.sortPrice){
+        if (pagination.sortPrice.toUpperCase() === "DESC") {
+          order.push(["price", "DESC"]);
+        } else {
+          order.push(["price", "ASC"]);
+        }
       }
+
 
       const results = await db.Product.findAndCountAll({
         where,

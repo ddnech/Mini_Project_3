@@ -14,7 +14,7 @@ module.exports = {
       return "";
     }
     const split = dbValue.split("/");
-    if (split.length < 4) {
+    if (split.length < 5) {
       return "";
     }
     return split[4];
