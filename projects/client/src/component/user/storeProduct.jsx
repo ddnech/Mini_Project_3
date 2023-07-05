@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import axios from "axios";
+import { Pagination } from "flowbite-react";
 
 export default function StoreProduct() {
     const token = useSelector((state) => state.auth.token)
@@ -58,21 +59,29 @@ export default function StoreProduct() {
         }
     }, [token])
 
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const onPageChange = (page) => {
+        setAllProduct([]);
+        setCurrentPage(page)
+    }
+
+
     // handle blog
     const location = useLocation();
-    const [allproduct, setAllProduct] = useState([]);
+    const [allProduct, setAllProduct] = useState([]);
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        let page = params.get('page');
-        if (!page) page = 1;
-
         if (token) {
-            const data = axios.get(`http://localhost:8000/api/user/product?page=${page}&search=${searchValue}&category=${selectCategory}&sortAlphabet=${sortAlphabet}&sortPrice${sortPrice}`, { headers: { Authorization: `Bearer ${token}` } })
+            const data = axios.get(`http://localhost:8000/api/user/product?page=${currentPage}&search=${searchValue}&category=${selectCategory}&sortAlphabet=${sortAlphabet}&sortPrice${sortPrice}`, { headers: { Authorization: `Bearer ${token}` } })
                 .then(response => {
                     console.log(response.data)
+                    const { pagination } = response.data;
                     if (response.data.data) {
                         setAllProduct(response.data.data)
+                        setTotalPages(Math.ceil(pagination.totalData / pagination.perPage))
                     } else {
                         setAllProduct([])
                     }
@@ -80,18 +89,7 @@ export default function StoreProduct() {
                     console.log(error.message)
                 })
         }
-    }, [token, searchValue, selectCategory, sortAlphabet, sortPrice])
-
-
-    useEffect(() => {
-        console.log(token);
-        const products = axios.get("http://localhost:8000/api/user/product", { headers: { Authorization: `Bearer ${token}` } })
-            .then((response) => {
-                setAllProduct(response.data.data);
-            })
-            .catch((err) => console.log(err));
-    }, [token])
-
+    }, [token, currentPage, searchValue, selectCategory, sortAlphabet, sortPrice])
 
     return (
         <>
@@ -191,13 +189,13 @@ export default function StoreProduct() {
                         </div>
                         <div className="flex flex-wrap gap-2 mt-2 mx-2">
                             {/* blog */}
-                            {allproduct.length === 0 ? (
+                            {allProduct.length === 0 ? (
                                 <div className="w-full h-full font-josefin text-xl text-center mx-auto my-5">
                                     No Product Listed Yet
                                 </div>
                             ) : (
                                 <>
-                                    {allproduct.map((allproduct) => (
+                                    {allProduct.map((allproduct) => (
                                         <div className={`${allproduct.isActive ? "bg-white w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1" : " bg-gray-400 w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1 opacity-20"
                                             }`}>
                                             <div className="w-full">
@@ -240,6 +238,18 @@ export default function StoreProduct() {
                                     ))}
                                 </>
                             )}
+                        </div>
+                        <div className="m-4 p-4 flex font-ysa">
+                            <Pagination
+                                currentPage={currentPage}
+                                onPageChange={onPageChange}
+                                showIcons
+                                layout="pagination"
+                                totalPages={totalPages}
+                                nextLabel="Next"
+                                previousLabel="Back"
+                                className="mx-auto"
+                            />
                         </div>
                     </div>
                 )}
