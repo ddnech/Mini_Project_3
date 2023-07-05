@@ -14,10 +14,7 @@ router.post(
   productController.createCategory
 );
 
-router.get(
-  "/category",
-  productController.getAllCategory
-);
+router.get("/category", productController.getAllCategory);
 
 router.post(
   "/",
@@ -27,5 +24,6 @@ router.post(
   productController.createProduct
 );
 
+router.get("/", productController.getAllProduct);
 
 module.exports = router;

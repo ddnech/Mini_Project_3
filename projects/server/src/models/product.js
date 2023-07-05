@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -11,25 +9,35 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Product.belongsTo(models.Category, { foreignKey: "category_id"});
-      Product.belongsToMany(models.User, { through: models.Cart, foreignKey: "buyer_id", otherKey: "product_id"}); 
-      Product.belongsToMany(models.Order_detail, { through: models.Order_item,
-      foreignKey: "product_id",
-      otherKey: "orderDetail_id"});  
+      Product.belongsTo(models.Category, { foreignKey: "category_id" });
+      Product.belongsToMany(models.User, {
+        through: models.Cart,
+        foreignKey: "product_id",
+        otherKey: "buyer_id",
+      });
+      Product.belongsToMany(models.Order_detail, {
+        through: models.Order_item,
+        foreignKey: "product_id",
+        otherKey: "orderDetail_id",
+      });
+      Product.belongsTo(models.User, { foreignKey: "seller_id", as: "Seller" });
     }
   }
-  Product.init({
-    seller_id: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    price: DataTypes.INTEGER,
-    category_id: DataTypes.INTEGER,
-    description: DataTypes.STRING,
-    imgProduct: DataTypes.STRING,
-    stock: DataTypes.INTEGER,
-    isActive: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'Product',
-  });
+  Product.init(
+    {
+      seller_id: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      price: DataTypes.INTEGER,
+      category_id: DataTypes.INTEGER,
+      description: DataTypes.STRING,
+      imgProduct: DataTypes.STRING,
+      stock: DataTypes.INTEGER,
+      isActive: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: "Product",
+    }
+  );
   return Product;
 };
