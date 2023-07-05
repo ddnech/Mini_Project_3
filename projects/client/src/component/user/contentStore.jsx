@@ -106,50 +106,58 @@ export default function MyStore() {
                     </li>
                 </ul>
                 <div id="myTabContent">
-                    <div
-                        className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'product' ? 'block' : 'hidden'
-                            }`}
-                        id="product"
-                        role="tabpanel"
-                        aria-labelledby="product-tab"
-                    >
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <StoreProduct />
-                        </p>
-                    </div>
-                    <div
-                        className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'new' ? 'block' : 'hidden'
-                            }`}
-                        id="new"
-                        role="tabpanel"
-                        aria-labelledby="new-tab"
-                    >
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <StoreNew />
-                        </p>
-                    </div>
-                    <div
-                        className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'income' ? 'block' : 'hidden'
-                            }`}
-                        id="income"
-                        role="tabpanel"
-                        aria-labelledby="income-tab"
-                    >
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <StoreIncome />
-                        </p>
-                    </div>
-                    <div
-                        className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'category' ? 'block' : 'hidden'
-                            }`}
-                        id="category"
-                        role="tabpanel"
-                        aria-labelledby="category-tab"
-                    >
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <StoreCategory />
-                        </p>
-                    </div>
+                    {activeTab === "product" ? (
+                        <div
+                            className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'product' ? 'block' : 'hidden'
+                                }`}
+                            id="product"
+                            role="tabpanel"
+                            aria-labelledby="product-tab"
+                        >
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <StoreProduct />
+                            </div>
+                        </div>
+                    ) : ""}
+                    {activeTab === "new" ? (
+                        <div
+                            className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'new' ? 'block' : 'hidden'
+                                }`}
+                            id="new"
+                            role="tabpanel"
+                            aria-labelledby="new-tab"
+                        >
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <StoreNew />
+                            </div>
+                        </div>
+                    ) : ""}
+                    {activeTab === "income" ? (
+                        <div
+                            className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'income' ? 'block' : 'hidden'
+                                }`}
+                            id="income"
+                            role="tabpanel"
+                            aria-labelledby="income-tab"
+                        >
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <StoreIncome />
+                            </div>
+                        </div>
+                    ) : ""}
+                    {activeTab === "category" ? (
+                        <div
+                            className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'category' ? 'block' : 'hidden'
+                                }`}
+                            id="category"
+                            role="tabpanel"
+                            aria-labelledby="category-tab"
+                        >
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <StoreCategory />
+                            </div>
+                        </div>
+                    ) : ""}
                 </div>
             </div>
         </div>
