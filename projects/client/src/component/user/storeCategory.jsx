@@ -108,7 +108,7 @@ export default function StoreCategory() {
                     console.log(error.message)
                 })
         }
-    }, [token])
+    }, [token, activeTab])
 
     return (
         <>
