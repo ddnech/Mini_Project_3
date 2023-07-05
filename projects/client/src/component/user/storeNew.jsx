@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -7,6 +7,21 @@ import * as Yup from 'yup';
 export default function StoreNew() {
   const token = useSelector((state) => state.auth.token);
   const [image, setImage] = useState('');
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get('http://localhost:8000/api/product/category', {
+        });
+        setCategories(res.data.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error.response.data);
+      }
+    };
+
+    fetchCategories();
+  }, [token]);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -65,7 +80,7 @@ export default function StoreNew() {
   const initialValues = {
     name: '',
     price: '',
-    category: '',
+    category: null,
     description: '',
     stock: '',
   };
@@ -75,7 +90,7 @@ export default function StoreNew() {
       <div className='w-screen grid grid-flow-row justify-center'>
         <div>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-            {({ isSubmitting, status }) => (
+            {({ isSubmitting, status ,values}) => (
               <Form>
                 <div className='grid grid-flow-row gap-1 justify-center'>
                   {status && status.success && (
@@ -84,7 +99,7 @@ export default function StoreNew() {
                   {status && !status.success && (
                     <p className='text-center text-redd'>{status.message}</p>
                   )}
-                  <h3 className='w-72 text-l text-center font-josefin mt-4 text-jetblack tracking-wide font-semibold'>Please fill the product information:</h3>
+                  <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Please fill the product information:</h3>
                   <div className='w-full grid grid-flow-row gap-3'>
                     <div className='font-ysa relative mt-4'>
                       <ErrorMessage name='name' component='div' className='text-redd text-xs absolute -top-5' />
@@ -96,7 +111,14 @@ export default function StoreNew() {
                     </div>
                     <div className='font-ysa relative mt-4'>
                       <ErrorMessage name='category' component='div' className='text-redd text-xs absolute -top-5' />
-                      <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='category' placeholder='Category' />
+                      <Field as='select' className='border border-gray-300 h-6 py-0 text-xs w-full focus:border-darkgreen focus:ring-0' name='category'>
+                        <option value=''>Select Category</option>
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </Field>
                     </div>
                     <div className='font-ysa relative mt-4'>
                       <ErrorMessage name='description' component='div' className='text-redd text-xs absolute -top-5' />
@@ -109,7 +131,7 @@ export default function StoreNew() {
                     <label className='font-ysa relative text-jetblack'>Image:</label>
                     <input className='border border-gray-300 h-10 text-xs w-full focus:border-darkgreen focus:ring-0' type='file' onChange={handleImageChange} />
                   </div>
-                  <button type='submit' className='bg-darkgreen text-white px-4 py-2 mt-4 rounded hover:bg-darkgreenhover'>
+                  <button type='submit' className='w-full py-2 my-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'>
                     Create
                   </button>
                 </div>
