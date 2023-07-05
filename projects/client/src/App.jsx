@@ -42,9 +42,7 @@ function AppContent() {
         <Route path="/myprofile" element={<UserProfile />} />
         <Route path="/mystore" element={<UserStore />} />
         <Route path="/mypurchase" element={<UserPurchase />} />
-        <Route path="/editproduct"  >
-          <Route path='/:productId' element={<ModifyProduct/>} />
-        </Route>
+        <Route path="/editproduct/:id" element={<ModifyProduct/>}  />
         <Route path="/mycart" element={<UserCart/>}/>
         <Route path="/product/:id" element={<SingleProduct/>}/>
       </Routes>
