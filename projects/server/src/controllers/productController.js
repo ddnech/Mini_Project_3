@@ -36,6 +36,106 @@ module.exports = {
     }
   },
 
+  async getAllProduct(req, res) {
+    const pagination = {
+      page: Number(req.query.page) || 1,
+      perPage: 9,
+      search: req.query.search || undefined,
+      category: req.query.category || undefined,
+      sortAlphabet: req.query.sortAlphabet,
+      sortPrice: req.query.sortPrice,
+    };
+
+    try {
+      const where = {};
+      const order = [];
+
+      if (pagination.search) {
+        where.name = {
+          [db.Sequelize.Op.like]: `%${pagination.search}%`,
+        };
+      }
+
+      if (pagination.category) {
+        where.category_id = pagination.category;
+      }
+      if (pagination.sortAlphabet) {
+        if (pagination.sortAlphabet.toUpperCase() === "DESC") {
+          order.push(["name", "DESC"]);
+        } else {
+          order.push(["name", "ASC"]);
+        }
+      }
+
+      if (pagination.sortPrice) {
+        if (pagination.sortPrice.toUpperCase() === "DESC") {
+          order.push(["price", "DESC"]);
+        } else {
+          order.push(["price", "ASC"]);
+        }
+      }
+
+      const results = await db.Product.findAndCountAll({
+        where,
+        include: [
+          {
+            model: db.Category,
+          },
+          {
+            model: db.User,
+            as: "Seller",
+            attributes: ["username", "storeName"],
+          },
+        ],
+        limit: pagination.perPage,
+        offset: (pagination.page - 1) * pagination.perPage,
+        order,
+      });
+
+      const totalCount = results.count;
+      pagination.totalData = totalCount;
+
+      if (results.rows.length === 0) {
+        return res.status(200).send({
+          message: "No products found",
+        });
+      }
+
+      res.send({
+        message: "Successfully retrieved products",
+        pagination,
+        data: results.rows.map((product) => {
+          return {
+            id: product.id,
+            seller: {
+              seller_id: product.seller_id,
+              name: product.Seller.username,
+              store: product.Seller.storeName,
+            },
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            imgProduct: product.imgProduct,
+            stock: product.stock,
+            isActive: product.isActive,
+            createdAt: product.createdAt,
+            updatedAt: product.updatedAt,
+            category: {
+              id: product.Category.id,
+              name: product.Category.name,
+            },
+          };
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: "Internal Server Error",
+        error: error.message,
+      });
+    }
+  },
+
   async getAllCategory(req, res) {
     try {
       const category = await db.Category.findAll({
@@ -53,7 +153,7 @@ module.exports = {
       });
     }
   },
-  
+
   async createCategory(req, res) {
     const user_id = req.user.id;
     try {
@@ -74,5 +174,4 @@ module.exports = {
       });
     }
   },
-
 };
