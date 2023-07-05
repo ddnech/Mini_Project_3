@@ -68,7 +68,7 @@ export default function StoreProduct() {
         if (!page) page = 1;
 
         if (token) {
-            const data = axios.get(`http://localhost:8000/api/product?page=${page}&search=${searchValue}&category=${selectCategory}&sortAlphabet=${sortAlphabet}&sortPrice${sortPrice}`, { headers: { Authorization: `Bearer ${token}` } })
+            const data = axios.get(`http://localhost:8000/api/user/product?page=${page}&search=${searchValue}&category=${selectCategory}&sortAlphabet=${sortAlphabet}&sortPrice${sortPrice}`, { headers: { Authorization: `Bearer ${token}` } })
                 .then(response => {
                     console.log(response.data)
                     if (response.data.data) {
@@ -85,7 +85,7 @@ export default function StoreProduct() {
 
     useEffect(() => {
         console.log(token);
-        const products = axios.get("http://localhost:8000/api/product", { headers: { Authorization: `Bearer ${token}` } })
+        const products = axios.get("http://localhost:8000/api/user/product", { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 setAllProduct(response.data.data);
             })
