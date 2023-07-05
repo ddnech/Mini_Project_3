@@ -3,6 +3,7 @@ const userController = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const validatorMiddleware = require("../middleware/validatorMiddleware");
 const multerMiddleware = require("../middleware/multerMiddleware/product");
+const transactionController = require("../controllers/transactionController");
 
 router.get(
   "/category",
@@ -30,5 +31,11 @@ router.get(
   userController.getAllUserProduct
 );
 
+router.post(
+  "/cart/:id",
+  authMiddleware.verifyToken,
+  validatorMiddleware.addToCart,
+  transactionController.addToCart
+);
 
 module.exports = router;
