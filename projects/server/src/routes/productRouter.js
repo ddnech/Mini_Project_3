@@ -1,4 +1,5 @@
 const productController = require("../controllers/productController");
+const userController = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
 const multerMiddleware = require("../middleware/multerMiddleware/product");
 const validatorMiddleware = require("../middleware/validatorMiddleware");
@@ -13,6 +14,11 @@ router.post(
   productController.createCategory
 );
 
+router.get(
+  "/category",
+  productController.getAllCategory
+);
+
 router.post(
   "/",
   authMiddleware.verifyToken,
@@ -21,17 +27,5 @@ router.post(
   productController.createProduct
 );
 
-router.patch(
-  "/:id",
-  authMiddleware.verifyToken,
-  multerMiddleware.single("file"),
-  productController.updateProduct
-);
-
-router.get(
-  "/",
-  authMiddleware.verifyToken,
-  productController.getAllUserProduct
-);
 
 module.exports = router;
