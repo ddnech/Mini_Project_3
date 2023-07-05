@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import { Pagination } from "flowbite-react";
 
@@ -29,22 +29,25 @@ export default function StoreProduct() {
     const [categories, setCategories] = useState([]);
 
     const handleSearchChange = (event) => {
+        setCurrentPage(1)
         setSearchValue(event.target.value);
     };
 
     const handleCategoryChange = (event) => {
         const formatCategoryId = event.target.value === 'All' ? '' : event.target.value;
-
+        setCurrentPage(1)
         setSelectCategory(formatCategoryId)
     };
 
     const handleSortOrderAlphabet = (event) => {
         const sortOrder = event.target.value === 'A-Z' ? 'DESC' : 'ASC';
+        setCurrentPage(1)
         setSortAlphabet(sortOrder)
     };
 
     const handleSortOrderPrice = (event) => {
         const sortOrder = event.target.value === 'Low-High' ? 'DESC' : 'ASC';
+        setCurrentPage(1)
         setSortPrice(sortOrder)
     };
 
@@ -70,7 +73,6 @@ export default function StoreProduct() {
 
 
     // handle blog
-    const location = useLocation();
     const [allProduct, setAllProduct] = useState([]);
 
     useEffect(() => {
