@@ -38,4 +38,10 @@ router.post(
   transactionController.addToCart
 );
 
+router.get(
+  "/income",
+  authMiddleware.verifyToken,
+  userController.userIncome
+);
+
 module.exports = router;

@@ -85,15 +85,37 @@ export default function EditProduct({onSubmit, product}) {
     stock: '',
   };
 
+  const handleProductStatus = async (isActive) => {
+    const statusAction = isActive ? 'deactivate' : 'activate';
+  
+    try {
+      await axios.patch(
+        `http://localhost:8000/api/product/status/${statusAction}/${id}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(`Product ${statusAction}d successfully`);
+      onSubmit();
+    } catch (error) {
+      console.error('Error:', error.response.data);
+    }
+  };
+
   return (
     <div className='m-10 flex'>
     <div className='w-full grid justify-center mt-2'>
-      <div className='w-full h-auto grid grid-flow-row justify-center'>
-          
-                  <button type='submit' className='w-full py-2 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'>
-                    {product.isActive ? "Active" : "Inactive"}
-                  </button>
-          
+      <div className='w-full h-auto grid grid-flow-row justify-center'>    
+      <button
+      type='submit'
+      className='w-full py-2 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
+      onClick={() => handleProductStatus(product?.isActive)}
+      >
+      {product?.isActive ? 'Active' : 'Inactive'}
+      </button>
         <div>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
             {({ isSubmitting, status ,values}) => (

@@ -1,7 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { Pagination } from "flowbite-react";
+import React from "react";
 
-export default function AllProduct({ allProduct }) {
+export default function AllProduct({ allProduct, currentPage, totalPages, onPageChange }) {
   // handle product by getting props from home
 
   const handleImageError = (event) => {
@@ -63,6 +63,17 @@ export default function AllProduct({ allProduct }) {
           ))}
         </>
       )}
+      <div className="m-4 p-4 flex font-ysa">
+          <Pagination
+              currentPage={currentPage}
+              onPageChange={onPageChange}
+              showIcons
+              layout="pagination"
+              totalPages={totalPages}
+              nextLabel="Next"
+              previousLabel="Back"
+              className="mx-auto"/>
+        </div>
       </div>
     </>
   );
