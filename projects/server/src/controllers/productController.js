@@ -176,4 +176,61 @@ module.exports = {
       });
     }
   },
+
+  async getProductById(req, res) {
+    try {
+        const product = await db.Product.findOne({
+            where: {
+                id: req.params.id
+            },
+            include: [
+                {
+                    model: db.Category,
+                },
+                {
+                    model: db.User,
+                    as: 'Seller',
+                    attributes: ['username', 'storeName'],
+                },
+            ],
+        });
+
+        if (!product) {
+            return res.status(404).send({
+                message: "Product not found",
+            });
+        }
+
+        res.send({
+            message: "Successfully retrieved product",
+            data: {
+                id: product.id,
+                seller: {
+                    seller_id: product.seller_id,
+                    name: product.Seller.username,
+                    store: product.Seller.storeName,
+                },
+                name: product.name,
+                price: product.price,
+                description: product.description,
+                imgProduct: product.imgProduct,
+                stock: product.stock,
+                isActive: product.isActive,
+                createdAt: product.createdAt,
+                updatedAt: product.updatedAt,
+                category: {
+                    id: product.Category.id,
+                    name: product.Category.name,
+                },
+            },
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: "Internal Server Error",
+            error: error.message,
+        });
+    }
+}
+
 };
