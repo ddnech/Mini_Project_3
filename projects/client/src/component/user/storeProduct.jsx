@@ -190,7 +190,7 @@ export default function StoreProduct() {
                             </div>
                         </div>
                         <div className="flex flex-wrap gap-2 mt-2 mx-2">
-                            {/* blog */}
+                            {/* product*/}
                             {allProduct.length === 0 ? (
                                 <div className="w-full h-full font-josefin text-xl text-center mx-auto my-5">
                                     No Product Listed Yet
@@ -228,7 +228,7 @@ export default function StoreProduct() {
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <Link to="/">
+                                                <Link to = {`/editproduct/${allproduct.id}`}>
                                                     <button
                                                         className='w-full py-2 mt-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
                                                     >
