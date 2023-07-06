@@ -50,6 +50,8 @@ module.exports = {
       const where = {};
       const order = [];
 
+      where.isActive = 1;
+
       if (pagination.search) {
         where.name = {
           [db.Sequelize.Op.like]: `%${pagination.search}%`,
