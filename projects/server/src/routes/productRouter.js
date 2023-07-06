@@ -28,4 +28,6 @@ router.get("/", productController.getAllProduct);
 
 router.get("/:id", productController.getProductById);
 
+router.patch("/status/:action/:id", authMiddleware.verifyToken , productController.productAction)
+
 module.exports = router;

@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from "react"
-import NavBar from "../component/navbar"
-import Header from "../component/header"
-import Footer from "../component/footer"
-import TopSelling from "../component/topselling"
-import AllProduct from "../component/cardProduct"
-import axios from "axios"
-
+import React, { useState, useEffect } from "react";
+import NavBar from "../component/navbar";
+import Header from "../component/header";
+import Footer from "../component/footer";
+import TopSelling from "../component/topselling";
+import AllProduct from "../component/cardProduct";
+import axios from "axios";
 
 export default function Home() {
-    const [allProduct, setAllProduct] = useState([])
-
-    
-    
-    const [searchValue, setSearchValue] = useState('');
-    const [sortAlphabet, setSortAlphabet] = useState('');
-    const [sortPrice, setSortPrice] = useState('');
-    const [selectCategory, setSelectCategory] = useState('');
-    const [categories, setCategories] = useState([]);
+  const [allProduct, setAllProduct] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [sortAlphabet, setSortAlphabet] = useState('');
+  const [sortPrice, setSortPrice] = useState('');
+  const [selectCategory, setSelectCategory] = useState('');
+  const [categories, setCategories] = useState([]);
+  
     
     // handle search
     const handleSearchChange = (event) => {
@@ -45,12 +42,15 @@ export default function Home() {
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    
 
     useEffect(() => {
         const product = axios.get(`http://localhost:8000/api/product?page=${currentPage}&search=${searchValue}&category=${selectCategory}&sortAlphabet=${sortAlphabet}&sortPrice=${sortPrice}`)
             .then(response => {
                 if (response.data.data) {
                     setAllProduct(response.data.data)
+                    const { totalData, perPage } = response.data.pagination;
+                    setTotalPages(Math.ceil(totalData / perPage));
                 } else {
                     setAllProduct([])
                 }
@@ -58,18 +58,28 @@ export default function Home() {
                 console.log(error.message)
             })
 
-            const userCategories = axios.get("http://localhost:8000/api/product/category")
+            axios.get("http://localhost:8000/api/product/category")
             .then(response => {
-                setCategories(response.data.data)
+              setCategories(response.data.data);
             }).catch(error => {
-                console.log(error.message)
-            })
-    }, [currentPage,searchValue,selectCategory,sortAlphabet,sortPrice])
+              console.log(error.message);
+            });
+        }, [currentPage, searchValue, selectCategory, sortAlphabet, sortPrice]);
 
     return (
         <div className="flex flex-col min-h-screen">
             <div className="sticky top-0 z-50">
-                <NavBar onSearchChange={handleSearchChange} onCategoryChange={handleCategoryChange} onAlphabetChange={handleSortOrderAlphabet} onPriceChange={handleSortOrderPrice} searchValue={searchValue} categoryValue={selectCategory} alphabetValue={sortAlphabet} priceValue={sortPrice} allCategory={categories}/>
+                <NavBar 
+                onSearchChange={handleSearchChange} 
+                onCategoryChange={handleCategoryChange} 
+                onAlphabetChange={handleSortOrderAlphabet}
+                onPriceChange={handleSortOrderPrice} 
+                searchValue={searchValue} 
+                categoryValue={selectCategory} 
+                alphabetValue={sortAlphabet} 
+                priceValue={sortPrice} 
+                allCategory={categories}
+                />
             </div>
             <div>
                 <Header />
@@ -78,7 +88,7 @@ export default function Home() {
                 <TopSelling />
             </div>
             <div>
-                <AllProduct allProduct={allProduct} />
+                <AllProduct  allProduct={allProduct} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
             </div>
             <div className="mt-auto">
                 <Footer />

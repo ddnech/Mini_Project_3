@@ -214,52 +214,61 @@ module.exports = {
     }
   },
 
-  async userIncome(req, res){
+  async userIncome(req, res) {
     try {
-        let startDate = new Date(req.query.start);
-        let endDate = new Date(req.query.end);
-
-        const endDateExpected = new Date(startDate);
-        endDateExpected.setDate(endDateExpected.getDate() + 7);
-
-        if (endDate.getTime() !== endDateExpected.getTime()) {
-            throw new Error("End date should be exactly 7 days after start date");
-        }
-
-        const sellerProducts = await db.Product.findAll({ 
-            where: { seller_id:req.user.id },  
+      const startDate = new Date(req.body.start);
+      const endDate = new Date(req.body.end);
+  
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        return res.status(400).json({
+          message: 'Invalid start or end date provided',
         });
+      }
 
-        const productIds = sellerProducts.map(product => product.id);
-
-        let totalIncome = 0;
-
-        for (const id of productIds) {
-            const product = await db.Product.findOne({ where: { id }});
-            const orderItemsCount = await db.Order_item.count({ 
-                where: { 
-                    product_id: id,
-                    createdAt: {
-                        [Op.between]: [startDate, endDate]
-                    }
-                }, 
-            });
-            totalIncome += product.price * orderItemsCount;
-        }
-
-        res.status(200).json({
-            message: 'Total income calculated successfully',
-            totalIncome: totalIncome
+      endDate.setDate(endDate.getDate() + 1);
+  
+      const products = await db.Product.findAll({
+        where: { seller_id: req.user.id },
+        attributes: ['id', 'price'],
+      });
+  
+      //console.log('Products:', products); 
+  
+      const productIds = products.map(product => product.id);
+      let totalIncome = 0;
+  
+      for (let i = 0; i < productIds.length; i++) {
+        const productId = productIds[i];
+        const productPrice = products[i].price;
+        const orderItemsCount = await db.Order_item.count({
+          where: {
+            product_id: productId,
+            createdAt: {
+              [db.Sequelize.Op.between]: [startDate, endDate]
+            }
+          }
         });
-
+  
+        //console.log('Order items count for product id', productId, ':', orderItemsCount); 
+  
+        totalIncome += productPrice * orderItemsCount;
+      }
+  
+      //console.log('Total income:', totalIncome);
+  
+      res.status(200).json({
+        message: 'Total income calculated successfully',
+        totalIncome: totalIncome
+      });
     } catch (error) {
-        console.error('Failed to calculate total income:', error);
-        res.status(500).json({
-            message: 'Failed to calculate total income',
-            error: error.message
-        });
+      console.error('Failed to calculate total income:', error);
+      res.status(500).json({
+        message: 'Failed to calculate total income',
+        error: error.message
+      });
     }
-}
+  }
+  
 
   
 };

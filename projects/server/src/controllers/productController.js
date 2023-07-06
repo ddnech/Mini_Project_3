@@ -231,6 +231,66 @@ module.exports = {
             error: error.message,
         });
     }
-}
+  },
+
+  async productAction(req, res) {
+    const id = parseInt(req.params.id);
+    const action = req.params.action;
+  
+    try {
+      const getProduct = await db.Product.findOne({
+        where: {
+          id,
+          seller_id: req.user.id
+        },
+      });
+  
+      if (!getProduct) {
+        return res.status(400).send({
+          message: "Product doesn't exist",
+        });
+      }
+  
+      switch (action) {
+        case "activate":
+          if (getProduct.isActive) {
+            return res.status(400).send({
+              message: "Product is already active",
+            });
+          }
+  
+          getProduct.isActive = true;
+          await getProduct.save();
+  
+          return res.status(200).send({
+            message: "Product activated successfully",
+          });
+  
+        case "deactivate":
+          if (!getProduct.isActive) {
+            return res.status(400).send({
+              message: "Product is already inactive",
+            });
+          }
+  
+          getProduct.isActive = false;
+          await getProduct.save();
+  
+          return res.status(200).send({
+            message: "Product deactivated successfully",
+          });
+  
+        default:
+          return res.status(400).send({
+            message: "Invalid action",
+          });
+      }
+    } catch (error) {
+      res.status(500).send({
+        message: "Fatal error on server",
+        errors: error.message,
+      });
+    }
+  }
 
 };
