@@ -216,58 +216,72 @@ module.exports = {
 
   async userIncome(req, res) {
     try {
-      const startDate = new Date(req.body.start);
-      const endDate = new Date(req.body.end);
-  
-      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-        return res.status(400).json({
-          message: 'Invalid start or end date provided',
-        });
-      }
+        const startDate = new Date(req.body.start);
+        const endDate = new Date(req.body.end);
 
-      endDate.setDate(endDate.getDate() + 1);
-  
-      const products = await db.Product.findAll({
-        where: { seller_id: req.user.id },
-        attributes: ['id', 'price'],
-      });
-  
-      //console.log('Products:', products); 
-  
-      const productIds = products.map(product => product.id);
-      let totalIncome = 0;
-  
-      for (let i = 0; i < productIds.length; i++) {
-        const productId = productIds[i];
-        const productPrice = products[i].price;
-        const orderItemsCount = await db.Order_item.count({
-          where: {
-            product_id: productId,
-            createdAt: {
-              [db.Sequelize.Op.between]: [startDate, endDate]
-            }
-          }
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            return res.status(400).json({
+                message: 'Invalid start or end date provided',
+            });
+        }
+
+        endDate.setDate(endDate.getDate() + 1);
+
+        const products = await db.Product.findAll({
+            where: { seller_id: req.user.id },
+            attributes: ['id', 'price'],
         });
-  
-        //console.log('Order items count for product id', productId, ':', orderItemsCount); 
-  
-        totalIncome += productPrice * orderItemsCount;
-      }
-  
-      //console.log('Total income:', totalIncome);
-  
-      res.status(200).json({
-        message: 'Total income calculated successfully',
-        totalIncome: totalIncome
-      });
+
+        const productIds = products.map(product => product.id);
+        let totalIncome = 0;
+        let dailyIncome = {};
+
+        for (let i = 0; i < productIds.length; i++) {
+            const productId = productIds[i];
+            const productPrice = products[i].price;
+
+            // Find each order item with createdAt date, grouped by date
+            const orderItems = await db.Order_item.findAll({
+                where: {
+                    product_id: productId,
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [startDate, endDate]
+                    }
+                },
+                attributes: [
+                    [db.Sequelize.fn('date', db.Sequelize.col('createdAt')), 'date'],
+                    [db.Sequelize.fn('count', '*'), 'count']
+                ],
+                group: [db.Sequelize.fn('date', db.Sequelize.col('createdAt'))]
+            });
+
+            for (let item of orderItems) {
+                const date = item.getDataValue('date');
+                const count = item.getDataValue('count');
+                if (!dailyIncome[date]) {
+                    dailyIncome[date] = 0;
+                }
+
+                const income = productPrice * count;
+                dailyIncome[date] += income;
+                totalIncome += income;
+            }
+        }
+
+        res.status(200).json({
+            message: 'Total and daily incomes calculated successfully',
+            totalIncome: totalIncome,
+            dailyIncome: dailyIncome
+        });
     } catch (error) {
-      console.error('Failed to calculate total income:', error);
-      res.status(500).json({
-        message: 'Failed to calculate total income',
-        error: error.message
-      });
+        console.error('Failed to calculate total and daily incomes:', error);
+        res.status(500).json({
+            message: 'Failed to calculate total and daily incomes',
+            error: error.message
+        });
     }
-  }
+}
+
   
 
   
