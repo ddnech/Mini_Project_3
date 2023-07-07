@@ -44,4 +44,10 @@ router.get(
   userController.userIncome
 );
 
+router.get(
+  "/purchase",
+  authMiddleware.verifyToken,
+  userController.userPurchase
+)
+
 module.exports = router;
