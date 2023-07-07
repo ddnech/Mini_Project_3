@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 
-function ProductDetails({product}) {
+function ProductDetailsSeller({ product }) {
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -47,4 +47,4 @@ function ProductDetails({product}) {
     );
 }
 
-export default ProductDetails;
+export default ProductDetailsSeller;

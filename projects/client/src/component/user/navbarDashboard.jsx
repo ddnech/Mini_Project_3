@@ -29,7 +29,7 @@ export default function NavbarDashboard() {
                             </Link>
                         </span>
                         <span className={`hover:border-b-4 hover:border-gray-300 px-4 grid content-center ${isCurrentRoute("/myshop") ? "border-b-4 border-gray-300" : ""}`}>
-                            <Link to="/myshop" className="basis-1/2 text-xs font-josefin h-5">
+                            <Link to="/mystore" className="basis-1/2 text-xs font-josefin h-5">
                                 <BsShopWindow size={15} />
                             </Link>
                         </span>

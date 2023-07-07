@@ -222,8 +222,8 @@ export default function StoreProduct() {
                                                     <table className="mx-auto">
                                                         <tbody>
                                                             <tr>
-                                                                <td className="border-r-2 border-gray-200 px-4 overflow-auto">{allproduct.price}</td>
-                                                                <td className="px-4 overflow-auto">{allproduct.stock}</td>
+                                                                <td className="border-r-2 border-gray-200 px-4 overflow-auto">{`Rp ${allproduct.price.toLocaleString("id-ID")}`}</td>
+                                                                <td className="px-4 overflow-auto">{allproduct.stock} Qty</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

@@ -10,7 +10,7 @@ import UserPurchase from './page/userPurchase'
 import store from './store/index'
 import UserStore from './page/userStore'
 import UserCart from './page/userCart'
-import SingleProduct from './page/singleProduct'
+import SingleProductBuyer from './page/singleProductBuyer'
 import ModifyProduct from './page/modifyProduct'
 
 
@@ -42,9 +42,9 @@ function AppContent() {
         <Route path="/myprofile" element={<UserProfile />} />
         <Route path="/mystore" element={<UserStore />} />
         <Route path="/mypurchase" element={<UserPurchase />} />
-        <Route path="/editproduct/:id" element={<ModifyProduct/>}  />
-        <Route path="/mycart" element={<UserCart/>}/>
-        <Route path="/product/:id" element={<SingleProduct/>}/>
+        <Route path="/editproduct/:id" element={<ModifyProduct />} />
+        <Route path="/mycart" element={<UserCart />} />
+        <Route path="/product/:id" element={<SingleProductBuyer />} />
       </Routes>
     </Router>
   )
