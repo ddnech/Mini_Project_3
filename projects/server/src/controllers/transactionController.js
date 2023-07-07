@@ -169,12 +169,10 @@ module.exports = {
         const price = item.Product.price;
         totalPrice += quantity * price;
 
-        for (let i = 0; i < quantity; i++) {
-          orderItems.push({
-            orderDetail_id: null,
-            product_id: item.product_id,
-          });
-        }
+        orderItems.push({
+          product_id: item.product_id,
+          quantity: quantity,
+        });
       });
 
       const orderDetail = await db.Order_detail.create(
