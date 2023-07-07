@@ -40,7 +40,7 @@ export default function StoreProduct() {
     };
 
     const handleSortOrderAlphabet = (event) => {
-        const sortOrder = event.target.value === 'A-Z' ? 'DESC' : 'ASC';
+        const sortOrder = event.target.value === 'Z-A' ? 'DESC' : 'ASC';
         setCurrentPage(1)
         setSortAlphabet(sortOrder)
     };
@@ -173,7 +173,7 @@ export default function StoreProduct() {
                                 </select>
                                 <select
                                     className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
-                                    value={sortAlphabet === 'DESC' ? 'A-Z' : 'Z-A'}
+                                    value={sortAlphabet === 'DESC' ? 'Z-A' : 'A-Z'}
                                     onChange={handleSortOrderAlphabet}
                                 >
                                     <option value="A-Z" className="font-ysa text-sm">Sort: A - Z</option>
@@ -228,7 +228,7 @@ export default function StoreProduct() {
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <Link to = {`/editproduct/${allproduct.id}`}>
+                                                <Link to={`/editproduct/${allproduct.id}`}>
                                                     <button
                                                         className='w-full py-2 mt-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
                                                     >
