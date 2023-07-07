@@ -39,4 +39,10 @@ router.get("/income", userController.userIncome);
 
 router.post("/checkout", transactionController.checkout);
 
+router.get(
+  "/purchase",
+  authMiddleware.verifyToken,
+  userController.userPurchase
+)
+
 module.exports = router;

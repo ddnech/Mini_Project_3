@@ -225,19 +225,28 @@ module.exports = {
             });
         }
 
+      const maxDateRange = 7;
+      const dateDifference = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+      if (dateDifference > maxDateRange) {
+      return res.status(400).json({
+      message: 'The date range cannot exceed 7 days.',
+      });
+      }
+
         endDate.setDate(endDate.getDate() + 1);
 
         const products = await db.Product.findAll({
             where: { seller_id: req.user.id },
-            attributes: ['id', 'price'],
+            attributes: ['id', 'price'], //{[1,100],[2,200]}
         });
 
-        const productIds = products.map(product => product.id);
+        const productIds = products.map(product => product.id); //[1,2]
         let totalIncome = 0;
         let dailyIncome = {};
 
         for (let i = 0; i < productIds.length; i++) {
-            const productId = productIds[i];
+            const productId = productIds[i]; 
             const productPrice = products[i].price;
 
             // Find each order item with createdAt date, grouped by date
@@ -280,8 +289,62 @@ module.exports = {
             error: error.message
         });
     }
-}
+  },
 
+  async userPurchase(req, res){
+    try{
+      const buyer_id = req.user.id;
+
+      const order_detail = await db.Order_detail.findOne({
+        where: { buyer_id },
+      });
+      
+      if (!order_detail) {
+        return res.status(404).json({ message: 'Order detail not found' });
+      }
+      
+      const order_items = await db.Order_item.findAll({
+        where: { orderDetail_id: order_detail.id },
+      });
+      
+      if (!order_items) {
+        return res.status(404).json({ message: 'Order items not found' });
+      }
+
+      const productIds = order_items.map(order_item => order_item.product_id);
+
+      const products = await db.Product.findAndCountAll({
+        where: { id: productIds },
+        attributes: ['id', 'createdAt'],
+        include: [
+          {
+            model: db.Order_item,
+            attributes: [
+              [db.Sequelize.fn('COUNT', 'product_id'), 'count'],
+            ],
+          },
+        ],
+        group: ['id', 'createdAt'],
+      });
+      
+      if (!products) {
+        return res.status(404).json({ message: 'Products not found' });
+      }
+      
+      res.status(200).json({
+        message: 'Product details retrieved successfully',
+        products: products,
+      });
+  
+    } catch (error) {
+      console.error('Failed to get user purchases:', error);
+      res.status(500).json({
+          message: 'Failed to get user purchases',
+          error: error.message
+      });
+    }
+  }
+  
   
 
   
