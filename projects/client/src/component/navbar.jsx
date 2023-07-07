@@ -76,44 +76,44 @@ export default function NavBar(props) {
       <div>
         {isSearchOpen && (
           <div className="bg-babypowder font-lora text-xs px-4 py-1">
-              <div className="h-full flex flex-wrap items-center px-2 w-full gap-2 sm:flex-nowrap font-ysa text-sm">
-                  <input
-                      className=" font-sans bg-transparent p-2 w-full focus:outline-none sm:basis-3/8 md:basis-2/5"
-                      type="text"
-                      placeholder="Search"
-                      value={props.searchValue}
-                      onChange={props.onSearchChange}
-                  />
-                  <select
-                      className=" bg-gray-200 outline-none w-full sm:basis-2/8 md:basis-1/5"
-                      value={props.selectCategory}
-                      onChange={props.onCategoryChange}
-                  >
-                      <option value="" className="font-ysa text-sm">All Categories</option> {/* Set initial value to empty string */}
-                      {props.allCategory.map((category) => (
-                          <option value={category.id} key={category.id} className="font-ysa text-sm">
-                              {category.name}
-                          </option>
-                      ))}
-                  </select>
-                  <select
-                      className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
-                      value={props.sortAlphabet === 'DESC' ? 'A-Z' : 'Z-A'}
-                      onChange={props.onAlphabetChange}
-                  >
-                      <option value="A-Z" className="font-ysa text-sm">Sort: A - Z</option>
-                      <option value="Z-A" className="font-ysa text-sm">Sort: Z - A</option>
-                  </select>
-                  <select
-                      className=" bg-gray-200 transparent outline-none w-full sm:basis-2/8 md:basis-1/5"
-                      value={props.sortPrice === 'DESC' ? 'Low-High' : 'High-Low'}
-                      onChange={props.onPriceChange}
-                  >
-                      <option value="Low-High" className="font-ysa text-sm">Price: Low - High</option>
-                      <option value="High-Low" className="font-ysa text-sm">Price: High - Low</option>
-                  </select>
-              </div>
-        </div>
+            <div className="h-full flex flex-wrap items-center px-2 w-full gap-2 sm:flex-nowrap font-ysa text-sm">
+              <input
+                className=" font-sans bg-transparent p-2 w-full focus:outline-none sm:basis-3/8 md:basis-2/5"
+                type="text"
+                placeholder="Search"
+                value={props.searchValue}
+                onChange={props.onSearchChange}
+              />
+              <select
+                className=" bg-gray-200 outline-none w-full sm:basis-2/8 md:basis-1/5"
+                value={props.categoryValue}
+                onChange={props.onCategoryChange}
+              >
+                <option value="" className="font-ysa text-sm">All Categories</option> {/* Set initial value to empty string */}
+                {props.allCategory.map((category) => (
+                  <option value={category.id} key={category.id} className="font-ysa text-sm">
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
+                value={props.alphabetValue === 'DESC' ? 'Z-A' : 'A-Z'}
+                onChange={props.onAlphabetChange}
+              >
+                <option value="A-Z" className="font-ysa text-sm">Sort: A - Z</option>
+                <option value="Z-A" className="font-ysa text-sm">Sort: Z - A</option>
+              </select>
+              <select
+                className=" bg-gray-200 transparent outline-none w-full sm:basis-2/8 md:basis-1/5"
+                value={props.priceValue === 'DESC' ? 'Low-High' : 'High-Low'}
+                onChange={props.onPriceChange}
+              >
+                <option value="Low-High" className="font-ysa text-sm">Price: Low - High</option>
+                <option value="High-Low" className="font-ysa text-sm">Price: High - Low</option>
+              </select>
+            </div>
+          </div>
         )}
       </div>
     </div>
