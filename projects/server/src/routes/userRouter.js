@@ -5,43 +5,38 @@ const validatorMiddleware = require("../middleware/validatorMiddleware");
 const multerMiddleware = require("../middleware/multerMiddleware/product");
 const transactionController = require("../controllers/transactionController");
 
-router.get(
-  "/category",
-  authMiddleware.verifyToken,
-  userController.getUserCategory
-);
+router.use(authMiddleware.verifyToken);
+
+router.get("/category", userController.getUserCategory);
 
 router.patch(
   "/category/:id",
-  authMiddleware.verifyToken,
   validatorMiddleware.updateCategory,
   userController.updateCategory
 );
 
 router.patch(
   "/product/:id",
-  authMiddleware.verifyToken,
   multerMiddleware.single("file"),
   userController.updateProduct
 );
 
-router.get(
-  "/product",
-  authMiddleware.verifyToken,
-  userController.getAllUserProduct
-);
+router.get("/product", userController.getAllUserProduct);
+
+router.get("/cart", transactionController.getCart);
 
 router.post(
   "/cart/:id",
-  authMiddleware.verifyToken,
   validatorMiddleware.addToCart,
   transactionController.addToCart
 );
 
-router.get(
-  "/income",
-  authMiddleware.verifyToken,
-  userController.userIncome
-);
+router.delete("/cart", transactionController.emptyCart);
+
+router.delete("/cart/:id", transactionController.removeFromCart);
+
+router.get("/income", userController.userIncome);
+
+router.post("/checkout", transactionController.checkout);
 
 module.exports = router;
