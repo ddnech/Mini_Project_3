@@ -6,6 +6,10 @@ module.exports = {
     const quantity = Number(req.body.quantity);
 
     try {
+      if (quantity === 0) {
+        return res.status(400).send({ message: "Quantity invalid" });
+      }
+
       const user = await db.User.findByPk(req.user.id);
       if (!user) {
         return res.status(401).send({ message: "User not found" });
@@ -15,6 +19,12 @@ module.exports = {
       const product = await db.Product.findByPk(productId);
       if (!product) {
         return res.status(404).send({ message: "Product not found" });
+      }
+
+      if (quantity > product.stock) {
+        return res
+          .status(400)
+          .send({ message: "Quantity exceeds available stock" });
       }
 
       // Add the product to the user's cart
@@ -151,29 +161,48 @@ module.exports = {
         include: [
           {
             model: db.Product,
-            attributes: ["price"],
+            attributes: ["price", "stock"],
           },
         ],
         transaction,
       });
 
       if (!cart) {
-        return res.status(400).send({ message: "Cart is empty" });
+        return res.status(200).send({ message: "Cart is still empty" });
       }
 
       let totalPrice = 0;
       const orderItems = [];
 
-      cart.forEach((item) => {
+      for (const item of cart) {
         const quantity = item.quantity;
         const price = item.Product.price;
+        const stock = item.Product.stock;
+
+        if (quantity > stock) {
+          await transaction.rollback();
+          return res
+            .status(400)
+            .send({ message: "Quantity exceeds available stock" });
+        }
+
         totalPrice += quantity * price;
 
         orderItems.push({
           product_id: item.product_id,
           quantity: quantity,
         });
-      });
+
+        await db.Product.update(
+          { stock: stock - quantity },
+          {
+            where: {
+              id: item.product_id,
+            },
+            transaction,
+          }
+        );
+      }
 
       const orderDetail = await db.Order_detail.create(
         {

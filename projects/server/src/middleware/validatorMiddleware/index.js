@@ -135,8 +135,28 @@ module.exports = {
       .withMessage("Price is required")
       .isNumeric(),
     body("category_id").notEmpty().withMessage("Category is required"),
-    body("description").notEmpty().withMessage("Description is required"),
+    body("description")
+      .notEmpty()
+      .withMessage("Description is required")
+      .isLength({ max: 255 })
+      .withMessage("Maximum character is 255"),
     body("stock").notEmpty().withMessage("Stock is required"),
+  ]),
+
+  updateProduct: validate([
+    body("name")
+      .optional()
+      .trim()
+      .isLength({ max: 50 })
+      .withMessage("Maximum character is 50"),
+    body("price").optional().trim().isNumeric(),
+    body("category_id"),
+    body("description")
+      .optional()
+      .isLength({ max: 255 })
+      .withMessage("Maximum character is 255"),
+    ,
+    body("stock").optional(),
   ]),
 
   validateLogin: validate([
@@ -187,6 +207,14 @@ module.exports = {
   ]),
 
   addToCart: validate([
-    body("quantity").notEmpty().withMessage("quantity is required").isNumeric(),
+    body("quantity")
+      .notEmpty()
+      .withMessage("quantity is required")
+      .isInt({ min: 1 })
+      .withMessage("Quantity must be a positive integer"),
+  ]),
+
+  checkoutAddress: validate([
+    body("address").notEmpty().withMessage("Address is required"),
   ]),
 };
