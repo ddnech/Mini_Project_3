@@ -29,39 +29,42 @@ export default function NavBar(props) {
 
   return (
     <div>
-      <div className="bg-babypowder w-screen h-8 flex content-center">
-        <div className="basis-1/2 px-5 font-lora">
-          <Link to="/">
-            <span className="font-lora font-semibold text-lg text-darkgreen">
-              verdant market
-            </span>
-          </Link>
+      <div className="bg-babypowder w-screen h-8 flex justify-center">
+        <div className="basis-2/5 mx-5 font-lora">
+          <div className="grid mt-[0.2rem]">
+            <Link to="/">
+              <div className="font-lora font-semibold text-lg text-darkgreen">
+                verdant market
+              </div>
+            </Link>
+          </div>
         </div>
-        <div className="basis-1/2 text-right flex justify-end px-5">
+        <div className="basis-3/5 text-right flex justify-end px-5">
+          {/* todo: if not yet login, can't see cart */}
           <Link to="/mycart" className="p-1">
             <AiOutlineShoppingCart size={20} />
           </Link>
-          <span className="hover:font-semibold px-4 pt-">
+          <span className="px-4">
             {token ? (
               <div className="relative p-1">
                 <button onClick={handleProfileMenuToggle}>
                   <AiOutlineUser size={20} />
                 </button>
                 {isProfileMenuOpen && (
-                  <ul className="absolute right-0 bg-white text-black shadow-lg">
-                    <li className="flex y-0 items-center p-2 border-b border-gray-600 bg-babypowder hover:text-redd">
-                      <AiOutlineUnorderedList size={20} className="mr-2" />
+                  <ul className="absolute right-0 bg-white text-black shadow-lg font-ysa text-sm">
+                    <li className="w-36 flex y-0 items-center py-2 px-4 border-b border-gray-600 bg-babypowder hover:text-darkgreen hover:font-semibold">
+                      <AiOutlineUnorderedList size={18} className="mr-2" />
                       <Link to="/myprofile">Dashboard</Link>
                     </li>
-                    <li className="flex items-center p-2 border-b border-gray-600 bg-babypowder hover:text-redd">
-                      <AiOutlineLogout size={20} className="mr-2" />
+                    <li className="w-36 flex items-center py-2 px-4 border-b border-gray-600 bg-babypowder hover:text-darkgreen hover:font-semibold">
+                      <AiOutlineLogout size={18} className="mr-2" />
                       <span onClick={handleLogout}>Logout</span>
                     </li>
                   </ul>
                 )}
               </div>
             ) : (
-              <Link to="/login" className="text-xs font-josefin">Log In</Link>
+              <Link to="/login" className="text-xs font-lora hover:">Log In</Link>
             )}
           </span>
           <span className="p-2">

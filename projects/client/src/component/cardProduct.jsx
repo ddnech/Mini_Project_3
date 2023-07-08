@@ -1,5 +1,6 @@
 import { Pagination } from "flowbite-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function AllProduct({ allProduct, currentPage, totalPages, onPageChange }) {
     // handle product by getting props from home
@@ -20,42 +21,43 @@ export default function AllProduct({ allProduct, currentPage, totalPages, onPage
                 ) : (
                     <>
                         {allProduct.map((allProduct) => (
-                            <div className="flex sm:flex-wrap gap-2 mt-2 mx-auto sm:w-[15rem] md:w-[24rem]">
-                                {/* ganti w when large screen */}
-                                <div
-                                    className={`mx-auto bg-white w-full h-full flex flex-col text-jetblack p-2 hover:bg-flashwhite`}
-                                >
-                                    <div className="w-full">
-                                        <img
-                                            className="w-20 h-20 justify-center mx-auto m-2 object-cover"
-                                            src={`http://localhost:8000${allProduct.imgProduct}`}
-                                            onError={handleImageError}
-                                            alt="/"
-                                        />
+                            <div className="flex justify-around sm:flex-wrap gap-2 mt-2 mx-auto sm:w-[15rem] md:w-[24rem]">
+                                <Link to={`product/${allProduct.id}`}>
+                                    <div
+                                        className={`mx-auto bg-white w-full h-full flex flex-col text-jetblack p-2 hover:bg-flashwhite`}
+                                    >
+                                        <div className="w-full">
+                                            <img
+                                                className="w-20 h-20 justify-center mx-auto m-2 object-cover"
+                                                src={`http://localhost:8000${allProduct.imgProduct}`}
+                                                onError={handleImageError}
+                                                alt="/"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col text-center gap-2 mt-2">
+                                            <div className="flex-1 font-lora text-base">
+                                                {allProduct.name}
+                                            </div>
+                                            <div className="font-josefin">
+                                                {allProduct.category?.name}
+                                            </div>
+                                            <div className="font-lora text-xs mx-auto mt-3 h-full grow-0 w-44">
+                                                <table className="mx-auto">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td className="border-r-2 border-gray-200 px-4">
+                                                                {`Rp ${allProduct.price.toLocaleString("id-ID")}`}
+                                                            </td>
+                                                            <td className="px-4 overflow-auto">
+                                                                {allProduct.stock} Qty
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col text-center gap-2 mt-2">
-                                        <div className="flex-1 font-lora text-base">
-                                            {allProduct.name}
-                                        </div>
-                                        <div className="font-josefin">
-                                            {allProduct.category?.name}
-                                        </div>
-                                        <div className="font-lora mx-auto mt-3 h-full grow-0 w-44">
-                                            <table className="mx-auto">
-                                                <tbody>
-                                                    <tr>
-                                                        <td className="border-r-2 border-gray-200 px-4">
-                                                            {allProduct.price}
-                                                        </td>
-                                                        <td className="px-4 overflow-auto">
-                                                            {allProduct.stock}
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                                </Link>
                             </div>
                         ))}
                     </>
