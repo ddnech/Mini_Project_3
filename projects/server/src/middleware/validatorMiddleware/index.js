@@ -143,21 +143,21 @@ module.exports = {
     body("stock").notEmpty().withMessage("Stock is required"),
   ]),
 
-  updateProduct: validate([
-    body("name")
-      .optional()
-      .trim()
-      .isLength({ max: 50 })
-      .withMessage("Maximum character is 50"),
-    body("price").optional().trim().isNumeric(),
-    body("category_id"),
-    body("description")
-      .optional()
-      .isLength({ max: 255 })
-      .withMessage("Maximum character is 255"),
-    ,
-    body("stock").optional(),
-  ]),
+  // updateProduct: validate([
+  //   body("name")
+  //     .optional()
+  //     .trim()
+  //     .isLength({ max: 50 })
+  //     .withMessage("Maximum character is 50"),
+  //   body("price").optional().trim().isNumeric(),
+  //   body("category_id"),
+  //   body("description")
+  //     .optional()
+  //     .isLength({ max: 255 })
+  //     .withMessage("Maximum character is 255"),
+  //   ,
+  //   body("stock").optional(),
+  // ]),
 
   validateLogin: validate([
     body("username").notEmpty().withMessage("Username is required"),
