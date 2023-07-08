@@ -36,7 +36,7 @@ module.exports = {
       if (pagination.category) {
         where.category_id = pagination.category;
       }
-      if(pagination.sortAlphabet){
+      if (pagination.sortAlphabet) {
         if (pagination.sortAlphabet.toUpperCase() === "DESC") {
           order.push(["name", "DESC"]);
         } else {
@@ -44,14 +44,13 @@ module.exports = {
         }
       }
 
-      if(pagination.sortPrice){
+      if (pagination.sortPrice) {
         if (pagination.sortPrice.toUpperCase() === "DESC") {
           order.push(["price", "DESC"]);
         } else {
           order.push(["price", "ASC"]);
         }
       }
-
 
       const results = await db.Product.findAndCountAll({
         where,
@@ -218,124 +217,130 @@ module.exports = {
 
   async userIncome(req, res) {
     try {
-        const startDate = new Date(req.body.start);
-        const endDate = new Date(req.body.end);
+      const startDate = new Date(req.body.start);
+      const endDate = new Date(req.body.end);
 
-        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-            return res.status(400).json({
-                message: 'Invalid start or end date provided',
-            });
-        }
-
-      const maxDateRange = 7;
-      const dateDifference = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
-
-      if (dateDifference > maxDateRange) {
-      return res.status(400).json({
-      message: 'The date range cannot exceed 7 days.',
-      });
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        return res.status(400).json({
+          message: "Invalid start or end date provided",
+        });
       }
 
-        endDate.setDate(endDate.getDate() + 1);
+      const maxDateRange = 7;
+      const dateDifference = Math.floor(
+        (endDate - startDate) / (1000 * 60 * 60 * 24)
+      );
 
-        const products = await db.Product.findAll({
-            where: { seller_id: req.user.id },
-            attributes: ['id', 'price'],
+      if (dateDifference > maxDateRange) {
+        return res.status(400).json({
+          message: "The date range cannot exceed 7 days.",
+        });
+      }
+
+      endDate.setDate(endDate.getDate() + 1);
+
+      const products = await db.Product.findAll({
+        where: { seller_id: req.user.id },
+        attributes: ["id", "price"],
+      });
+
+      const productIds = products.map((product) => product.id);
+      let totalIncome = 0;
+      let dailyIncome = {};
+
+      for (let i = 0; i < productIds.length; i++) {
+        const productId = productIds[i];
+        const productPrice = products[i].price;
+
+        const orderItems = await db.Order_item.findAll({
+          where: {
+            product_id: productId,
+            createdAt: {
+              [db.Sequelize.Op.between]: [startDate, endDate],
+            },
+          },
+          attributes: [
+            [db.Sequelize.fn("date", db.Sequelize.col("createdAt")), "date"],
+            [db.Sequelize.fn("count", "*"), "count"],
+          ],
+          group: [db.Sequelize.fn("date", db.Sequelize.col("createdAt"))],
         });
 
-        const productIds = products.map(product => product.id);
-        let totalIncome = 0;
-        let dailyIncome = {};
+        for (let item of orderItems) {
+          const date = item.getDataValue("date");
+          const count = item.getDataValue("count");
+          if (!dailyIncome[date]) {
+            dailyIncome[date] = 0;
+          }
 
-        for (let i = 0; i < productIds.length; i++) {
-            const productId = productIds[i]; 
-            const productPrice = products[i].price;
-
-            const orderItems = await db.Order_item.findAll({
-                where: {
-                    product_id: productId,
-                    createdAt: {
-                        [db.Sequelize.Op.between]: [startDate, endDate]
-                    }
-                },
-                attributes: [
-                    [db.Sequelize.fn('date', db.Sequelize.col('createdAt')), 'date'],
-                    [db.Sequelize.fn('count', '*'), 'count']
-                ],
-                group: [db.Sequelize.fn('date', db.Sequelize.col('createdAt'))]
-            });
-
-            for (let item of orderItems) {
-                const date = item.getDataValue('date');
-                const count = item.getDataValue('count');
-                if (!dailyIncome[date]) {
-                    dailyIncome[date] = 0;
-                }
-
-                const income = productPrice * count;
-                dailyIncome[date] += income;
-                totalIncome += income;
-            }
+          const income = productPrice * count;
+          dailyIncome[date] += income;
+          totalIncome += income;
         }
+      }
 
-        res.status(200).json({
-            message: 'Total and daily incomes calculated successfully',
-            totalIncome: totalIncome,
-            dailyIncome: dailyIncome
-        });
+      res.status(200).json({
+        message: "Total and daily incomes calculated successfully",
+        totalIncome: totalIncome,
+        dailyIncome: dailyIncome,
+      });
     } catch (error) {
-        console.error('Failed to calculate total and daily incomes:', error);
-        res.status(500).json({
-            message: 'Failed to calculate total and daily incomes',
-            error: error.message
-        });
+      console.error("Failed to calculate total and daily incomes:", error);
+      res.status(500).json({
+        message: "Failed to calculate total and daily incomes",
+        error: error.message,
+      });
     }
   },
 
-  async userPurchase(req, res){
-    try{
+  async userPurchase(req, res) {
+    try {
       const buyer_id = req.user.id;
       const { startDate, endDate } = req.body;
 
       const order_details = await db.Order_detail.findAll({
-        where: { 
-          buyer_id, 
+        where: {
+          buyer_id,
           createdAt: {
             [db.Sequelize.Op.between]: [
-              new Date(startDate + 'T00:00:00.000Z'),
-              new Date(endDate + 'T23:59:59.999Z')
-            ]
-          }
+              new Date(startDate + "T00:00:00.000Z"),
+              new Date(endDate + "T23:59:59.999Z"),
+            ],
+          },
         },
       });
 
       if (!order_details || order_details.length === 0) {
-        return res.status(404).json({ message: 'Order detail not found' });
+        return res.status(404).json({ message: "Order detail not found" });
       }
-      
+
       let purchases = [];
 
       for (let order_detail of order_details) {
         const order_items = await db.Order_item.findAll({
           where: { orderDetail_id: order_detail.id },
-          include: [{
-            model: db.Product,
-            as: 'product',
-            attributes: ['id', 'name', 'price', 'description', 'imgProduct'],
-            include: [{
-              model: db.Category, 
-              attributes: ['name']  // Adjust as necessary to match your Category model attribute
-            }]
-          }]
+          include: [
+            {
+              model: db.Product,
+              as: "product",
+              attributes: ["id", "name", "price", "description", "imgProduct"],
+              include: [
+                {
+                  model: db.Category,
+                  attributes: ["name"], // Adjust as necessary to match your Category model attribute
+                },
+              ],
+            },
+          ],
         });
 
         if (!order_items || order_items.length === 0) {
-          return res.status(404).json({ message: 'Order items not found' });
+          return res.status(404).json({ message: "Order items not found" });
         }
 
         let order = {
           orderDetail: order_detail,
-          items: []
+          items: [],
         };
 
         for (let order_item of order_items) {
@@ -346,9 +351,9 @@ module.exports = {
               price: order_item.product.price,
               description: order_item.product.description,
               imgProduct: order_item.product.imgProduct,
-              category: order_item.product.Category.name, 
+              category: order_item.product.Category.name,
             },
-            quantity: order_item.quantity
+            quantity: order_item.quantity,
           });
         }
 
@@ -356,82 +361,127 @@ module.exports = {
       }
 
       res.status(200).json({
-        message: 'Purchase history retrieved successfully',
+        message: "Purchase history retrieved successfully",
         purchases: purchases,
       });
-  
     } catch (error) {
-      console.error('Failed to get user purchases:', error);
+      console.error("Failed to get user purchases:", error);
       res.status(500).json({
-          message: 'Failed to get user purchases',
-          error: error.message
+        message: "Failed to get user purchases",
+        error: error.message,
+      });
+    }
+  },
+
+  async userTransaction(req, res) {
+    const { startDate, endDate } = req.body;
+    try {
+      const orderItem = await db.Order_item.findAll({
+        where: {
+          createdAt: {
+            [db.Sequelize.Op.between]: [
+              new Date(startDate + "T00:00:00.000Z"),
+              new Date(endDate + "T23:59:59.999Z"),
+            ],
+          },
+        },
+        include: {
+          model: db.Product,
+          as: "product",
+          where: {
+            seller_id: req.user.id,
+          },
+        },
+      });
+
+      const groupedOrderItems = {};
+      orderItem.forEach((orderItem) => {
+        const orderDetailId = orderItem.orderDetail_id;
+        if (!(orderDetailId in groupedOrderItems)) {
+          groupedOrderItems[orderDetailId] = {
+            orderDetail_id: orderDetailId,
+            product: [],
+          };
+        }
+        groupedOrderItems[orderDetailId].product.push(orderItem);
+      });
+
+      const groupedOrderItemsArray = Object.values(groupedOrderItems);
+
+      res.status(200).send(groupedOrderItemsArray);
+    } catch (error) {
+      console.error("Failed to get user purchases:", error);
+      res.status(500).json({
+        message: "Failed to get user purchases",
+        error: error.message,
       });
     }
   },
 
   async getUserProfile(req, res) {
     try {
-        const userProfile = await db.User.findOne({
-            where: {
-                id: req.user.id,
-            },
-            attributes: { exclude: ['password'] },
-        });
-
-        if (!userProfile) {
-            return res.status(400).send({
-                message: "User profile not found",
-            });
-        }
-
-        return res.status(200).send(userProfile);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({
-            message: "Internal Server Error",
-        });
-    }
-},
-
-async updateImageProfile(req, res) {
-  try {
-
-    const userProfile = await db.User.findOne({
-      where: {
+      const userProfile = await db.User.findOne({
+        where: {
           id: req.user.id,
-      },
-      attributes: { exclude: ['password'] },
-  });
+        },
+        attributes: { exclude: ["password"] },
+      });
 
+      if (!userProfile) {
+        return res.status(400).send({
+          message: "User profile not found",
+        });
+      }
 
-    if (!userProfile) {
-      return res.status(400).send({
-        message: "User not Found",
+      return res.status(200).send({
+        message: "Successfully retrieved user profile",
+        data: userProfile,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "Internal Server Error",
       });
     }
+  },
 
-    if (req.file) {
-      const realimgProduct = userProfile.getDataValue("imgProfile"); //   /public/IMG-16871930921482142001.jpeg
-      console.log(realimgProduct)
-      const oldFilename = getFileNameFromDbValue(realimgProduct); //   IMG-16871930921482142001.jpeg
-      console.log(oldFilename)
-      if (oldFilename) {
-        fs.unlinkSync(getAbsolutePathPublicFileProfile(oldFilename));
+  async updateImageProfile(req, res) {
+    try {
+      const userProfile = await db.User.findOne({
+        where: {
+          id: req.user.id,
+        },
+        attributes: { exclude: ["password"] },
+      });
+
+      if (!userProfile) {
+        return res.status(400).send({
+          message: "User not Found",
+        });
       }
-      userProfile.imgProfile = setFromFileNameToDBValueProfile(
-        req.file.filename
-      );
+
+      if (req.file) {
+        const realimgProduct = userProfile.getDataValue("imgProfile"); //   /public/IMG-16871930921482142001.jpeg
+        console.log(realimgProduct);
+        const oldFilename = getFileNameFromDbValue(realimgProduct); //   IMG-16871930921482142001.jpeg
+        console.log(oldFilename);
+        if (oldFilename) {
+          fs.unlinkSync(getAbsolutePathPublicFileProfile(oldFilename));
+        }
+        userProfile.imgProfile = setFromFileNameToDBValueProfile(
+          req.file.filename
+        );
+      }
+
+      await userProfile.save();
+      return res
+        .status(200)
+        .send({ message: "Successfully changed image profile" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "Internal Server Error",
+      });
     }
-
-    await userProfile.save();
-    return res.status(200).send(userProfile);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({
-      message: "Internal Server Error",
-    });
-  }
-},
-
-
+  },
 };

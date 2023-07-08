@@ -6,8 +6,6 @@ const multerMiddlewareProduct = require("../middleware/multerMiddleware/product"
 const transactionController = require("../controllers/transactionController");
 const multerMiddlewareProfile = require("../middleware/multerMiddleware/profile");
 
-
-
 router.use(authMiddleware.verifyToken);
 
 router.get("/category", userController.getUserCategory);
@@ -21,6 +19,7 @@ router.patch(
 router.patch(
   "/product/:id",
   multerMiddlewareProduct.single("file"),
+  validatorMiddleware.updateProduct,
   userController.updateProduct
 );
 
@@ -40,12 +39,22 @@ router.delete("/cart/:id", transactionController.removeFromCart);
 
 router.post("/income", userController.userIncome);
 
-router.post("/checkout", transactionController.checkout);
+router.post("/transaction", userController.userTransaction);
 
-router.post("/purchase",authMiddleware.verifyToken,userController.userPurchase)
+router.post(
+  "/checkout",
+  validatorMiddleware.checkoutAddress,
+  transactionController.checkout
+);
 
-router.get("/",authMiddleware.verifyToken,userController.getUserProfile)
+router.post("/purchase", userController.userPurchase);
 
-router.patch("/profile",authMiddleware.verifyToken,multerMiddlewareProfile.single("file"),userController.updateImageProfile)
+router.get("/", userController.getUserProfile);
+
+router.patch(
+  "/profile",
+  multerMiddlewareProfile.single("file"),
+  userController.updateImageProfile
+);
 
 module.exports = router;
