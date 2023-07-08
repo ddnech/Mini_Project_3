@@ -35,7 +35,7 @@ export default function ModifyProduct() {
       </div>
       <div>
         <div className="p-4 flex flex-col justify-center items-center">
-          <div className="flex flex-wrap gap-4 md:flex-row md:flex-nowrap">
+          <div className="flex flex-wrap gap-1 md:flex-row md:flex-nowrap sm:gap-10">
             <div className="flex-auto">
               <ProductDetailsSeller product={product} />
             </div>
