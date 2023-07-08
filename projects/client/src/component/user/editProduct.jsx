@@ -5,11 +5,11 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useParams } from 'react-router-dom';
 
-export default function EditProduct({onSubmit, product}) {
+export default function EditProduct({ onSubmit, product }) {
   const token = useSelector((state) => state.auth.token);
   const [image, setImage] = useState('');
   const [categories, setCategories] = useState([]);
-  const {id} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -87,7 +87,7 @@ export default function EditProduct({onSubmit, product}) {
 
   const handleProductStatus = async (isActive) => {
     const statusAction = isActive ? 'deactivate' : 'activate';
-  
+
     try {
       await axios.patch(
         `http://localhost:8000/api/product/status/${statusAction}/${id}`,
@@ -106,69 +106,69 @@ export default function EditProduct({onSubmit, product}) {
   };
 
   return (
-    <div className='m-10 flex'>
-    <div className='w-full grid justify-center mt-2'>
-      <div className='w-full h-auto grid grid-flow-row justify-center'>    
-      <button
-      type='submit'
-      className='w-full py-2 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
-      onClick={() => handleProductStatus(product?.isActive)}
-      >
-      {product?.isActive ? 'Active' : 'Inactive'}
-      </button>
-        <div>
-          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-            {({ isSubmitting, status ,values}) => (
-              <Form>
-                <div className='grid grid-flow-row gap-1 justify-center'>
-                  {status && status.success && (
-                    <p className='text-center text-greenn'>{status.message}</p>
-                  )}
-                  {status && !status.success && (
-                    <p className='text-center text-redd'>{status.message}</p>
-                  )}
-                  <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Change the product information:</h3>
-                  <div className='w-full grid grid-flow-row gap-3'>
-                    <div className='font-ysa relative mt-4'>
-                      <ErrorMessage name='name' component='div' className='text-redd text-xs absolute -top-5' />
-                      <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='name' placeholder='Name' />
+    <div className='p-2 flex '>
+      <div className='w-full grid justify-center mt-2'>
+        <div className='w-full h-auto grid grid-flow-row justify-center'>
+          <button
+            type='submit'
+            className='w-full py-2 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
+            onClick={() => handleProductStatus(product?.isActive)}
+          >
+            {product?.isActive ? 'Active' : 'Inactive'}
+          </button>
+          <div className='mt-6'>
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+              {({ isSubmitting, status, values }) => (
+                <Form>
+                  <div className='grid grid-flow-row gap-1 justify-center'>
+                    {status && status.success && (
+                      <p className='text-center text-greenn'>{status.message}</p>
+                    )}
+                    {status && !status.success && (
+                      <p className='text-center text-redd'>{status.message}</p>
+                    )}
+                    <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Change the product information:</h3>
+                    <div className='w-full grid grid-flow-row gap-3'>
+                      <div className='font-ysa relative mt-4'>
+                        <ErrorMessage name='name' component='div' className='text-redd text-xs absolute -top-5' />
+                        <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='name' placeholder='Name' />
+                      </div>
+                      <div className='font-ysa relative mt-4'>
+                        <ErrorMessage name='price' component='div' className='text-redd text-xs absolute -top-5' />
+                        <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='price' placeholder='Price' />
+                      </div>
+                      <div className='font-ysa relative mt-4'>
+                        <ErrorMessage name='category' component='div' className='text-redd text-xs absolute -top-5' />
+                        <Field as='select' className='border border-gray-300 h-6 py-0 text-xs w-full focus:border-darkgreen focus:ring-0' name='category'>
+                          <option value=''>Select Category</option>
+                          {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </Field>
+                      </div>
+                      <div className='font-ysa relative mt-4'>
+                        <ErrorMessage name='description' component='div' className='text-redd text-xs absolute -top-5' />
+                        <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='description' placeholder='Description' />
+                      </div>
+                      <div className='font-ysa relative mt-4'>
+                        <ErrorMessage name='stock' component='div' className='text-redd text-xs absolute -top-5' />
+                        <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='stock' placeholder='Stock' />
+                      </div>
+                      <label className='font-ysa relative text-jetblack'>Image:</label>
+                      <input className='border border-gray-300 h-10 text-xs w-full focus:border-darkgreen focus:ring-0' type='file' onChange={handleImageChange} />
                     </div>
-                    <div className='font-ysa relative mt-4'>
-                      <ErrorMessage name='price' component='div' className='text-redd text-xs absolute -top-5' />
-                      <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='price' placeholder='Price' />
-                    </div>
-                    <div className='font-ysa relative mt-4'>
-                      <ErrorMessage name='category' component='div' className='text-redd text-xs absolute -top-5' />
-                      <Field as='select' className='border border-gray-300 h-6 py-0 text-xs w-full focus:border-darkgreen focus:ring-0' name='category'>
-                        <option value=''>Select Category</option>
-                        {categories.map((category) => (
-                          <option key={category.id} value={category.id}>
-                            {category.name}
-                          </option>
-                        ))}
-                      </Field>
-                    </div>
-                    <div className='font-ysa relative mt-4'>
-                      <ErrorMessage name='description' component='div' className='text-redd text-xs absolute -top-5' />
-                      <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='description' placeholder='Description' />
-                    </div>
-                    <div className='font-ysa relative mt-4'>
-                      <ErrorMessage name='stock' component='div' className='text-redd text-xs absolute -top-5' />
-                      <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='stock' placeholder='Stock' />
-                    </div>
-                    <label className='font-ysa relative text-jetblack'>Image:</label>
-                    <input className='border border-gray-300 h-10 text-xs w-full focus:border-darkgreen focus:ring-0' type='file' onChange={handleImageChange} />
+                    <button type='submit' className='w-full py-2 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'>
+                      Save Changes
+                    </button>
                   </div>
-                  <button type='submit' className='w-full py-2 my-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'>
-                    Save Changes
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

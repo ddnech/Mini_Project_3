@@ -6,7 +6,7 @@ function ProductDetailsSeller({ product }) {
     }
 
     return (
-        <div className={`bg-white w-full h-auto flex flex-col text-jetblack p-10 sm:w-full flex-1`}>
+        <div className={`bg-white w-full h-auto flex flex-col text-jetblack p-3 sm:w-full flex-1`}>
             <div className={`w-full ${product.isActive ? "" : "opacity-40"}`}>
                 <img
                     className="w-60 h-60 justify-center mx-auto m-2 object-cover"
@@ -21,11 +21,11 @@ function ProductDetailsSeller({ product }) {
                 <div className="font-josefin text-lg">
                     {product.description}
                 </div>
-                <div className={`font-josefin text-lg font-bold`}>
+                <div className={`font-ysa text-lg`}>
                     {product.isActive ? "Active" : "Inactive"}
                 </div>
                 <div className="font-josefin text-lg">
-                <span className="font-bold">Category:</span>{product.category ? product.category.name : ""}
+                    <span className="">Category: </span>{product.category ? product.category.name : ""}
                 </div>
                 <div className="font-josefin text-lg">
                     Sold by: {product.seller ? product.seller.store : ""}
