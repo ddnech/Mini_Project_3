@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
 
 function ProductDetails({product}) {
     if (!product) {
@@ -7,9 +6,8 @@ function ProductDetails({product}) {
     }
 
     return (
-        <div className={`${product.isActive ? "bg-white w-full h-auto flex flex-col text-jetblack p-10 sm:w-full flex-1" : " bg-gray-400 w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1 opacity-20"
-            }`}>
-            <div className="w-full">
+        <div className={`bg-white w-full h-auto flex flex-col text-jetblack p-10 sm:w-full flex-1`}>
+            <div className={`w-full ${product.isActive ? "" : "opacity-40"}`}>
                 <img
                     className="w-60 h-60 justify-center mx-auto m-2 object-cover"
                     src={product.imgProduct ? `http://localhost:8000${product.imgProduct}` : undefined}
@@ -23,11 +21,11 @@ function ProductDetails({product}) {
                 <div className="font-josefin text-lg">
                     {product.description}
                 </div>
-                <div className="font-josefin text-lg">
+                <div className={`font-josefin text-lg font-bold`}>
                     {product.isActive ? "Active" : "Inactive"}
                 </div>
                 <div className="font-josefin text-lg">
-                    {product.category ? product.category.name : ""}
+                <span className="font-bold">Category:</span>{product.category ? product.category.name : ""}
                 </div>
                 <div className="font-josefin text-lg">
                     Sold by: {product.seller ? product.seller.store : ""}

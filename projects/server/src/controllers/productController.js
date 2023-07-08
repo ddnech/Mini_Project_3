@@ -291,6 +291,40 @@ module.exports = {
         errors: error.message,
       });
     }
+  },
+
+  async deleteProduct(req, res) {
+    try {
+      const product = await db.Product.findOne({
+        where: {
+          id: parseInt(req.params.id),
+          seller_id: req.user.id,
+        },
+      });
+  
+      if (!product) {
+        return res.status(404).send({
+          message: "Product not found",
+        });
+      }
+  
+      const imgProduct = product.getDataValue("imgProduct");
+      const oldFilename = getFileNameFromDbValue(imgProduct);
+      if (oldFilename) {
+        fs.unlinkSync(getAbsolutePathPublicFileProduct(oldFilename));
+      }
+  
+      await product.destroy();
+  
+      return res.status(200).send({
+        message: "Product successfully deleted",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
   }
 
 };

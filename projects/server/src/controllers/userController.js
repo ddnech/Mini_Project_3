@@ -3,6 +3,8 @@ const {
   setFromFileNameToDBValueProduct,
   getAbsolutePathPublicFileProduct,
   getFileNameFromDbValue,
+  getAbsolutePathPublicFileProfile,
+  setFromFileNameToDBValueProfile,
 } = require("../helper");
 const fs = require("fs");
 
@@ -238,10 +240,10 @@ module.exports = {
 
         const products = await db.Product.findAll({
             where: { seller_id: req.user.id },
-            attributes: ['id', 'price'], //{[1,100],[2,200]}
+            attributes: ['id', 'price'],
         });
 
-        const productIds = products.map(product => product.id); //[1,2]
+        const productIds = products.map(product => product.id);
         let totalIncome = 0;
         let dailyIncome = {};
 
@@ -249,7 +251,6 @@ module.exports = {
             const productId = productIds[i]; 
             const productPrice = products[i].price;
 
-            // Find each order item with createdAt date, grouped by date
             const orderItems = await db.Order_item.findAll({
                 where: {
                     product_id: productId,
@@ -294,46 +295,69 @@ module.exports = {
   async userPurchase(req, res){
     try{
       const buyer_id = req.user.id;
+      const { startDate, endDate } = req.body;
 
-      const order_detail = await db.Order_detail.findOne({
-        where: { buyer_id },
+      const order_details = await db.Order_detail.findAll({
+        where: { 
+          buyer_id, 
+          createdAt: {
+            [db.Sequelize.Op.between]: [
+              new Date(startDate + 'T00:00:00.000Z'),
+              new Date(endDate + 'T23:59:59.999Z')
+            ]
+          }
+        },
       });
-      
-      if (!order_detail) {
+
+      if (!order_details || order_details.length === 0) {
         return res.status(404).json({ message: 'Order detail not found' });
       }
       
-      const order_items = await db.Order_item.findAll({
-        where: { orderDetail_id: order_detail.id },
-      });
-      
-      if (!order_items) {
-        return res.status(404).json({ message: 'Order items not found' });
+      let purchases = [];
+
+      for (let order_detail of order_details) {
+        const order_items = await db.Order_item.findAll({
+          where: { orderDetail_id: order_detail.id },
+          include: [{
+            model: db.Product,
+            as: 'product',
+            attributes: ['id', 'name', 'price', 'description', 'imgProduct'],
+            include: [{
+              model: db.Category, 
+              attributes: ['name']  // Adjust as necessary to match your Category model attribute
+            }]
+          }]
+        });
+
+        if (!order_items || order_items.length === 0) {
+          return res.status(404).json({ message: 'Order items not found' });
+        }
+
+        let order = {
+          orderDetail: order_detail,
+          items: []
+        };
+
+        for (let order_item of order_items) {
+          order.items.push({
+            product: {
+              id: order_item.product.id,
+              name: order_item.product.name,
+              price: order_item.product.price,
+              description: order_item.product.description,
+              imgProduct: order_item.product.imgProduct,
+              category: order_item.product.Category.name, 
+            },
+            quantity: order_item.quantity
+          });
+        }
+
+        purchases.push(order);
       }
 
-      const productIds = order_items.map(order_item => order_item.product_id);
-
-      const products = await db.Product.findAndCountAll({
-        where: { id: productIds },
-        attributes: ['id', 'createdAt'],
-        include: [
-          {
-            model: db.Order_item,
-            attributes: [
-              [db.Sequelize.fn('COUNT', 'product_id'), 'count'],
-            ],
-          },
-        ],
-        group: ['id', 'createdAt'],
-      });
-      
-      if (!products) {
-        return res.status(404).json({ message: 'Products not found' });
-      }
-      
       res.status(200).json({
-        message: 'Product details retrieved successfully',
-        products: products,
+        message: 'Purchase history retrieved successfully',
+        purchases: purchases,
       });
   
     } catch (error) {
@@ -343,9 +367,71 @@ module.exports = {
           error: error.message
       });
     }
-  }
-  
-  
+  },
 
-  
+  async getUserProfile(req, res) {
+    try {
+        const userProfile = await db.User.findOne({
+            where: {
+                id: req.user.id,
+            },
+            attributes: { exclude: ['password'] },
+        });
+
+        if (!userProfile) {
+            return res.status(400).send({
+                message: "User profile not found",
+            });
+        }
+
+        return res.status(200).send(userProfile);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Internal Server Error",
+        });
+    }
+},
+
+async updateImageProfile(req, res) {
+  try {
+
+    const userProfile = await db.User.findOne({
+      where: {
+          id: req.user.id,
+      },
+      attributes: { exclude: ['password'] },
+  });
+
+
+    if (!userProfile) {
+      return res.status(400).send({
+        message: "User not Found",
+      });
+    }
+
+    if (req.file) {
+      const realimgProduct = userProfile.getDataValue("imgProfile"); //   /public/IMG-16871930921482142001.jpeg
+      console.log(realimgProduct)
+      const oldFilename = getFileNameFromDbValue(realimgProduct); //   IMG-16871930921482142001.jpeg
+      console.log(oldFilename)
+      if (oldFilename) {
+        fs.unlinkSync(getAbsolutePathPublicFileProfile(oldFilename));
+      }
+      userProfile.imgProfile = setFromFileNameToDBValueProfile(
+        req.file.filename
+      );
+    }
+
+    await userProfile.save();
+    return res.status(200).send(userProfile);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+},
+
+
 };
