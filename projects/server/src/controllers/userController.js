@@ -484,4 +484,45 @@ module.exports = {
       });
     }
   },
+
+  async getTopSellingProducts(req, res) {
+    try {
+      const categoryId = req.body.categoryId;
+      const sellerId = req.user.id;
+  
+      const topSellingProducts = await OrderItem.findAll({
+        include: [
+          {
+            model: Product,
+            where: { seller_id: sellerId, category_id: categoryId },
+          },
+        ],
+        group: ['product_id'],
+        attributes: [
+          'product_id',
+          [sequelize.fn('SUM', sequelize.col('quantity')), 'total_quantity'],
+        ],
+        order: [[sequelize.fn('SUM', sequelize.col('quantity')), 'DESC']],
+      });
+  
+      if (topSellingProducts.length === 0) {
+        return res.status(400).send({
+          message: 'No products found for this category',
+        });
+      }
+  
+      return res.status(200).send({
+        message: 'Successfully retrieved top selling products',
+        data: topSellingProducts,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: 'Internal Server Error',
+      });
+    }
+  }
+  
+
+
 };

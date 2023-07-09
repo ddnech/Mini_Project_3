@@ -1,17 +1,41 @@
-import React, { useState } from "react";
-import { AiOutlineUser, AiOutlineUnorderedList, AiOutlineLogout, AiOutlineShoppingCart } from 'react-icons/ai';
+import React, { useState, useEffect } from "react";
+import {
+  AiOutlineUser,
+  AiOutlineUnorderedList,
+  AiOutlineLogout,
+  AiOutlineShoppingCart,
+} from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { remove } from "../store/reducer/authSlice";
-import { ImSearch } from 'react-icons/im';
-import { GrClose } from 'react-icons/gr'
+import { ImSearch } from "react-icons/im";
+import { GrClose } from "react-icons/gr";
+import axios from "axios";
 
 export default function NavBar(props) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get("http://localhost:8000/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setUserProfile(response.data.data);
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    }
+  }, [token]);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -46,12 +70,20 @@ export default function NavBar(props) {
           </Link>
           <span className="px-4">
             {token ? (
-              <div className="relative p-1">
+              <div className="relative pt-1 ">
                 <button onClick={handleProfileMenuToggle}>
-                  <AiOutlineUser size={20} />
+                  {userProfile?.imgProfile ? (
+                    <img
+                      className="w-6 h-6 rounded-full mr-2"
+                      src={`http://localhost:8000${userProfile.imgProfile}`}
+                      alt="Profile"
+                    />
+                  ) : (
+                    <AiOutlineUser size={20} />
+                  )}
                 </button>
                 {isProfileMenuOpen && (
-                  <ul className="absolute right-0 bg-white text-black shadow-lg font-ysa text-sm">
+                  <ul className="absolute right-0 bg-white text-black shadow-lg font-ysa text-sm top-8">
                     <li className="w-36 flex y-0 items-center py-2 px-4 border-b border-gray-600 bg-babypowder hover:text-darkgreen hover:font-semibold">
                       <AiOutlineUnorderedList size={18} className="mr-2" />
                       <Link to="/myprofile">Dashboard</Link>
@@ -64,14 +96,22 @@ export default function NavBar(props) {
                 )}
               </div>
             ) : (
-              <Link to="/login" className="text-xs font-lora hover:">Log In</Link>
+              <Link to="/login" className="text-xs font-lora hover:">
+                Log In
+              </Link>
             )}
           </span>
           <span className="p-2">
             {isSearchOpen ? (
-              <GrClose className="text-xs cursor-pointer" onClick={toggleSearch} />
+              <GrClose
+                className="text-xs cursor-pointer"
+                onClick={toggleSearch}
+              />
             ) : (
-              <ImSearch className="text-xs cursor-pointer" onClick={toggleSearch} />
+              <ImSearch
+                className="text-xs cursor-pointer"
+                onClick={toggleSearch}
+              />
             )}
           </span>
         </div>
@@ -92,28 +132,43 @@ export default function NavBar(props) {
                 value={props.categoryValue}
                 onChange={props.onCategoryChange}
               >
-                <option value="" className="font-ysa text-sm">All Categories</option> {/* Set initial value to empty string */}
+                <option value="" className="font-ysa text-sm">
+                  All Categories
+                </option>{" "}
+                {/* Set initial value to empty string */}
                 {props.allCategory.map((category) => (
-                  <option value={category.id} key={category.id} className="font-ysa text-sm">
+                  <option
+                    value={category.id}
+                    key={category.id}
+                    className="font-ysa text-sm"
+                  >
                     {category.name}
                   </option>
                 ))}
               </select>
               <select
                 className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
-                value={props.alphabetValue === 'DESC' ? 'Z-A' : 'A-Z'}
+                value={props.alphabetValue === "DESC" ? "Z-A" : "A-Z"}
                 onChange={props.onAlphabetChange}
               >
-                <option value="A-Z" className="font-ysa text-sm">Sort: A - Z</option>
-                <option value="Z-A" className="font-ysa text-sm">Sort: Z - A</option>
+                <option value="A-Z" className="font-ysa text-sm">
+                  Sort: A - Z
+                </option>
+                <option value="Z-A" className="font-ysa text-sm">
+                  Sort: Z - A
+                </option>
               </select>
               <select
                 className=" bg-gray-200 transparent outline-none w-full sm:basis-2/8 md:basis-1/5"
-                value={props.priceValue === 'DESC' ? 'Low-High' : 'High-Low'}
+                value={props.priceValue === "DESC" ? "Low-High" : "High-Low"}
                 onChange={props.onPriceChange}
               >
-                <option value="Low-High" className="font-ysa text-sm">Price: Low - High</option>
-                <option value="High-Low" className="font-ysa text-sm">Price: High - Low</option>
+                <option value="Low-High" className="font-ysa text-sm">
+                  Price: Low - High
+                </option>
+                <option value="High-Low" className="font-ysa text-sm">
+                  Price: High - Low
+                </option>
               </select>
             </div>
           </div>
@@ -122,4 +177,3 @@ export default function NavBar(props) {
     </div>
   );
 }
-
