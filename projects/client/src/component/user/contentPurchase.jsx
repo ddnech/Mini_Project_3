@@ -58,10 +58,10 @@ export default function MyPurchase() {
   const maxStartDate = moment().subtract(30, 'days').format('YYYY-MM-DD'); // Maximum allowed start date
 
   return (
-    <div className="font-ysa">
-      <h1 className="text-xs text-center font-josefin mb-4 text-jetblack tracking-wide mt-6">Purchase History</h1>
-      {errorMsg && <div className="text-red-500">{errorMsg}</div>}
-      <div className="flex gap-3 pl-4">
+    <div className="font-josefin">
+      <h1 className="text-base text-center font-josefin mb-4 text-jetblack tracking-wide mt-6 sm:text-2xl">Purchase History</h1>
+      {errorMsg && <div className="text-red-500 sm:flex-row justify-center">{errorMsg}</div>}
+      <div className="flex flex-col gap-3 pl-4 sm:flex-row justify-center">
         <div className="mb-4">
           <label>Start Date:</label>
           <input
@@ -70,6 +70,7 @@ export default function MyPurchase() {
             min={maxStartDate}
             max={endDate || moment().format('YYYY-MM-DD')}
             onChange={handleStartDateChange}
+            className="mx-2 text-sm py-0 focus:ring-0 focus:border focus:border-jetblack"
           />
         </div>
         <div className="mb-4">
@@ -80,6 +81,7 @@ export default function MyPurchase() {
             min={startDate || moment().subtract(30, 'days').format('YYYY-MM-DD')}
             max={moment().format('YYYY-MM-DD')}
             onChange={handleEndDateChange}
+            className="mx-2 text-sm py-0 focus:ring-0 focus:border focus:border-jetblack"
           />
         </div>
       </div>
@@ -98,7 +100,7 @@ export default function MyPurchase() {
               <h5 className="font-bold">Items:</h5>
               {purchase.items.map((item, itemIndex) => (
                 <div key={itemIndex} className="border p-2 rounded mb-2 flex gap-3">
-                  <img src={`http://localhost:8000${item.product.imgProduct}`} alt={item.product.name} className="h-24 w-24 object-cover" />
+                  <img src={`http://localhost:8000${item.product.imgProduct}`} alt={item.product.name} className="h-24 w-24 object-cover hidden sm:block" />
                   <div className="grid grid-cols-1 gap-2">
                     <p>Product: {item.product.name}</p>
                     <p>Quantity: {item.quantity}</p>

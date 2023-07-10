@@ -57,11 +57,11 @@ export default function StoreIncome() {
   const maxStartDate = moment().subtract(30, 'days').format('YYYY-MM-DD'); // Maximum allowed start date
 
   return (
-    <div className="font-ysa">
-      <h1 className="text-xs text-center font-josefin mb-4 text-jetblack tracking-wide">Income History</h1>
+    <div className="font-josefin">
+      <h1 className="text-base text-center font-josefin mb-4 text-jetblack tracking-wide mt-6 sm:text-2xl">Income History</h1>
       {errorMsg && <div className="text-red-500">{errorMsg}</div>}
-      <div className="flex gap-3 pl-4">
-        <div className="mb-4">
+      <div className="flex flex-col gap-3 pl-4 sm:flex-row justify-center">
+        <div className="">
           <label>Start Date:</label>
           <input
             type="date"
@@ -69,16 +69,18 @@ export default function StoreIncome() {
             min={maxStartDate}
             max={end || moment().format('YYYY-MM-DD')}
             onChange={handleStartChange}
+            className="mx-2 text-sm py-0 focus:ring-0 focus:border focus:border-jetblack"
           />
         </div>
         <div className="mb-4">
-          <label>End Date:</label>
+          <label className="mr-1 sm:mr-0">End Date:</label>
           <input
             type="date"
             value={end || ""}
             min={start || moment().subtract(30, 'days').format('YYYY-MM-DD')}
             max={moment().format('YYYY-MM-DD')}
             onChange={handleEndChange}
+            className="mx-2 text-sm py-0 focus:ring-0 focus:border focus:border-jetblack"
           />
         </div>
       </div>

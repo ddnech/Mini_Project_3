@@ -62,11 +62,11 @@ export default function OneProductBuyer() {
             axios
                 .delete(`http://localhost:8000/api/user/cart/${id}`, { headers: { Authorization: `Bearer ${token}` } })
                 .then((response) => {
-                    console.log("Successfully removed from cart");
                     axios
                         .get("http://localhost:8000/api/user/cart", { headers: { Authorization: `Bearer ${token}` } })
                         .then((response) => {
                             dispatch(updateCart(response.data.data));
+                            alert("Successfully removed from cart")
                         })
                         .catch((error) => {
                             console.error("Failed to fetch cart data", error.message);
@@ -83,11 +83,11 @@ export default function OneProductBuyer() {
                     { headers: { Authorization: `Bearer ${token}` } }
                 )
                 .then((response) => {
-                    console.log("Successfully added to cart");
                     axios
                         .get("http://localhost:8000/api/user/cart", { headers: { Authorization: `Bearer ${token}` } })
                         .then((response) => {
                             dispatch(updateCart(response.data.data));
+                            alert("Successfully add to cart")
                         })
                         .catch((error) => {
                             console.error("Failed to fetch cart data", error.message);

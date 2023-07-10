@@ -113,7 +113,7 @@ export default function EditProduct({ onSubmit, product }) {
             className='w-full py-2 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
             onClick={() => handleProductStatus(product?.isActive)}
           >
-            {product?.isActive ? 'Active' : 'Inactive'}
+            {product?.isActive ? 'Deactive' : 'Active'}
           </button>
           <div className='mt-6'>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
