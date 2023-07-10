@@ -179,78 +179,78 @@ module.exports = {
 
   async getProductById(req, res) {
     try {
-        const product = await db.Product.findOne({
-            where: {
-                id: req.params.id
-            },
-            include: [
-                {
-                    model: db.Category,
-                },
-                {
-                    model: db.User,
-                    as: 'Seller',
-                    attributes: ['username', 'storeName'],
-                },
-            ],
-        });
+      const product = await db.Product.findOne({
+        where: {
+          id: req.params.id,
+        },
+        include: [
+          {
+            model: db.Category,
+          },
+          {
+            model: db.User,
+            as: "Seller",
+            attributes: ["username", "storeName"],
+          },
+        ],
+      });
 
-        if (!product) {
-            return res.status(404).send({
-                message: "Product not found",
-            });
-        }
-
-        res.send({
-            message: "Successfully retrieved product",
-            data: {
-                id: product.id,
-                seller: {
-                    seller_id: product.seller_id,
-                    name: product.Seller.username,
-                    store: product.Seller.storeName,
-                },
-                name: product.name,
-                price: product.price,
-                description: product.description,
-                imgProduct: product.imgProduct,
-                stock: product.stock,
-                isActive: product.isActive,
-                createdAt: product.createdAt,
-                updatedAt: product.updatedAt,
-                category: {
-                    id: product.Category.id,
-                    name: product.Category.name,
-                },
-            },
+      if (!product) {
+        return res.status(404).send({
+          message: "Product not found",
         });
+      }
+
+      res.send({
+        message: "Successfully retrieved product",
+        data: {
+          id: product.id,
+          seller: {
+            seller_id: product.seller_id,
+            name: product.Seller.username,
+            store: product.Seller.storeName,
+          },
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          imgProduct: product.imgProduct,
+          stock: product.stock,
+          isActive: product.isActive,
+          createdAt: product.createdAt,
+          updatedAt: product.updatedAt,
+          category: {
+            id: product.Category.id,
+            name: product.Category.name,
+          },
+        },
+      });
     } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            message: "Internal Server Error",
-            error: error.message,
-        });
+      console.log(error);
+      res.status(500).send({
+        message: "Internal Server Error",
+        error: error.message,
+      });
     }
   },
 
   async productAction(req, res) {
     const id = parseInt(req.params.id);
     const action = req.params.action;
-  
+
     try {
       const getProduct = await db.Product.findOne({
         where: {
           id,
-          seller_id: req.user.id
+          seller_id: req.user.id,
         },
       });
-  
+
       if (!getProduct) {
         return res.status(400).send({
           message: "Product doesn't exist",
         });
       }
-  
+
       switch (action) {
         case "activate":
           if (getProduct.isActive) {
@@ -258,28 +258,28 @@ module.exports = {
               message: "Product is already active",
             });
           }
-  
+
           getProduct.isActive = true;
           await getProduct.save();
-  
+
           return res.status(200).send({
             message: "Product activated successfully",
           });
-  
+
         case "deactivate":
           if (!getProduct.isActive) {
             return res.status(400).send({
               message: "Product is already inactive",
             });
           }
-  
+
           getProduct.isActive = false;
           await getProduct.save();
-  
+
           return res.status(200).send({
             message: "Product deactivated successfully",
           });
-  
+
         default:
           return res.status(400).send({
             message: "Invalid action",
@@ -301,21 +301,21 @@ module.exports = {
           seller_id: req.user.id,
         },
       });
-  
+
       if (!product) {
         return res.status(404).send({
           message: "Product not found",
         });
       }
-  
+
       const imgProduct = product.getDataValue("imgProduct");
       const oldFilename = getFileNameFromDbValue(imgProduct);
       if (oldFilename) {
         fs.unlinkSync(getAbsolutePathPublicFileProduct(oldFilename));
       }
-  
+
       await product.destroy();
-  
+
       return res.status(200).send({
         message: "Product successfully deleted",
       });
@@ -325,6 +325,56 @@ module.exports = {
         message: "Internal Server Error",
       });
     }
-  }
+  },
 
+  async getTopSellingProduct(req, res) {
+    try {
+      const categoryId = Number(req.body.categoryId);
+
+      let productInclude = {
+        model: db.Product,
+        as: "product",
+        where: {
+          [db.Sequelize.Op.and]: [
+            categoryId ? { category_id: categoryId } : {},
+            { isActive: 1 },
+          ],
+        },
+        include: {
+          model: db.Category,
+          attributes: ["name"],
+        },
+      };
+
+      const topSellingProducts = await db.Order_item.findAll({
+        include: [productInclude],
+        group: ["product_id"],
+        attributes: [
+          "product_id",
+          [
+            db.sequelize.fn("SUM", db.sequelize.col("quantity")),
+            "total_quantity",
+          ],
+        ],
+        order: [[db.sequelize.fn("SUM", db.sequelize.col("quantity")), "DESC"]],
+        limit: 6,
+      });
+
+      if (topSellingProducts.length === 0) {
+        return res.status(400).send({
+          message: "No products found",
+        });
+      }
+
+      return res.status(200).send({
+        message: "Successfully retrieved top-selling products",
+        data: topSellingProducts,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
+  },
 };

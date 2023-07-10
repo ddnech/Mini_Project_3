@@ -12,7 +12,7 @@ export default function AllProduct({ allProduct, currentPage, totalPages, onPage
 
     return (
         <>
-            <div className="flex flex-wrap md:flex-shrink">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {/* product*/}
                 {allProduct.length === 0 ? (
                     <div className="w-full h-full font-josefin text-xl text-center mx-auto my-5">

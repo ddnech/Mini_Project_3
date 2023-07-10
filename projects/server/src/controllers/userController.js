@@ -106,20 +106,20 @@ module.exports = {
   async updateProduct(req, res) {
     try {
       const { name, price, category_id, description, stock } = req.body;
-  
+
       const updatedProduct = await db.Product.findOne({
         where: {
           id: parseInt(req.params.id),
           seller_id: req.user.id,
         },
       });
-  
+
       if (!updatedProduct) {
         return res.status(400).send({
           message: "Product not found",
         });
       }
-  
+
       if (req.file) {
         const realimgProduct = updatedProduct.getDataValue("imgProduct");
         const oldFilename = getFileNameFromDbValue(realimgProduct);
@@ -130,11 +130,11 @@ module.exports = {
           req.file.filename
         );
       }
-  
+
       if (category_id !== undefined && category_id !== "") {
         updatedProduct.category_id = parseInt(category_id);
       }
-  
+
       if (name) {
         updatedProduct.name = name;
       }
@@ -147,7 +147,7 @@ module.exports = {
       if (stock) {
         updatedProduct.stock = parseInt(stock);
       }
-  
+
       await updatedProduct.save();
       return res.status(200).send(updatedProduct);
     } catch (error) {
@@ -157,7 +157,6 @@ module.exports = {
       });
     }
   },
-
 
   async getUserCategory(req, res) {
     const user_id = req.user.id;
@@ -487,7 +486,7 @@ module.exports = {
     try {
       const categoryId = req.body.categoryId;
       const sellerId = req.user.id;
-  
+
       let productInclude = {
         model: db.Product,
         as: "product",
@@ -495,44 +494,38 @@ module.exports = {
         include: {
           model: db.Category,
           where: categoryId ? { id: categoryId } : {},
-          attributes: ["name"]
-        }
+          attributes: ["name"],
+        },
       };
-  
+
       const topSellingProducts = await db.Order_item.findAll({
         include: [productInclude],
-        group: ['product_id'],
+        group: ["product_id"],
         attributes: [
-          'product_id',
-          [db.sequelize.fn('SUM', db.sequelize.col('quantity')), 'total_quantity'],
+          "product_id",
+          [
+            db.sequelize.fn("SUM", db.sequelize.col("quantity")),
+            "total_quantity",
+          ],
         ],
-        order: [[db.sequelize.fn('SUM', db.sequelize.col('quantity')), 'DESC']],
+        order: [[db.sequelize.fn("SUM", db.sequelize.col("quantity")), "DESC"]],
       });
-  
+
       if (topSellingProducts.length === 0) {
         return res.status(400).send({
-          message: 'No products found',
+          message: "No products found",
         });
       }
-  
+
       return res.status(200).send({
-        message: 'Successfully retrieved top-selling products',
+        message: "Successfully retrieved top-selling products",
         data: topSellingProducts,
       });
     } catch (error) {
       console.log(error);
       return res.status(500).send({
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
       });
     }
   },
-
-
-
-  
-  
-  
-  
-
-
 };
