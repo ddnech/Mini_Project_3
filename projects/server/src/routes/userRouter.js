@@ -57,4 +57,11 @@ router.patch(
   userController.updateImageProfile
 );
 
+router.post(
+  "/top_selling",
+  userController.getTopSellingProducts
+);
+
+
+
 module.exports = router;

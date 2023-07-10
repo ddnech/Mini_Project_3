@@ -58,7 +58,7 @@ export default function StoreIncome() {
 
   return (
     <div className="font-ysa">
-      <h1 className="text-2xl font-bold text-darkgreen mb-4 text-center">Income History</h1>
+      <h1 className="text-xs text-center font-josefin mb-4 text-jetblack tracking-wide">Income History</h1>
       {errorMsg && <div className="text-red-500">{errorMsg}</div>}
       <div className="flex gap-3 pl-4">
         <div className="mb-4">
