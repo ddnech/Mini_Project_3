@@ -62,7 +62,7 @@ export default function MyPurchase() {
       <h1 className="text-base text-center font-josefin mb-4 text-jetblack tracking-wide mt-6 sm:text-2xl">Purchase History</h1>
       {errorMsg && <div className="text-red-500 sm:flex-row justify-center">{errorMsg}</div>}
       <div className="flex flex-col gap-3 pl-4 sm:flex-row justify-center">
-        <div className="mb-4">
+        <div className="">
           <label>Start Date:</label>
           <input
             type="date"
@@ -74,7 +74,7 @@ export default function MyPurchase() {
           />
         </div>
         <div className="mb-4">
-          <label>End Date:</label>
+          <label className="mr-[0.4rem] sm:mr-0">End Date:</label>
           <input
             type="date"
             value={endDate || ""}
@@ -106,7 +106,7 @@ export default function MyPurchase() {
                     <p>Quantity: {item.quantity}</p>
                     <p>Price: Rp {Number(item.product.price).toLocaleString({ style: 'currency', currency: 'IDR' })}</p>
                     <p>Category: {item.product.category}</p>
-                    
+
                   </div>
                 </div>
               ))}
@@ -114,7 +114,7 @@ export default function MyPurchase() {
           ))}
         </div>
       ) : (
-        <p className="pl-4">No purchase history found for the selected date range.</p>
+        <p className="text-center">No purchase history found for the selected date range.</p>
       )}
     </div>
   );

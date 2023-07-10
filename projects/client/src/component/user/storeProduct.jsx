@@ -155,14 +155,14 @@ export default function StoreProduct() {
                             {/* search  */}
                             <div className="h-full flex flex-wrap items-center px-2 w-full gap-2 sm:flex-nowrap font-ysa text-sm">
                                 <input
-                                    className=" font-sans bg-transparent p-2 w-full focus:outline-none sm:basis-3/8 md:basis-2/5"
+                                    className="h-6 bg-transparent p-2 w-full focus:ring-0 focus:border focus:border-darkgreen sm:h-10 sm:basis-3/8 md:basis-2/5"
                                     type="text"
                                     placeholder="Search"
                                     value={searchValue}
                                     onChange={handleSearchChange}
                                 />
                                 <select
-                                    className=" bg-gray-200 outline-none w-full sm:basis-2/8 md:basis-1/5"
+                                    className="bg-transparent h-6 focus:ring-0 focus:border focus:border-darkgreen py-0 px-2 w-full sm:h-10 sm:basis-2/8 md:basis-1/5"
                                     value={selectCategory}
                                     onChange={handleCategoryChange}
                                 >
@@ -174,7 +174,7 @@ export default function StoreProduct() {
                                     ))}
                                 </select>
                                 <select
-                                    className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
+                                    className="bg-transparent h-6 focus:ring-0 focus:border focus:border-darkgreen py-0 px-2 w-full sm:h-10 sm:basis-1/8 md:basis-1/5"
                                     value={sortAlphabet}
                                     onChange={handleSortOrderAlphabet}
                                 >
@@ -182,7 +182,7 @@ export default function StoreProduct() {
                                     <option value="DESC" className="font-ysa text-sm">Sort: Z - A</option>
                                 </select>
                                 <select
-                                    className=" bg-gray-200 transparent outline-none w-full sm:basis-2/8 md:basis-1/5"
+                                    className="bg-transparent h-6 focus:ring-0 focus:border focus:border-darkgreen py-0 px-2 w-full sm:h-10 sm:basis-2/8 md:basis-1/5"
                                     value={sortPrice}
                                     onChange={handleSortOrderPrice}
                                 >
@@ -191,41 +191,41 @@ export default function StoreProduct() {
                                 </select>
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 mt-2 mx-2">
-                            {/* product*/}
-                            {allProduct.length === 0 ? (
-                                <div className="w-full h-full font-josefin text-xl text-center mx-auto my-5">
-                                    No Product Listed Yet
-                                </div>
-                            ) : (
-                                <>
+                        {/* product*/}
+                        {allProduct.length === 0 ? (
+                            <div className="w-full h-full font-josefin text-xl text-center mx-auto my-5">
+                                No Product Listed Yet
+                            </div>
+                        ) : (
+                            <>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-2 mx-2">
                                     {allProduct.map((allproduct) => (
                                         <div className={`${allproduct.isActive ? "bg-white w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1" : " bg-gray-400 w-full h-full flex flex-col text-jetblack p-2 sm:w-80 flex-1 opacity-20"
                                             }`}>
                                             <div className="w-full">
                                                 <img
-                                                    className="w-20 h-20 justify-center mx-auto m-2 object-cover"
+                                                    className="w-32 h-30 justify-center mx-auto m-2 object-cover sm:w-40 sm:h-40"
                                                     src={`http://localhost:8000${allproduct.imgProduct}`}
                                                     onError={handleImageError}
                                                     alt="/"
                                                 />
                                             </div>
-                                            <div className="flex flex-col text-center gap-2 mt-2">
-                                                <div className="flex-1 font-lora text-base overflow-auto">
+                                            <div className="h-full flex flex-col text-center gap-2 mt-2">
+                                                <div className="font-lora text-base">
                                                     {allproduct.name}
                                                 </div>
-                                                <div className="font-josefin overflow-auto">
+                                                <div className="font-josefin">
                                                     {allproduct.isActive ? "active" : "inactive"}
                                                 </div>
-                                                <div className="font-josefin overflow-auto">
+                                                <div className="font-josefin">
                                                     {allproduct.category.name}
                                                 </div>
-                                                <div className="font-lora mx-auto mt-3 h-full grow-0 w-44">
+                                                <div className="font-lora mx-auto mt-3 h-full grow-0 w-[12.5rem]">
                                                     <table className="mx-auto">
                                                         <tbody>
                                                             <tr>
-                                                                <td className="border-r-2 border-gray-200 px-4 overflow-auto">{`Rp ${allproduct.price.toLocaleString("id-ID")}`}</td>
-                                                                <td className="px-4 overflow-auto">{allproduct.stock} Qty</td>
+                                                                <td className="border-r-2 border-gray-200 px-4">{`Rp ${allproduct.price.toLocaleString("id-ID")}`}</td>
+                                                                <td className="px-4">{allproduct.stock} Qty</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -240,9 +240,9 @@ export default function StoreProduct() {
                                             </div>
                                         </div>
                                     ))}
-                                </>
-                            )}
-                        </div>
+                                </div>
+                            </>
+                        )}
                         <div className="m-4 p-4 flex font-ysa">
                             <Pagination
                                 currentPage={currentPage}

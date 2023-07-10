@@ -69,7 +69,7 @@ export default function NavBar(props) {
             <Link to="/mycart" className="p-1">
               <AiOutlineShoppingCart size={20} />
               {cartItems.length > 0 && (
-                <span className="absolute top-1 right-[18px] sm:right-[-15px] bg-red-500 text-white text-xs px-1 rounded-full">
+                <span className="absolute top-1 right-28 bg-darkgreen text-white text-xxs px-1 rounded-full">
                   {cartItems.length}
                 </span>
               )}
@@ -125,17 +125,17 @@ export default function NavBar(props) {
       </div>
       <div>
         {isSearchOpen && (
-          <div className="bg-babypowder font-lora text-xs px-4 py-1">
-            <div className="h-full flex flex-wrap items-center px-2 w-full gap-2 sm:flex-nowrap font-ysa text-sm">
+          <div className="bg-babypowder text-xs px-4 py-1">
+            <div className="h-full flex flex-wrap items-center px-2 w-full gap-2 sm:flex-nowrap font-josefin text-sm">
               <input
-                className=" font-sans bg-transparent p-2 w-full focus:outline-none sm:basis-3/8 md:basis-2/5"
+                className="h-6 bg-transparent p-2 w-full focus:ring-0 focus:border focus:border-darkgreen sm:h-10 sm:basis-3/8 md:basis-2/5"
                 type="text"
                 placeholder="Search"
                 value={props.searchValue}
                 onChange={props.onSearchChange}
               />
               <select
-                className=" bg-gray-200 outline-none w-full sm:basis-2/8 md:basis-1/5"
+                className="bg-transparent h-6 focus:ring-0 focus:border focus:border-darkgreen py-0 px-2 w-full sm:h-10 sm:basis-2/8 md:basis-1/5"
                 value={props.categoryValue}
                 onChange={props.onCategoryChange}
               >
@@ -154,7 +154,7 @@ export default function NavBar(props) {
                 ))}
               </select>
               <select
-                className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
+                className="bg-transparent h-6 focus:ring-0 focus:border focus:border-darkgreen py-0 px-2 w-full sm:h-10 sm:basis-1/8 md:basis-1/5"
                 value={props.alphabetValue}
                 onChange={props.onAlphabetChange}
               >
@@ -166,7 +166,7 @@ export default function NavBar(props) {
                 </option>
               </select>
               <select
-                className=" bg-gray-200 transparent outline-none w-full sm:basis-2/8 md:basis-1/5"
+                className="bg-transparent h-6 focus:ring-0 focus:border focus:border-darkgreen py-0 px-2 w-full sm:h-10 sm:basis-2/8 md:basis-1/5"
                 value={props.priceValue}
                 onChange={props.onPriceChange}
               >

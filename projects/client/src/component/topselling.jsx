@@ -66,7 +66,7 @@ export default function TopSelling() {
 
     return (
         <>
-            <div className="my-3 bg-gray-100">
+            <div className="mb-3 bg-gray-100">
                 <div className="font-josefin text-center py-4 text-xl font-medium">Top Selling!</div>
                 <div className="font-josefin w-full flex justify-center items-center">
                     Select Category:
@@ -81,12 +81,12 @@ export default function TopSelling() {
                     <div className="text-left left-0 top-5 mx-4 grid">
                         <button onClick={scrollLeft} className="text-xl text-jetblack"><IoIosArrowBack size={15} /></button>
                     </div>
-                    <div id="content" className="carousel font-josefin p-4 flex items-center justify-start overflow-x-auto scroll-smooth scrollbar-hide w-full">
+                    <div id="content" className="carousel font-josefin py-4 flex items-center justify-start overflow-x-auto scroll-smooth scrollbar-hide w-full">
                         {topSelling.length > 0 ? (
                             <div className="flex">
                                 {topSelling.map((item) => (
                                     <Link to={`product/${item.product_id}`}>
-                                        <div className="group h-60 w-48 p-2 mx-1 hover:border-b-2 hover:cursor-pointer">
+                                        <div className="group h-60 w-56 p-2 mx-1 hover:border-b-2 hover:cursor-pointer">
                                             <div className="h-36 w-36 flex mx-auto mt-4">
                                                 <img src={`http://localhost:8000${item.product.imgProduct}`} alt={item.product.name} className="h-36 w-36 object-cover" />
                                             </div>
@@ -109,7 +109,7 @@ export default function TopSelling() {
                             </div>
                         ) : (
                             <div className="h-60 w-full p-2 mx-1 flex justify-center">
-                                <p className="flex justify-center">No top selling products found.</p>
+                                <p className="flex text-center justify-center">No top selling products found</p>
                             </div>
                         )}
                     </div>

@@ -142,7 +142,7 @@ export default function StoreCategory() {
                                 {({ isSubmitting, status }) => (
                                     <Form>
                                         <div className='grid grid-flow-row gap-1 justify-center'>
-                                            <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Input the name of the new category below:</h3>
+                                            <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide sm:text-sm'>Input the name of the new category below:</h3>
                                             <div className='w-full grid grid-flow-row gap-3 font-ysa'>
                                                 {status && status.success && (
                                                     <p className="font-ysa text-sm text-center text-greenn">{status.message}</p>
@@ -222,7 +222,7 @@ export default function StoreCategory() {
                                     {({ isSubmitting, status }) => (
                                         <Form>
                                             <div className='grid grid-flow-row gap-1 justify-center'>
-                                                <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Set new name for the category:</h3>
+                                                <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide sm:text-sm'>Set new name for the category:</h3>
                                                 <div className='w-full grid grid-flow-row gap-3 font-ysa'>
                                                     {status && status.success && (
                                                         <p className="font-ysa text-sm text-center text-greenn">{status.message}</p>
