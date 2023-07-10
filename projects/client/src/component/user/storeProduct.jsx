@@ -24,8 +24,8 @@ export default function StoreProduct() {
 
     // handle search
     const [searchValue, setSearchValue] = useState('');
-    const [sortAlphabet, setSortAlphabet] = useState('');
-    const [sortPrice, setSortPrice] = useState('');
+    const [sortAlphabet, setSortAlphabet] = useState('ASC');
+    const [sortPrice, setSortPrice] = useState('ASC');
     const [selectCategory, setSelectCategory] = useState('');
     const [categories, setCategories] = useState([]);
 
@@ -41,13 +41,13 @@ export default function StoreProduct() {
     };
 
     const handleSortOrderAlphabet = (event) => {
-        const sortOrder = event.target.value === 'Z-A' ? 'DESC' : 'ASC';
+        const sortOrder = event.target.value;
         setCurrentPage(1)
         setSortAlphabet(sortOrder)
     };
 
     const handleSortOrderPrice = (event) => {
-        const sortOrder = event.target.value === 'Low-High' ? 'DESC' : 'ASC';
+        const sortOrder = event.target.value;
         setCurrentPage(1)
         setSortPrice(sortOrder)
     };
@@ -120,12 +120,12 @@ export default function StoreProduct() {
                     </svg>
                 </button>
                 {activeTab === "top" && (
-  <div className="py-5 border-b border-gray-200 dark:border-gray-700">
-    <div>
-      <TopSeller/>
-    </div>
-  </div>
-)}
+                    <div className="py-5 border-b border-gray-200 dark:border-gray-700">
+                        <div>
+                            <TopSeller />
+                        </div>
+                    </div>
+                )}
 
                 <button
                     type="button"
@@ -175,19 +175,19 @@ export default function StoreProduct() {
                                 </select>
                                 <select
                                     className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
-                                    value={sortAlphabet === 'DESC' ? 'Z-A' : 'A-Z'}
+                                    value={sortAlphabet}
                                     onChange={handleSortOrderAlphabet}
                                 >
-                                    <option value="A-Z" className="font-ysa text-sm">Sort: A - Z</option>
-                                    <option value="Z-A" className="font-ysa text-sm">Sort: Z - A</option>
+                                    <option value="ASC" className="font-ysa text-sm">Sort: A - Z</option>
+                                    <option value="DESC" className="font-ysa text-sm">Sort: Z - A</option>
                                 </select>
                                 <select
                                     className=" bg-gray-200 transparent outline-none w-full sm:basis-2/8 md:basis-1/5"
-                                    value={sortPrice === 'DESC' ? 'Low-High' : 'High-Low'}
+                                    value={sortPrice}
                                     onChange={handleSortOrderPrice}
                                 >
-                                    <option value="Low-High" className="font-ysa text-sm">Price: Low - High</option>
-                                    <option value="High-Low" className="font-ysa text-sm">Price: High - Low</option>
+                                    <option value="ASC" className="font-ysa text-sm">Price: Low - High</option>
+                                    <option value="DESC" className="font-ysa text-sm">Price: High - Low</option>
                                 </select>
                             </div>
                         </div>

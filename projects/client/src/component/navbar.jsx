@@ -148,25 +148,25 @@ export default function NavBar(props) {
               </select>
               <select
                 className=" bg-gray-200 transparent outline-none w-full sm:basis-1/8 md:basis-1/5"
-                value={props.alphabetValue === "DESC" ? "Z-A" : "A-Z"}
+                value={props.alphabetValue}
                 onChange={props.onAlphabetChange}
               >
-                <option value="A-Z" className="font-ysa text-sm">
+                <option value="ASC" className="font-ysa text-sm">
                   Sort: A - Z
                 </option>
-                <option value="Z-A" className="font-ysa text-sm">
+                <option value="DESC" className="font-ysa text-sm">
                   Sort: Z - A
                 </option>
               </select>
               <select
                 className=" bg-gray-200 transparent outline-none w-full sm:basis-2/8 md:basis-1/5"
-                value={props.priceValue === "DESC" ? "Low-High" : "High-Low"}
+                value={props.priceValue}
                 onChange={props.onPriceChange}
               >
-                <option value="Low-High" className="font-ysa text-sm">
+                <option value="ASC" className="font-ysa text-sm">
                   Price: Low - High
                 </option>
-                <option value="High-Low" className="font-ysa text-sm">
+                <option value="DESC" className="font-ysa text-sm">
                   Price: High - Low
                 </option>
               </select>

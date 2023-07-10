@@ -2,11 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { BsBoxFill } from "react-icons/bs"
 import { ImBoxAdd } from "react-icons/im"
-import { FaCashRegister, FaListAlt } from "react-icons/fa"
+import { FaCashRegister, FaListAlt, FaPaste } from "react-icons/fa"
 import StoreProduct from "./storeProduct";
 import StoreNew from "./storeNew";
 import StoreIncome from "./storeIncome";
 import StoreCategory from "./storeCategory";
+import StoreTransaction from "./storeTransaction";
 
 export default function MyStore() {
     const [activeTab, setActiveTab] = useState('product');
@@ -84,6 +85,26 @@ export default function MyStore() {
                             </span>
                         </button>
                     </li>
+                    <li className="mr-2" role="presentation">
+                        <button
+                            className={`inline-block px-4 py-2 border-b-2 h-9 ${activeTab === 'transaction' ? 'border-jetblack' : 'border-transparent'
+                                }`}
+                            id="transaction-tab"
+                            data-tabs-target="#transaction"
+                            type="button"
+                            role="tab"
+                            aria-controls="transaction"
+                            aria-selected={activeTab === 'transaction' ? 'true' : 'false'}
+                            onClick={() => handleTabClick('transaction')}
+                        >
+                            <span className="hidden sm:inline-block">
+                                My Transaction
+                            </span>
+                            <span className="text-darkgreen sm:hidden">
+                                <FaPaste size={15} />
+                            </span>
+                        </button>
+                    </li>
                     <li role="presentation">
                         <button
                             className={`inline-block px-4 py-2 border-b-2 h-9 ${activeTab === 'category' ? 'border-jetblack' : 'border-transparent'
@@ -142,6 +163,19 @@ export default function MyStore() {
                         >
                             <div className="text-sm text-gray-500 dark:text-gray-400">
                                 <StoreIncome />
+                            </div>
+                        </div>
+                    ) : ""}
+                    {activeTab === "transaction" ? (
+                        <div
+                            className={`m-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab === 'transaction' ? 'block' : 'hidden'
+                                }`}
+                            id="transaction"
+                            role="tabpanel"
+                            aria-labelledby="transaction-tab"
+                        >
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                <StoreTransaction />
                             </div>
                         </div>
                     ) : ""}

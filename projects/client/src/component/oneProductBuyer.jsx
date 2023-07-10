@@ -131,7 +131,7 @@ export default function OneProductBuyer() {
                             </div>
                             <div className="flex">
                                 <div className="pr-3">
-                                    PRICE {/* Rp {`${(product.price).toLocaleString("id-ID")}`} */}
+                                    {product.price ? `Rp ${(product.price).toLocaleString()}` : ""}
                                 </div>
                                 <div className="pl-3 border-l-2">
                                     {product.stock} Qty
