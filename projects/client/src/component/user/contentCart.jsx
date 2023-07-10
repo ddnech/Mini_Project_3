@@ -7,15 +7,18 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { updateCart, clearCart } from "../../store/reducer/cartSlice";
 
+
+
+
 export default function MyCart() {
     const [modalOpen, setModalOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [submit, setSubmit] = useState(false);
-    const [cart, setCart] = useState([]);
-    const [quantity, setQuantity] = useState(0);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const cartItems = useSelector((state) => state.cart.cart);
 
     const token = useSelector((state) => state.auth.token);
     // handle image error 
@@ -24,14 +27,9 @@ export default function MyCart() {
             "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
     };
 
-    const addQuantity = (productId, currentQuantity) => {
-        const productInCart = cart.find((item) => item.product.id === productId);
-        if (productInCart && quantity <= productInCart.product.stock) {
+    const addQuantity = (productId, currentQuantity, stock) => {
+        if (currentQuantity <= stock) {
             const updatedQuantity = currentQuantity + 1;
-            setQuantity((prevQuantity) => ({
-                ...prevQuantity,
-                [productId]: updatedQuantity,
-            }));
             axios
                 .post(
                     `http://localhost:8000/api/user/cart/${productId}`,
@@ -57,9 +55,8 @@ export default function MyCart() {
     };
 
     const reduceQuantity = (productId, currentQuantity) => {
-        const updatedQuantity = currentQuantity - 1;
-        const productInCart = cart.find((item) => item.product.id === productId);
-        if (productInCart && updatedQuantity >= 0) {
+        if (currentQuantity >= 0) {
+            const updatedQuantity = currentQuantity - 1;
             axios
                 .post(
                     `http://localhost:8000/api/user/cart/${productId}`,
@@ -102,21 +99,6 @@ export default function MyCart() {
         setModalOpen(false);
     };
 
-    useEffect(() => {
-        if (token) {
-            const cart = axios.get("http://localhost:8000/api/user/cart", { headers: { Authorization: `Bearer ${token}` } })
-                .then(response => {
-                    setCart(response.data.data)
-
-                    const quantityPerProductId = response.data.data.reduce((quantities, item) => {
-                        return { ...quantities, [item.product.id]: item.quantity };
-                    }, {});
-                    setQuantity(quantityPerProductId);
-                }).catch(error => {
-                    console.warn(error.message)
-                })
-        }
-    }, [token])
 
     const handleRemoveCart = async (productId) => {
         try {
@@ -129,12 +111,10 @@ export default function MyCart() {
 
             if (response.data.data.length === 0) {
                 dispatch(clearCart());
-                setCart([]);
                 setTimeout(() => {
                     navigate("/");
                 }, 3000);
             } else {
-                setCart([]);
                 dispatch(updateCart(response.data.data));
             }
         } catch (error) {
@@ -145,7 +125,7 @@ export default function MyCart() {
     const handleSubmit = async (values, { resetForm, setStatus }) => {
         try {
             const response = await axios.post(
-                'http://localhost:8000/api/user/transaction',
+                'http://localhost:8000/api/user/checkout',
                 values,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -154,7 +134,6 @@ export default function MyCart() {
                 resetForm();
                 setStatus({ success: true, message: 'Successfully purchased.' });
                 dispatch(clearCart());
-                setCart([]);
                 setSuccessMessage('Successfully purchased.');
                 setErrorMessage('');
                 setTimeout(() => {
@@ -185,9 +164,8 @@ export default function MyCart() {
                         Total
                     </div>
                 </div>
-                {cart.map((item) => {
+                {cartItems.map((item) => {
                     const totalPrice = item.quantity * item.product.price;
-                    const productQuantity = quantity[item.product.id] || 0
                     return (
 
                         <div className="grid grid-flow-col m-5 grid-cols-3 py-2 border-b-2">
@@ -210,7 +188,7 @@ export default function MyCart() {
                                         </div>
                                         <div className="sm:flex font-ysa">
                                             <div className="w-fit flex items-center border border-gray-300 px-1 py-1 mt-2">
-                                                <button className={`text-gray-500 hover:text-gray-700 focus:outline-none`} onClick={() => reduceQuantity(item.product.id, productQuantity)}>
+                                                <button className={`text-gray-500 hover:text-gray-700 focus:outline-none`} onClick={() => reduceQuantity(item.product.id, item.quantity)}>
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                                                     </svg>
@@ -218,11 +196,11 @@ export default function MyCart() {
                                                 <div className="flex items-center mx-2">
                                                     <div className="h-4 w-[0.05rem] bg-gray-300 mr-1"></div>
                                                     <div className="text-gray-700 font-medium px-2">
-                                                        {productQuantity}
+                                                        {item.quantity}
                                                     </div>
                                                     <div className="h-4 w-[0.05rem] bg-gray-300 ml-1"></div>
                                                 </div>
-                                                <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => addQuantity(item.product.id, productQuantity)}>
+                                                <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => addQuantity(item.product.id, item.quantity, item.product.stock)}>
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                                                     </svg>
@@ -249,13 +227,13 @@ export default function MyCart() {
                             Total Price:
                         </div>
                         <div className="col-start-3 col-end-4 px-2">
-                            Rp {cart.reduce((total, item) => total + item.quantity * item.product.price, 0).toLocaleString()}
+                            Rp {cartItems.reduce((total, item) => total + item.quantity * item.product.price, 0).toLocaleString()}
                         </div>
                     </div>
                 </div>
                 <div className="px-5">
                     <button
-                        className={`w-full py-2 my-4 text-xs font-josefin tracking-wide border ${cart.length === 0 ? 'bg-gray-300 cursor-not-allowed opacity-50' : 'bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'}`}
+                        className={`w-full py-2 my-4 text-xs font-josefin tracking-wide border ${cartItems.length === 0 ? 'bg-gray-300 cursor-not-allowed opacity-50' : 'bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'}`}
                         onClick={handleToggleModal}
                     >
                         Proceed to Payment
@@ -270,18 +248,22 @@ export default function MyCart() {
                                     <div className="text-gray-900 dark:text-white text-sm sm:text-base">
                                         Cart Summary
                                     </div>
-                                    {/* product */}
-                                    <div className="text-sm flex w-full">
-                                        <div className="basis-3/6 px-1">
-                                            Product Name
-                                        </div>
-                                        <div className="basis-1/6 px-1">
-                                            x 3
-                                        </div>
-                                        <div className="basis-2/6 px-1">
-                                            Rp 300.000
-                                        </div>
-                                    </div>
+                                    {cartItems.map((item) => {
+                                        const totalPrice = item.quantity * item.product.price
+                                        return (
+                                            <div className="text-sm flex w-full">
+                                                <div className="basis-3/6 px-1">
+                                                    {item.product.name}
+                                                </div>
+                                                <div className="basis-1/6 px-1">
+                                                    x {item.quantity}
+                                                </div>
+                                                <div className="basis-2/6 px-1">
+                                                    {`Rp ${totalPrice.toLocaleString()}`}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                                 <div>
                                     <div>
@@ -300,6 +282,7 @@ export default function MyCart() {
                                                             className='w-full py-2 my-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'
                                                             type='submit'
                                                             disabled={submit}
+                                                            onClick={handleSubmit}
 
                                                         >
                                                             Checkout

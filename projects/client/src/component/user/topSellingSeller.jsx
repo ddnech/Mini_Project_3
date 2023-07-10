@@ -10,9 +10,11 @@ export default function TopSelling() {
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    fetchData();
-    fetchCategories();
-  }, []);
+    if (token) {
+      fetchData();
+      fetchCategories();
+    }
+  }, [token]);
 
   useEffect(() => {
     fetchData();
@@ -31,7 +33,7 @@ export default function TopSelling() {
           }
         }
       );
-  
+
       setTopSelling(response.data.data);
     } catch (error) {
       console.error('Failed to get top selling products:', error);
@@ -74,16 +76,16 @@ export default function TopSelling() {
                 <p>Price: Rp {Number(product.product.price).toLocaleString({ style: 'currency', currency: 'IDR' })}</p>
                 <p>Category: {product.product.Category.name}</p>
                 {/* <p>Description: {product.product.description}</p> */}
-          
+
                 <p>Stock: {product.product.stock}</p>
                 <p>{product.product.isActive ? 'Active' : 'Deactive'}</p>
               </div>
               <div>
-              <textarea
-              className="w-70 h-30 p-4 border border-gray-300 bg-white text-lg resize-none font-josefin break-words"
-              readOnly
-              value={product.product.description}
-            />
+                <textarea
+                  className="w-70 h-30 p-4 border border-gray-300 bg-white text-lg resize-none font-josefin break-words"
+                  readOnly
+                  value={product.product.description}
+                />
               </div>
             </div>
           ))}

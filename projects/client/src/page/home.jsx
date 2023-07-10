@@ -9,8 +9,8 @@ import axios from "axios";
 export default function Home() {
     const [allProduct, setAllProduct] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-    const [sortAlphabet, setSortAlphabet] = useState('');
-    const [sortPrice, setSortPrice] = useState('');
+    const [sortAlphabet, setSortAlphabet] = useState('ASC');
+    const [sortPrice, setSortPrice] = useState('ASC');
     const [selectCategory, setSelectCategory] = useState('');
     const [categories, setCategories] = useState([]);
 
@@ -28,14 +28,14 @@ export default function Home() {
     };
 
     const handleSortOrderAlphabet = (event) => {
-        const sortOrder = event.target.value === 'A-Z' ? 'ASC' : 'DESC';
+        const sortOrder = event.target.value;
         setAllProduct([])
         setCurrentPage(1)
         setSortAlphabet(sortOrder)
     };
 
     const handleSortOrderPrice = (event) => {
-        const sortOrder = event.target.value === 'Low-High' ? 'DESC' : 'ASC';
+        const sortOrder = event.target.value;
         setAllProduct([])
         setCurrentPage(1)
         setSortPrice(sortOrder)
