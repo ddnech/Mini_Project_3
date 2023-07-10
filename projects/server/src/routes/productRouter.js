@@ -16,6 +16,8 @@ router.post(
 
 router.get("/category", productController.getAllCategory);
 
+router.post("/top-selling", productController.getTopSellingProduct);
+
 router.post(
   "/",
   authMiddleware.verifyToken,
@@ -28,6 +30,10 @@ router.get("/", productController.getAllProduct);
 
 router.get("/:id", productController.getProductById);
 
-router.patch("/status/:action/:id", authMiddleware.verifyToken , productController.productAction)
+router.patch(
+  "/status/:action/:id",
+  authMiddleware.verifyToken,
+  productController.productAction
+);
 
 module.exports = router;
