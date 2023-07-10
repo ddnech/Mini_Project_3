@@ -17,6 +17,7 @@ export default function NavBar(props) {
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   const token = useSelector((state) => state.auth.token);
+  const cartItems = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -64,10 +65,16 @@ export default function NavBar(props) {
           </div>
         </div>
         <div className="basis-3/5 text-right flex justify-end px-5">
-          {/* todo: if not yet login, can't see cart */}
-          <Link to="/mycart" className="p-1">
-            <AiOutlineShoppingCart size={20} />
-          </Link>
+          {token && (
+            <Link to="/mycart" className="p-1">
+              <AiOutlineShoppingCart size={20} />
+              {cartItems.length > 0 && (
+                <span className="absolute top-1 right-[18px] sm:right-[-15px] bg-red-500 text-white text-xs px-1 rounded-full">
+                  {cartItems.length}
+                </span>
+              )}
+            </Link>
+          )}
           <span className="px-4">
             {token ? (
               <div className="relative pt-1 ">

@@ -7,7 +7,8 @@ const generateJWTToken = (user) => {
     {
       id: user.id,
     },
-    process.env.JWT_SECRET_KEY
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: '1h' }
   );
   return token;
 };
