@@ -4,8 +4,9 @@ import ProfileDetails from "../component/user/profileDetails";
 import NavbarDashboard from "../component/user/navbarDashboard";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import withAuth from "../component/withAuth";
 
-export default function UserProfile() {
+function UserProfile() {
   const [user, setUser] = useState({});
   const token = useSelector((state) => state.auth.token);
 
@@ -43,3 +44,5 @@ export default function UserProfile() {
     </div>
   );
 }
+
+export default withAuth(UserProfile);

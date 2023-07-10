@@ -15,6 +15,7 @@ import ModifyProduct from './page/modifyProduct'
 import { updateCart } from './store/reducer/cartSlice'
 import axios from 'axios'
 
+
 function App() {
 
   return (
@@ -42,8 +43,8 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/myprofile" element={<UserProfile />} />
+        <Route path="/signup" element={<SignUp />} /> 
+        <Route path="/myprofile" element={<UserProfile />} /> 
         <Route path="/mystore" element={<UserStore />} />
         <Route path="/mypurchase" element={<UserPurchase />} />
         <Route path="/editproduct/:id" element={<ModifyProduct />} />
