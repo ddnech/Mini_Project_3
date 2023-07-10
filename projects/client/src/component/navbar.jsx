@@ -57,7 +57,7 @@ export default function NavBar(props) {
         <div className="basis-2/5 mx-5 font-lora">
           <div className="grid mt-[0.2rem]">
             <Link to="/">
-              <div className="font-lora font-semibold text-lg text-darkgreen">
+              <div className="text-sm font-lora font-semibold sm:text-base text-darkgreen">
                 verdant market
               </div>
             </Link>

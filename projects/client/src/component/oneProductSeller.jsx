@@ -38,8 +38,8 @@ function ProductDetailsSeller({ product }) {
           <table className="mx-auto">
             <tbody>
               <tr>
-                <td className="border-r-2 border-gray-200 px-4 text-lg">{product.price}</td>
-                <td className="px-4 text-lg">{product.stock}</td>
+                <td className="border-r-2 border-gray-200 px-4 text-lg">{product.price ? `Rp ${(product.price).toLocaleString()}` : ""}</td>
+                <td className="px-4 text-lg">{product.stock} Qty</td>
               </tr>
             </tbody>
           </table>
