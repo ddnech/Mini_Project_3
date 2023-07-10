@@ -62,19 +62,18 @@ export default function EditProduct({ onSubmit, product }) {
       onSubmit();
     } catch (error) {
       console.error('Error:', error.response.data);
-      setStatus({ success: false, message: 'Failed to failed to update the product.' });
+      setStatus({ success: false, message: 'Failed to update the product.' });
     } finally {
       setSubmitting(false);
     }
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().optional(),
-    price: Yup.number().optional(),
-    category: Yup.string().optional(),
-    description: Yup.string().optional(),
-    stock: Yup.number().optional(),
-
+    name: Yup.string().max(50, 'Name must not exceed 50 characters').optional(),
+    price: Yup.number().max(1000000000, 'Price must not exceed 1,000,000,000').optional().typeError('Price must be a valid number'),
+    category: Yup.string().notRequired(),
+    description: Yup.string().max(200, 'Description must not exceed 200 characters').optional(),
+    stock: Yup.number().max(999, 'Stock must not exceed 999').optional().typeError('Stock must be a valid number'),
   });
 
   const initialValues = {

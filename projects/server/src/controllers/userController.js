@@ -106,23 +106,23 @@ module.exports = {
   async updateProduct(req, res) {
     try {
       const { name, price, category_id, description, stock } = req.body;
-
+  
       const updatedProduct = await db.Product.findOne({
         where: {
           id: parseInt(req.params.id),
           seller_id: req.user.id,
         },
       });
-
+  
       if (!updatedProduct) {
         return res.status(400).send({
           message: "Product not found",
         });
       }
-
+  
       if (req.file) {
-        const realimgProduct = updatedProduct.getDataValue("imgProduct"); //   /public/IMG-16871930921482142001.jpeg
-        const oldFilename = getFileNameFromDbValue(realimgProduct); //   IMG-16871930921482142001.jpeg
+        const realimgProduct = updatedProduct.getDataValue("imgProduct");
+        const oldFilename = getFileNameFromDbValue(realimgProduct);
         if (oldFilename) {
           fs.unlinkSync(getAbsolutePathPublicFileProduct(oldFilename));
         }
@@ -130,14 +130,11 @@ module.exports = {
           req.file.filename
         );
       }
-
-      if (category_id !== undefined) {
-        updatedProduct.category_id =
-          parseInt(category_id) !== ""
-            ? parseInt(category_id)
-            : updatedProduct.category_id;
+  
+      if (category_id !== undefined && category_id !== "") {
+        updatedProduct.category_id = parseInt(category_id);
       }
-
+  
       if (name) {
         updatedProduct.name = name;
       }
@@ -150,7 +147,7 @@ module.exports = {
       if (stock) {
         updatedProduct.stock = parseInt(stock);
       }
-
+  
       await updatedProduct.save();
       return res.status(200).send(updatedProduct);
     } catch (error) {
@@ -160,6 +157,7 @@ module.exports = {
       });
     }
   },
+
 
   async getUserCategory(req, res) {
     const user_id = req.user.id;
@@ -327,7 +325,7 @@ module.exports = {
               include: [
                 {
                   model: db.Category,
-                  attributes: ["name"], // Adjust as necessary to match your Category model attribute
+                  attributes: ["name"],
                 },
               ],
             },
