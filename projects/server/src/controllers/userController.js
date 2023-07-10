@@ -490,29 +490,35 @@ module.exports = {
       const categoryId = req.body.categoryId;
       const sellerId = req.user.id;
   
-      const topSellingProducts = await OrderItem.findAll({
-        include: [
-          {
-            model: Product,
-            where: { seller_id: sellerId, category_id: categoryId },
-          },
-        ],
+      let productInclude = {
+        model: db.Product,
+        as: "product",
+        where: { seller_id: sellerId },
+        include: {
+          model: db.Category,
+          where: categoryId ? { id: categoryId } : {},
+          attributes: ["name"]
+        }
+      };
+  
+      const topSellingProducts = await db.Order_item.findAll({
+        include: [productInclude],
         group: ['product_id'],
         attributes: [
           'product_id',
-          [sequelize.fn('SUM', sequelize.col('quantity')), 'total_quantity'],
+          [db.sequelize.fn('SUM', db.sequelize.col('quantity')), 'total_quantity'],
         ],
-        order: [[sequelize.fn('SUM', sequelize.col('quantity')), 'DESC']],
+        order: [[db.sequelize.fn('SUM', db.sequelize.col('quantity')), 'DESC']],
       });
   
       if (topSellingProducts.length === 0) {
         return res.status(400).send({
-          message: 'No products found for this category',
+          message: 'No products found',
         });
       }
   
       return res.status(200).send({
-        message: 'Successfully retrieved top selling products',
+        message: 'Successfully retrieved top-selling products',
         data: topSellingProducts,
       });
     } catch (error) {
@@ -521,7 +527,13 @@ module.exports = {
         message: 'Internal Server Error',
       });
     }
-  }
+  },
+
+
+
+  
+  
+  
   
 
 

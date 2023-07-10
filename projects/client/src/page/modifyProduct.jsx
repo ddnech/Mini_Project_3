@@ -34,10 +34,10 @@ export default function ModifyProduct() {
       <div>
         <div className="p-4 flex flex-col justify-center items-center">
           <div className="flex flex-wrap gap-1 md:flex-row md:flex-nowrap sm:gap-10">
-            <div className="flex-auto">
+          <div className="w-full">
               <ProductDetailsSeller product={product} />
             </div>
-            <div className="flex-auto grid">
+            <div className="w-full">
               <EditProduct onSubmit={getProduct} product={product} />
             </div>
           </div>

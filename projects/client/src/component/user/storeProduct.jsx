@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { Pagination } from "flowbite-react";
+import TopSeller from "./topSellingSeller"
 
 export default function StoreProduct() {
     const token = useSelector((state) => state.auth.token)
@@ -119,12 +120,13 @@ export default function StoreProduct() {
                     </svg>
                 </button>
                 {activeTab === "top" && (
-                    <div className="py-5 border-b border-gray-200 dark:border-gray-700">
-                        <div>
-                            {/* tab for choosing category and card item */}
-                        </div>
-                    </div>
-                )}
+  <div className="py-5 border-b border-gray-200 dark:border-gray-700">
+    <div>
+      <TopSeller/>
+    </div>
+  </div>
+)}
+
                 <button
                     type="button"
                     className={`h-10 flex items-center justify-between w-full font-ysa tracking-wide py-5 font-medium text-left ${activeTab === "product"
