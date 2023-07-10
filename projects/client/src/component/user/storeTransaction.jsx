@@ -74,7 +74,7 @@ export default function StoreTransaction() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="mr-1 sm:mr-0">End Date:</label>
+                    <label className="mr-[0.4rem] sm:mr-0">End Date:</label>
                     <input
                         type="date"
                         value={endDate || ""}
@@ -112,7 +112,7 @@ export default function StoreTransaction() {
                     ))}
                 </div>
             ) : (
-                <p className="pl-4">No transaction history found for the selected date range.</p>
+                <p className="text-center">No transaction history found for the selected date range.</p>
             )}
         </div>
     );

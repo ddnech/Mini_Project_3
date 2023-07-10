@@ -90,7 +90,7 @@ export default function StoreNew() {
       <div className='w-screen grid grid-flow-row justify-center'>
         <div>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-            {({ isSubmitting, status ,values}) => (
+            {({ isSubmitting, status, values }) => (
               <Form>
                 <div className='grid grid-flow-row gap-1 justify-center'>
                   {status && status.success && (
@@ -99,7 +99,7 @@ export default function StoreNew() {
                   {status && !status.success && (
                     <p className='text-center text-redd'>{status.message}</p>
                   )}
-                  <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Please fill the product information:</h3>
+                  <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide sm:text-base'>Please fill the product information:</h3>
                   <div className='w-full grid grid-flow-row gap-3'>
                     <div className='font-ysa relative mt-4'>
                       <ErrorMessage name='name' component='div' className='text-redd text-xs absolute -top-5' />
@@ -129,7 +129,7 @@ export default function StoreNew() {
                       <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='stock' placeholder='Stock' />
                     </div>
                     <label className='font-ysa relative text-jetblack'>Image:</label>
-                    <input className='border border-gray-300 h-10 text-xs w-full focus:border-darkgreen focus:ring-0' type='file' onChange={handleImageChange} />
+                    <input className='border border-gray-300 h-9 text-xs w-full focus:border-darkgreen focus:ring-0' type='file' onChange={handleImageChange} />
                   </div>
                   <button type='submit' className='w-full py-2 my-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'>
                     Create

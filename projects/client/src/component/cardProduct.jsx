@@ -12,16 +12,15 @@ export default function AllProduct({ allProduct, currentPage, totalPages, onPage
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                {/* product*/}
-                {allProduct.length === 0 ? (
-                    <div className="w-full h-full font-josefin text-xl text-center mx-auto my-5">
-                        No Product Found
-                    </div>
-                ) : (
-                    <>
+            {allProduct.length === 0 ? (
+                <div className="w-full font-josefin text-xl text-center mx-auto my-5">
+                    No Product Found
+                </div>
+            ) : (
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                         {allProduct.map((allProduct) => (
-                            <div className="flex justify-around sm:flex-wrap gap-2 mt-2 mx-auto sm:w-[15rem] md:w-[24rem]">
+                            <div className="flex justify-around sm:flex-wrap gap-2 my-1 mx-auto sm:w-[15rem] md:w-[24rem]">
                                 <Link to={`product/${allProduct.id}`}>
                                     <div
                                         className={`mx-auto bg-white w-full h-full flex flex-col text-jetblack p-2 hover:bg-flashwhite`}
@@ -41,7 +40,7 @@ export default function AllProduct({ allProduct, currentPage, totalPages, onPage
                                             <div className="font-josefin">
                                                 {allProduct.category?.name}
                                             </div>
-                                            <div className="font-lora text-xs mx-auto mt-3 h-full grow-0 w-44">
+                                            <div className="font-lora text-xs mx-auto mt-3 h-full grow-0 w-full">
                                                 <table className="mx-auto">
                                                     <tbody>
                                                         <tr>
@@ -60,9 +59,9 @@ export default function AllProduct({ allProduct, currentPage, totalPages, onPage
                                 </Link>
                             </div>
                         ))}
-                    </>
-                )}
-            </div>
+                    </div>
+                </>
+            )}
             <div className="m-4 p-4 flex font-ysa">
                 <Pagination
                     currentPage={currentPage}

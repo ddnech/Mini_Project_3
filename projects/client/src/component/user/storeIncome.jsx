@@ -73,7 +73,7 @@ export default function StoreIncome() {
           />
         </div>
         <div className="mb-4">
-          <label className="mr-1 sm:mr-0">End Date:</label>
+          <label className="mr-[0.4rem] sm:mr-0">End Date:</label>
           <input
             type="date"
             value={end || ""}
@@ -100,7 +100,7 @@ export default function StoreIncome() {
           ))}
         </div>
       ) : (
-        <p className="pl-4">No income history found for the selected date range.</p>
+        <p className="text-center">No income history found for the selected date range.</p>
       )}
     </div>
   );

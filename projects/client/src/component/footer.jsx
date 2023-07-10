@@ -8,12 +8,12 @@ export default function Footer() {
             <div className="m-4 flex flex-col gap-5">
                 <div className="basis-3/4 flex text-center justify-between">
                     <div className="p-2 basis-1/2">
-                        <p className="text-babypowder font-bold mb-2 text-sm text-left font-josefin tracking-wide">FIND US ON</p>
-                        <p className="flex gap-2 text-flashwhite">
-                            <a href="#" className="text-xl"><FaFacebookF className="text-sm" /></a>
-                            <a href="#" className="text-xl"><FaTwitter className="text-sm" /></a>
-                            <a href="#" className="text-xl"><FaInstagram className="text-sm" /></a>
-                            <a href="#" className="text-xl"><FaPinterest className="text-sm" /></a>
+                        <p className="text-babypowder font-bold mb-2 text-sm text-left font-josefin tracking-wide sm:text-center">FIND US ON</p>
+                        <p className="flex gap-2 text-flashwhite sm:justify-center">
+                            <a href="#" className="text-xl"><FaFacebookF className="text-sm sm:text-xl" /></a>
+                            <a href="#" className="text-xl"><FaTwitter className="text-sm sm:text-xl" /></a>
+                            <a href="#" className="text-xl"><FaInstagram className="text-sm sm:text-xl" /></a>
+                            <a href="#" className="text-xl"><FaPinterest className="text-sm sm:text-xl" /></a>
                         </p>
                     </div>
                     <div className="p-2 basis-1/2">

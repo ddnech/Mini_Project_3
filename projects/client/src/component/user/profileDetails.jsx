@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function ProfileDetails({ user,onChange }) {
+function ProfileDetails({ user, onChange }) {
   const token = useSelector((state) => state.auth.token);
   const [image, setImage] = useState({});
 
@@ -52,7 +52,7 @@ function ProfileDetails({ user,onChange }) {
         <div className="font-josefin text-lg">Address: {user.address}</div>
         <label className="font-ysa relative text-jetblack">Update Image:</label>
         <input
-          className="border border-gray-300 h-10 text-xs w-full focus:border-darkgreen focus:ring-0"
+          className="border border-gray-300 h-9 text-xs w-full focus:border-darkgreen focus:ring-0"
           type="file"
           onChange={handleImageChange}
         />

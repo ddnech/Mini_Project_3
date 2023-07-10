@@ -7,9 +7,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { updateCart, clearCart } from "../../store/reducer/cartSlice";
 
-
-
-
 export default function MyCart() {
     const [modalOpen, setModalOpen] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -81,7 +78,6 @@ export default function MyCart() {
         }
     };
 
-
     // handle address
     const initialValues = {
         address: ""
@@ -98,7 +94,6 @@ export default function MyCart() {
     const handleCloseModal = () => {
         setModalOpen(false);
     };
-
 
     const handleRemoveCart = async (productId) => {
         try {

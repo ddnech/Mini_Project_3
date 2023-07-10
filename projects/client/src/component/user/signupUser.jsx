@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 export default function SignupUser() {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const togglePassword = (e) => {
         e.preventDefault();
@@ -65,6 +66,9 @@ export default function SignupUser() {
 
         } finally {
             setSubmitting(false);
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
         }
     };
 
@@ -76,8 +80,8 @@ export default function SignupUser() {
                         {({ isSubmitting, status }) => (
                             <Form>
                                 <div className='grid grid-flow-row gap-1 justify-center'>
-                                    <h3 className='w-72 text-l text-center font-josefin mt-4 text-jetblack tracking-wide font-semibold'>Sign Up</h3>
-                                    <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide'>Please fill in the information below:</h3>
+                                    <h3 className='w-72 text-xl text-center font-josefin mt-4 text-jetblack tracking-wide font-semibold sm:text-2xl'>Sign Up</h3>
+                                    <h3 className='text-xs text-center font-josefin mb-4 text-jetblack tracking-wide sm:text-sm'>Please fill in the information below:</h3>
                                     <div className='w-full grid grid-flow-row gap-3'>
                                         {status && status.success && (
                                             <p className="font-ysa text-center text-greenn">{status.message}</p>
