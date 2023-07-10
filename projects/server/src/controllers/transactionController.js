@@ -166,9 +166,9 @@ module.exports = {
         ],
         transaction,
       });
-
-      if (!cart) {
-        return res.status(200).send({ message: "Cart is still empty" });
+      console.log(cart);
+      if (cart.length === 0) {
+        return res.status(400).send({ message: "Cart is still empty" });
       }
 
       let totalPrice = 0;

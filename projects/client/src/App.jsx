@@ -12,8 +12,8 @@ import UserStore from './page/userStore'
 import UserCart from './page/userCart'
 import SingleProductBuyer from './page/singleProductBuyer'
 import ModifyProduct from './page/modifyProduct'
-
-
+import { updateCart } from './store/reducer/cartSlice'
+import axios from 'axios'
 
 function App() {
 
@@ -30,6 +30,10 @@ function AppContent() {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       dispatch(keep(localStorage.getItem("token")));
+      axios.get("http://localhost:8000/api/user/cart", { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } })
+        .then((response) => {
+          dispatch(updateCart(response.data.data));
+        })
     }
   }, [dispatch])
 
