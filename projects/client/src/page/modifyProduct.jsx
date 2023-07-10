@@ -5,8 +5,9 @@ import EditProduct from "../component/user/editProduct"
 import NavbarDashboard from "../component/user/navbarDashboard"
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import withAuth from "../component/withAuth";
 
-export default function ModifyProduct() {
+function ModifyProduct() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
 
@@ -49,3 +50,5 @@ export default function ModifyProduct() {
     </div>
   )
 }
+
+export default withAuth(ModifyProduct);

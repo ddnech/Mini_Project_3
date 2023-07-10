@@ -1,8 +1,9 @@
 import Footer from "../component/footer"
 import MyCart from "../component/user/contentCart"
 import NavBar from "../component/navbar"
+import withAuth from "../component/withAuth";
 
-export default function UserCart() {
+function UserCart() {
     return (
         <div className="flex flex-col min-h-screen">
             <div className="sticky top-0 z-50">
@@ -17,3 +18,5 @@ export default function UserCart() {
         </div>
     )
 }
+
+export default withAuth(UserCart)
