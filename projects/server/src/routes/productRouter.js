@@ -14,8 +14,6 @@ router.post(
   productController.createCategory
 );
 
-router.get("/category", productController.getAllCategory);
-
 router.post("/top-selling", productController.getTopSellingProduct);
 
 router.post(
