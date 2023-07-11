@@ -54,7 +54,7 @@ export default function StoreProduct() {
 
     useEffect(() => {
         if (token) {
-            const userCategories = axios.get("http://localhost:8000/api/user/category", { headers: { Authorization: `Bearer ${token}` } })
+            const userCategories = axios.get("http://localhost:8000/api/user/default/category", { headers: { Authorization: `Bearer ${token}` } })
                 .then(response => {
                     setCategories(response.data.data)
                 }).catch(error => {

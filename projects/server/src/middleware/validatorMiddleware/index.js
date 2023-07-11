@@ -133,31 +133,41 @@ module.exports = {
       .trim()
       .notEmpty()
       .withMessage("Price is required")
-      .isNumeric(),
-    body("category_id").notEmpty().withMessage("Category is required"),
+      .isFloat({ gt: 0 })
+      .withMessage("Price must be a valid number")
+      .isLength({ max: 1000000000 })
+      .withMessage("Price must not exceed 1,000,000,000"),
     body("description")
       .notEmpty()
       .withMessage("Description is required")
-      .isLength({ max: 255 })
-      .withMessage("Maximum character is 255"),
-    body("stock").notEmpty().withMessage("Stock is required"),
+      .isLength({ max: 200 })
+      .withMessage("Maximum character is 200"),
+    body("stock")
+      .notEmpty()
+      .isInt({ gt: 0, lte: 999 })
+      .withMessage("Stock must be a valid number and not exceed 999"),
   ]),
 
-  // updateProduct: validate([
-  //   body("name")
-  //     .optional()
-  //     .trim()
-  //     .isLength({ max: 50 })
-  //     .withMessage("Maximum character is 50"),
-  //   body("price").optional().trim().isNumeric(),
-  //   body("category_id"),
-  //   body("description")
-  //     .optional()
-  //     .isLength({ max: 255 })
-  //     .withMessage("Maximum character is 255"),
-  //   ,
-  //   body("stock").optional(),
-  // ]),
+  updateProduct: validate([
+    body("name")
+    .optional()
+    .trim()
+    .isLength({ max: 50 })
+    .withMessage("Name must not exceed 50 characters"),
+    body("price")
+    .optional()
+    .trim(),
+    body("category_id"),
+    body("description")
+      .optional()
+      .isLength({ max: 200 })
+      .withMessage("Maximum character is 200"),
+    ,
+    body("stock")
+    .optional()
+    .isInt({ gt: 0, lte: 999 })
+    .withMessage("Stock must be a valid number and not exceed 999"),
+  ]),
 
   validateLogin: validate([
     body("username").notEmpty().withMessage("Username is required"),
