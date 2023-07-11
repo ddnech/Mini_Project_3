@@ -367,7 +367,7 @@ module.exports = {
           ],
         ],
         order: [[db.sequelize.fn("SUM", db.sequelize.col("quantity")), "DESC"]],
-        limit: 7, // Set the limit to 7
+        limit: 7, 
       });
   
       if (topSellingProducts.length === 0) {

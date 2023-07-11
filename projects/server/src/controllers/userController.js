@@ -290,7 +290,7 @@ module.exports = {
         for (let item of orderItems) {
           const date = item.getDataValue("date");
           const count = item.getDataValue("totalQuantity");
-          
+
           if (!dailyIncome[date]) {
             dailyIncome[date] = 0;
           }
@@ -534,6 +534,7 @@ module.exports = {
           ],
         ],
         order: [[db.sequelize.fn("SUM", db.sequelize.col("quantity")), "DESC"]],
+        limit: 6, 
       });
 
       if (topSellingProducts.length === 0) {
