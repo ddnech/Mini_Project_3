@@ -12,6 +12,12 @@ module.exports = {
       const { name, price, category_id, description, stock } = req.body;
       let imgProduct = "";
 
+      if (!req.file) {
+        return res.status(400).send({
+          message: "Missing product image file",
+        });
+      }
+
       if (req.file) {
         imgProduct = setFromFileNameToDBValueProduct(req.file.filename);
       }
@@ -51,6 +57,10 @@ module.exports = {
       const order = [];
 
       where.isActive = 1;
+      where.stock = {
+        [db.Sequelize.Op.gt]: 0
+      };
+      
 
       if (pagination.search) {
         where.name = {
@@ -330,7 +340,7 @@ module.exports = {
   async getTopSellingProduct(req, res) {
     try {
       const categoryId = Number(req.body.categoryId);
-
+  
       let productInclude = {
         model: db.Product,
         as: "product",
@@ -345,7 +355,7 @@ module.exports = {
           attributes: ["name"],
         },
       };
-
+  
       const topSellingProducts = await db.Order_item.findAll({
         include: [productInclude],
         group: ["product_id"],
@@ -357,15 +367,15 @@ module.exports = {
           ],
         ],
         order: [[db.sequelize.fn("SUM", db.sequelize.col("quantity")), "DESC"]],
-        limit: 6,
+        limit: 7, // Set the limit to 7
       });
-
+  
       if (topSellingProducts.length === 0) {
         return res.status(400).send({
           message: "No products found",
         });
       }
-
+  
       return res.status(200).send({
         message: "Successfully retrieved top-selling products",
         data: topSellingProducts,
@@ -376,5 +386,6 @@ module.exports = {
         message: "Internal Server Error",
       });
     }
-  },
+  }
+  
 };

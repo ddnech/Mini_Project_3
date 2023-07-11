@@ -11,6 +11,7 @@ import { remove } from "../store/reducer/authSlice";
 import { ImSearch } from "react-icons/im";
 import { GrClose } from "react-icons/gr";
 import axios from "axios";
+import { clearCart } from "../store/reducer/cartSlice";
 
 export default function NavBar(props) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -49,6 +50,7 @@ export default function NavBar(props) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(remove());
+    dispatch(clearCart())
     navigate("/login");
   };
 

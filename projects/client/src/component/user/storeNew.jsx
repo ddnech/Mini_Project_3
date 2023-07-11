@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 export default function StoreNew() {
   const token = useSelector((state) => state.auth.token);
   const [image, setImage] = useState('');
+  const [isImageSelected, setIsImageSelected] = useState(false);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -25,10 +26,15 @@ export default function StoreNew() {
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
+    setIsImageSelected(true);
   };
 
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     const { name, price, category, description, stock } = values;
+
+    if (!isImageSelected) {
+      setStatus({ success: false, message: 'Please select an image.' });
+    }
 
     const formData = new FormData();
     formData.append('name', name);
@@ -67,14 +73,23 @@ export default function StoreNew() {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    name: Yup.string()
+    .max(50, 'Name must not exceed 50 characters')
+    .required('Name is required'),
     price: Yup.number()
-      .required('Price is required'),
-    category: Yup.string().required('Category is required'),
-    description: Yup.string().required('Description is required'),
+    .max(1000000000, 'Price must not exceed 1,000,000,000')
+    .typeError('Price must be a valid number')
+    .required('Price is required'),
+    category: Yup.string()
+    .required('Category is required'),
+    description: Yup
+    .string()
+    .required('Description is required')
+    .max(200, 'Description must not exceed 200 characters'),
     stock: Yup.number()
-      .required('Stock is required')
-
+      .max(999, 'Stock must not exceed 999')
+      .typeError('Stock must be a valid number')
+      .required('Stock is required'),
   });
 
   const initialValues = {
@@ -129,7 +144,7 @@ export default function StoreNew() {
                       <Field className='border border-gray-300 h-6 text-xs w-full focus:border-darkgreen focus:ring-0' type='text' name='stock' placeholder='Stock' />
                     </div>
                     <label className='font-ysa relative text-jetblack'>Image:</label>
-                    <input className='border border-gray-300 h-9 text-xs w-full focus:border-darkgreen focus:ring-0' type='file' onChange={handleImageChange} />
+                    <input className='border border-gray-300 h-9 text-xs w-full focus:border-darkgreen focus:ring-0' type='file' onChange={handleImageChange} required/>
                   </div>
                   <button type='submit' className='w-full py-2 my-4 text-xs font-josefin tracking-wide border bg-darkgreen text-flashwhite hover:bg-white hover:text-darkgreen hover:border-darkgreen'>
                     Create

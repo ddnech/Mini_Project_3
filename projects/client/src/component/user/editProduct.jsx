@@ -41,6 +41,7 @@ export default function EditProduct({ onSubmit, product }) {
     if (image) {
       formData.append('file', image);
     }
+    
 
     try {
       const res = await axios.patch(`http://localhost:8000/api/user/product/${id}`, formData, {
@@ -69,17 +70,22 @@ export default function EditProduct({ onSubmit, product }) {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().max(50, 'Name must not exceed 50 characters').optional(),
-    price: Yup.number().max(1000000000, 'Price must not exceed 1,000,000,000').optional().typeError('Price must be a valid number'),
-    category: Yup.string().notRequired(),
-    description: Yup.string().max(200, 'Description must not exceed 200 characters').optional(),
-    stock: Yup.number().max(999, 'Stock must not exceed 999').optional().typeError('Stock must be a valid number'),
+    name: Yup.string()
+    .max(50, 'Name must not exceed 50 characters'),
+    price: Yup.number()
+    .max(1000000000, 'Price must not exceed 1,000,000,000')
+    .typeError('Price must be a valid number'),
+    description: Yup.string()
+    .max(200, 'Description must not exceed 200 characters'),
+    stock: Yup.number()
+    .max(999, 'Stock must not exceed 999')
+    .typeError('Stock must be a valid number'),
   });
 
   const initialValues = {
     name: '',
     price: '',
-    category: null,
+    category: '',
     description: '',
     stock: '',
   };

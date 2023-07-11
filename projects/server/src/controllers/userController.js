@@ -179,6 +179,30 @@ module.exports = {
     }
   },
 
+  async getUserDefaultCategory(req, res) {
+    const user_id = req.user.id;
+    try {
+      const category = await db.Category.findAll({
+        where: {
+          [db.Sequelize.Op.or]: [
+            { user_id: user_id },
+            { user_id: null },
+          ],
+        },
+        attributes: ["id", "name"],
+      });
+
+      return res
+        .status(200)
+        .send({ message: "Successfully get user categories", data: category });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
+  },
+
   async updateCategory(req, res) {
     const user_id = req.user.id;
     try {

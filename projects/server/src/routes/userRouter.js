@@ -9,6 +9,7 @@ const multerMiddlewareProfile = require("../middleware/multerMiddleware/profile"
 router.use(authMiddleware.verifyToken);
 
 router.get("/category", userController.getUserCategory);
+router.get("/default/category", userController.getUserDefaultCategory);
 
 router.patch(
   "/category/:id",
