@@ -20,7 +20,7 @@ router.patch(
 router.patch(
   "/product/:id",
   multerMiddlewareProduct.single("file"),
-  // validatorMiddleware.updateProduct,
+  validatorMiddleware.updateProduct,
   userController.updateProduct
 );
 
