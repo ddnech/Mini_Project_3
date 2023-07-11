@@ -282,14 +282,15 @@ module.exports = {
           },
           attributes: [
             [db.Sequelize.fn("date", db.Sequelize.col("createdAt")), "date"],
-            [db.Sequelize.fn("count", "*"), "count"],
+            [db.Sequelize.fn("sum", db.Sequelize.col("quantity")), "totalQuantity"],
           ],
           group: [db.Sequelize.fn("date", db.Sequelize.col("createdAt"))],
         });
 
         for (let item of orderItems) {
           const date = item.getDataValue("date");
-          const count = item.getDataValue("count");
+          const count = item.getDataValue("totalQuantity");
+          
           if (!dailyIncome[date]) {
             dailyIncome[date] = 0;
           }
