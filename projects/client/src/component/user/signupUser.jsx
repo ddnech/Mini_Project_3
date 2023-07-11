@@ -35,7 +35,7 @@ export default function SignupUser() {
         email: Yup.string().email('Please use a valid email format').required('Email is required'),
         phone: Yup.string().required('Phone is required').matches(validRgx, "Phone number is not valid"),
         address: Yup.string().required("Address is required"),
-        password: Yup.string().matches(pwdRgx, 'At least 8 characters, 1 symbol, 1 capital letter, and 1 number'
+        password: Yup.string().matches(pwdRgx, 'At least 8 chars, 1 symbol, 1 caps, and 1 number'
         ).required('Password is required'),
         confirmPassword: Yup.string()
             .oneOf([Yup.ref('password'), null], 'Passwords must match')
