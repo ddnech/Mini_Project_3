@@ -156,17 +156,30 @@ module.exports = {
     .withMessage("Name must not exceed 50 characters"),
     body("price")
     .optional()
-    .trim(),
-    body("category_id"),
+    .custom((value, { req }) => {
+      if (value !== "" && isNaN(value)) {
+        throw new Error("Price must be a valid number");
+      }
+      if (value !== "" && (parseFloat(value) <= 0 || parseFloat(value) > 1000000000)) {
+        throw new Error("Price must be a valid number and not exceed 1000000000");
+      }
+      return true;
+    }),
     body("description")
       .optional()
       .isLength({ max: 200 })
       .withMessage("Maximum character is 200"),
-    ,
-    body("stock")
-    .optional()
-    .isInt({ gt: 0, lte: 999 })
-    .withMessage("Stock must be a valid number and not exceed 999"),
+      body("stock")
+      .optional()
+      .custom((value, { req }) => {
+        if (value !== "" && isNaN(value)) {
+          throw new Error("Stock must be a valid number");
+        }
+        if (value !== "" && (parseInt(value) <= 0 || parseInt(value) > 999)) {
+          throw new Error("Stock must be a valid number and not exceed 999");
+        }
+        return true;
+      }),
   ]),
 
   validateLogin: validate([
